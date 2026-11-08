@@ -1,0 +1,23 @@
+{
+  "stage": "intake",
+  "path": "full",
+  "pathConfirmed": false,
+  "pathRecommended": null,
+  "requirementId": null,
+  "dependsOnFeatures": [],
+  "actorRole": null,
+  "actorLabel": null,
+  "gates": {
+    "G0": "pending",
+    "G1": "pending",
+    "G2": "pending",
+    "G2T": "pending",
+    "G3": "pending",
+    "GR": "pending",
+    "G4": "pending",
+    "GD": "pending"
+  },
+  "openQuestions": [],
+  "runId": null,
+  "specHash": null
+}

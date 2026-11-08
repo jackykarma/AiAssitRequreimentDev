@@ -1,5 +1,5 @@
 ---
-name: specforge-lead
+name: aiassitrequreimentdev-lead
 description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让产品产出需求级 PRD 与 split.yaml，再创建一个或多个 feature。产物共仓于 features/<id>/。
 ---
 
@@ -23,10 +23,10 @@ description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让
 小需求：直接 `start FEAT-xxx`，一个 feature 到底。
 
 ```bash
-python -m specforge init-req REQ-001
+python -m aiassitrequreimentdev init-req REQ-001
 # 产品写完 prd + split 后：
-python -m specforge init FEAT-001 --requirement REQ-001
-python -m specforge init FEAT-002 --requirement REQ-001
+python -m aiassitrequreimentdev init FEAT-001 --requirement REQ-001
+python -m aiassitrequreimentdev init FEAT-002 --requirement REQ-001
 ```
 
 **不要**在没有需求级 PRD（或未确认的单 feature 捷径）时批量空建 feature。  
@@ -34,7 +34,7 @@ python -m specforge init FEAT-002 --requirement REQ-001
 
 ## 启动（单 feature 捷径）
 
-1. `python -m specforge start <FEAT-id> [--need "..."]`
+1. `python -m aiassitrequreimentdev start <FEAT-id> [--need "..."]`
 2. 角色弹窗 → `adopt`
 3. 路径推荐弹窗 → `path`
 4. 派对应技能

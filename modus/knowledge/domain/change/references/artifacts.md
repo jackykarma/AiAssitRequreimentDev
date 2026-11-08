@@ -1,11 +1,11 @@
-﻿# feature 工件合同
+# feature 工件合同
 
 目录：`features/<id>/`。只保留正式交付，不保留 `intent.md` 等对话草稿。
 
 | 文件 | 作者 | 要点 |
 | --- | --- | --- |
 | `state.json` | 主控 | `stage`、`path`、`pathConfirmed`、`actorRole`、`gates`、`specHash`、`runId` |
-| `BOARD.md` | 主控/`specforge board` | 共仓产物索引 |
+| `BOARD.md` | 主控/`aiassitrequreimentdev board` | 共仓产物索引 |
 | `prd.md` | 产品 | 给人评审的 PRD；与 `spec.yaml` 同口径 |
 | `prototype/` | 产品 | 可点击 HTML 原型 |
 | `spec.yaml` | 产品 | 机器合同与 G1/`seal` 对象；`S*`/`A*` 编号 |

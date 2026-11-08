@@ -3,9 +3,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from specforge.board import set_path
-from specforge.gates import init_feature
-from specforge.paths import recommend_path, resolve_path
+from aiassitrequreimentdev.board import set_path
+from aiassitrequreimentdev.gates import init_feature
+from aiassitrequreimentdev.paths import recommend_path, resolve_path
 
 
 class PathTests(unittest.TestCase):

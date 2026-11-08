@@ -1,6 +1,6 @@
-﻿# AiAssitRequreimentDev
+# AiAssitRequreimentDev
 
-AI 辅助需求开发流水线（内部引擎包名仍为 `specforge`）。从意图出发，用结构化规格把产品、交互视觉、技术方案、开发、Review、测试、部署串起来。
+AI 辅助需求开发流水线。从意图出发，用结构化规格把产品、交互视觉、技术方案、开发、Review、测试、部署串起来。
 
 你只需对主控说需求；文档与门禁命令由 Agent 代写代跑。有问题才打断，否则自动推进。
 
@@ -22,7 +22,7 @@ AI 辅助需求开发流水线（内部引擎包名仍为 `specforge`）。从�
 
 ## 开始
 
-在 Cursor 中启用 `specforge-lead`：
+在 Cursor 中启用 `aiassitrequreimentdev-lead`：
 
 1. 选角色（[docs/role-picker.html](docs/role-picker.html) + `adopt`）
 2. 确认路径全量/轻量（[docs/path-picker.html](docs/path-picker.html) + `recommend` / `path`）
@@ -32,9 +32,9 @@ AI 辅助需求开发流水线（内部引擎包名仍为 `specforge`）。从�
 
 ```bash
 python -m pip install -e .
-python -m specforge init-req REQ-001          # 大需求（可选）
-python -m specforge init FEAT-001             # feature
-python -m specforge check features/FEAT-001 --gate G1
+python -m aiassitrequreimentdev init-req REQ-001          # 大需求（可选）
+python -m aiassitrequreimentdev init FEAT-001             # feature
+python -m aiassitrequreimentdev check features/FEAT-001 --gate G1
 python -m unittest tests.test_gates tests.test_roles tests.test_paths
 ```
 
@@ -42,14 +42,14 @@ python -m unittest tests.test_gates tests.test_roles tests.test_paths
 
 | 技能 | 只写 |
 | --- | --- |
-| `specforge-lead` | `state.json`、`tasks.yaml`、代跑 CLI |
-| `specforge-product` | `prd.md`、`prototype/`、`spec.yaml`（大需求另写需求级 PRD / `split.yaml`） |
-| `specforge-ux` | `ux.yaml` |
-| `specforge-tech` | `tech.md`、`tech.yaml`（按 feature；架构图可选，变更文件/选型/风险/快稳省/数据/埋点必含） |
-| `specforge-dev` | 任务写集内源码 |
-| `specforge-review` | `review.yaml` |
-| `specforge-test` | `evidence.yaml` |
-| `specforge-deploy` | `deploy.yaml` |
+| `aiassitrequreimentdev-lead` | `state.json`、`tasks.yaml`、代跑 CLI |
+| `aiassitrequreimentdev-product` | `prd.md`、`prototype/`、`spec.yaml`（大需求另写需求级 PRD / `split.yaml`） |
+| `aiassitrequreimentdev-ux` | `ux.yaml` |
+| `aiassitrequreimentdev-tech` | `tech.md`、`tech.yaml`（按 feature；架构图可选，变更文件/选型/风险/快稳省/数据/埋点必含） |
+| `aiassitrequreimentdev-dev` | 任务写集内源码 |
+| `aiassitrequreimentdev-review` | `review.yaml` |
+| `aiassitrequreimentdev-test` | `evidence.yaml` |
+| `aiassitrequreimentdev-deploy` | `deploy.yaml` |
 
 门禁：`G0` → `G1` → `G2` → `G2T` → `G3` → `GR` → `G4` → `GD`。
 

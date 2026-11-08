@@ -1,6 +1,6 @@
 # 产品需求（待产品 Agent 与产品经理共创）
 
-本文件由 `specforge-product` 在对话澄清后写出，供人评审。与同目录 `spec.yaml` 同源同口径：本文件给人读，`spec.yaml` 给 Agent 与 G1；场景/验收编号必须一致。可点击原型见 `prototype/index.html`。
+本文件由 `aiassitrequreimentdev-product` 在对话澄清后写出，供人评审。与同目录 `spec.yaml` 同源同口径：本文件给人读，`spec.yaml` 给 Agent 与 G1；场景/验收编号必须一致。可点击原型见 `prototype/index.html`。
 
 ## 背景与问题
 

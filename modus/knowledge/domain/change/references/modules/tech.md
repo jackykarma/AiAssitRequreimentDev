@@ -1,6 +1,6 @@
 # 技术方案模块
 
-技能：`specforge-tech`。架构师与 AI 共写：
+技能：`aiassitrequreimentdev-tech`。架构师与 AI 共写：
 
 - `tech.md`：给人读的方案文档
 - `tech.yaml`：机器合同与 G2T

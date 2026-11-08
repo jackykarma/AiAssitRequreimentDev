@@ -1,5 +1,5 @@
-﻿---
-name: specforge-test
+---
+name: aiassitrequreimentdev-test
 description: 测试 Agent。确认 GR 通过后执行验收命令并写 evidence.yaml。用户要测试、证据或 G4 时使用。
 ---
 
@@ -10,7 +10,7 @@ description: 测试 Agent。确认 GR 通过后执行验收命令并写 evidence
 开工前运行：
 
 ```bash
-python -m specforge check <feature 目录> --gate GR
+python -m aiassitrequreimentdev check <feature 目录> --gate GR
 ```
 
 非 `GR ready` 则拒绝执行，交回主控。
@@ -22,5 +22,5 @@ python -m specforge check <feature 目录> --gate GR
 ## 结束
 
 ```bash
-python -m specforge check <feature 目录> --gate G4
+python -m aiassitrequreimentdev check <feature 目录> --gate G4
 ```

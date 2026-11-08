@@ -1,4 +1,4 @@
-﻿# 全量 / 轻量路径
+# 全量 / 轻量路径
 
 `state.path`：`full` | `light`。启动时根据需求推荐，并由人确认后写入 `pathConfirmed=true`。
 
@@ -12,9 +12,9 @@
 命令：
 
 ```bash
-python -m specforge recommend --text "修复单模块崩溃"
-python -m specforge paths --text "新功能跨模块状态机"
-python -m specforge path features/FEAT-001 --path 轻量 --recommended light
+python -m aiassitrequreimentdev recommend --text "修复单模块崩溃"
+python -m aiassitrequreimentdev paths --text "新功能跨模块状态机"
+python -m aiassitrequreimentdev path features/FEAT-001 --path 轻量 --recommended light
 ```
 
 选择页：`docs/path-picker.html`（可带 `?recommend=light&reason=...`）。

@@ -1,6 +1,6 @@
 # Feature 共仓看板
 
-目录：`D:/Jacky/AndroidProjects/SpecForge/features/FEAT-001`
+目录：`D:/Jacky/AndroidProjects/AiAssitRequreimentDev/features/FEAT-001`
 
 各角色只写自己的工件，其余文件只读共享。一条需求可对应多个 feature。切换角色前先刷新本看板。
 
@@ -31,8 +31,8 @@
 
 | 角色 | 技能 | 写出 |
 | --- | --- | --- |
-| 产品经理 | `specforge-product` | `prd.md`, `prototype/`, `spec.yaml` |
-| 架构师SE | `specforge-tech` | `tech.yaml` |
-| 开发 | `specforge-dev` | `<任务写集内源码>` |
-| 测试 | `specforge-test` | `evidence.yaml` |
-| 部署 | `specforge-deploy` | `deploy.yaml` |
+| 产品经理 | `aiassitrequreimentdev-product` | `prd.md`, `prototype/`, `spec.yaml` |
+| 架构师SE | `aiassitrequreimentdev-tech` | `tech.yaml` |
+| 开发 | `aiassitrequreimentdev-dev` | `<任务写集内源码>` |
+| 测试 | `aiassitrequreimentdev-test` | `evidence.yaml` |
+| 部署 | `aiassitrequreimentdev-deploy` | `deploy.yaml` |

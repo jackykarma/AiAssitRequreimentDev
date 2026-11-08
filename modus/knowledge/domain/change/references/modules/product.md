@@ -1,6 +1,6 @@
-﻿# 产品模块
+# 产品模块
 
-技能：`specforge-product`。由产品经理用自然语言驱动。
+技能：`aiassitrequreimentdev-product`。由产品经理用自然语言驱动。
 
 ## 职责
 
@@ -20,4 +20,4 @@
 
 ## 完成
 
-`python -m specforge check <feature 目录> --gate G1` 输出 `G1 ready`，且 PRD 与原型约定已齐。
+`python -m aiassitrequreimentdev check <feature 目录> --gate G1` 输出 `G1 ready`，且 PRD 与原型约定已齐。

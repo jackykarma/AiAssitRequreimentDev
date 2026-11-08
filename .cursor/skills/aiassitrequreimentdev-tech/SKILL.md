@@ -1,5 +1,5 @@
-﻿---
-name: specforge-tech
+---
+name: aiassitrequreimentdev-tech
 description: 技术方案 Agent。架构师与 AI 共写 tech.md + tech.yaml：架构图（可选）、变更文件路径、选型、风险、快稳省、数据设计、埋点与验收落点。用户要技术方案、接口/库表设计或 G2T 时使用。
 ---
 
@@ -38,5 +38,5 @@ description: 技术方案 Agent。架构师与 AI 共写 tech.md + tech.yaml：�
 ## 结束
 
 ```bash
-python -m specforge check <feature 目录> --gate G2T
+python -m aiassitrequreimentdev check <feature 目录> --gate G2T
 ```

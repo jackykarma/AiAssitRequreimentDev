@@ -1,6 +1,6 @@
 # AiAssitRequreimentDev 架构
 
-对话编排 + 规格门禁多智能体。启动时先选角色，再确认全量/轻量；合同落在 `features/<id>/`，长期知识在 `modus/knowledge/`。门禁用 `python -m specforge check`（主控代跑）。
+对话编排 + 规格门禁多智能体。启动时先选角色，再确认全量/轻量；合同落在 `features/<id>/`，长期知识在 `modus/knowledge/`。门禁用 `python -m aiassitrequreimentdev check`（主控代跑）。
 
 ## 需求与 feature
 
@@ -57,20 +57,20 @@ features/<FEAT-id>/        # 交付切片
 
 | 技能 | 只写 |
 | --- | --- |
-| `specforge-lead` | `state.json`、`tasks.yaml`、代跑 CLI |
-| `specforge-product` | `prd.md`、`prototype/`、`spec.yaml` |
-| `specforge-ux` | `ux.yaml` |
-| `specforge-tech` | `tech.md`、`tech.yaml` |
-| `specforge-dev` | 任务写集 |
-| `specforge-review` | `review.yaml` |
-| `specforge-test` | `evidence.yaml` |
-| `specforge-deploy` | `deploy.yaml` |
+| `aiassitrequreimentdev-lead` | `state.json`、`tasks.yaml`、代跑 CLI |
+| `aiassitrequreimentdev-product` | `prd.md`、`prototype/`、`spec.yaml` |
+| `aiassitrequreimentdev-ux` | `ux.yaml` |
+| `aiassitrequreimentdev-tech` | `tech.md`、`tech.yaml` |
+| `aiassitrequreimentdev-dev` | 任务写集 |
+| `aiassitrequreimentdev-review` | `review.yaml` |
+| `aiassitrequreimentdev-test` | `evidence.yaml` |
+| `aiassitrequreimentdev-deploy` | `deploy.yaml` |
 
 ## 检查器
 
 ```bash
 python -m pip install -e .
-python -m specforge init FEAT-001
-python -m specforge check features/FEAT-001 --gate G1
+python -m aiassitrequreimentdev init FEAT-001
+python -m aiassitrequreimentdev check features/FEAT-001 --gate G1
 python -m unittest tests.test_gates tests.test_roles tests.test_paths
 ```

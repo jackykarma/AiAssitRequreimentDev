@@ -14,8 +14,8 @@
 
 | 角色 | 职责 |
 | --- | --- |
-| **产品（PM + `specforge-product`）** | **主责**：写需求级 PRD，提出「一个还是多个」及每个 feature 的范围/验收边界，写入 `split.yaml` |
-| **主控（`specforge-lead`）** | 按 `split.yaml` 执行 `init` 各 feature、写入 `requirementId` / `dependsOnFeatures`；多 feature 时向人确认拆分方案 |
+| **产品（PM + `aiassitrequreimentdev-product`）** | **主责**：写需求级 PRD，提出「一个还是多个」及每个 feature 的范围/验收边界，写入 `split.yaml` |
+| **主控（`aiassitrequreimentdev-lead`）** | 按 `split.yaml` 执行 `init` 各 feature、写入 `requirementId` / `dependsOnFeatures`；多 feature 时向人确认拆分方案 |
 | **架构师SE** | **顾问**：可对技术耦合、发布依赖提出合并/拆开建议，不代替产品定业务切片 |
 | **开发 / 测试** | 不拆 feature；只在既定 feature 内改写集 / 写证据 |
 

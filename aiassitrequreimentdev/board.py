@@ -22,8 +22,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from specforge.paths import PATH_BY_ID, resolve_path
-from specforge.roles import ROLE_BY_ID, ROLES, resolve_menu_choice
+from aiassitrequreimentdev.paths import PATH_BY_ID, resolve_path
+from aiassitrequreimentdev.roles import ROLE_BY_ID, ROLES, resolve_menu_choice
 
 
 ARTIFACTS = (

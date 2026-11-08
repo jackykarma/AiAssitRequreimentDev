@@ -1,5 +1,5 @@
 ---
-name: specforge-dev
+name: aiassitrequreimentdev-dev
 description: 开发 Agent。按单个任务包在写集内改代码；也可承接 Review blocking 或已裁决需改项的修复轮次。
 ---
 

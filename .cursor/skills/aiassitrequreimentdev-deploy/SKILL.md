@@ -1,5 +1,5 @@
-﻿---
-name: specforge-deploy
+---
+name: aiassitrequreimentdev-deploy
 description: 部署 Agent。只写 deploy.yaml 部署清单与命令，不执行上线。用户要发版清单或 GD 时使用。
 ---
 
@@ -17,7 +17,7 @@ description: 部署 Agent。只写 deploy.yaml 部署清单与命令，不执行
 ## 结束
 
 ```bash
-python -m specforge check <feature 目录> --gate GD
+python -m aiassitrequreimentdev check <feature 目录> --gate GD
 ```
 
 输出 `GD ready` 后停，由主控打断人确认是否真正执行上线。

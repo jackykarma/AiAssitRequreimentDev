@@ -1,6 +1,6 @@
 # 门禁模块
 
-实现：`specforge/gates.py`。
+实现：`aiassitrequreimentdev/gates.py`。
 
 | 门禁 | 主要条件 |
 | --- | --- |

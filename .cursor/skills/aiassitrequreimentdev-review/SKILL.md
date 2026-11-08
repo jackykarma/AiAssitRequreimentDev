@@ -1,5 +1,5 @@
-﻿---
-name: specforge-review
+---
+name: aiassitrequreimentdev-review
 description: Code Review Agent。只写 review.yaml；blocking 打回开发禁止进测试，dispute 交主控打断，nit 不挡门禁。
 ---
 
@@ -33,7 +33,7 @@ resolution:
 ## 结束
 
 ```bash
-python -m specforge check <feature 目录> --gate GR
+python -m aiassitrequreimentdev check <feature 目录> --gate GR
 ```
 
 有 `REVIEW_BLOCKING_OPEN` / `REVIEW_DISPUTE_OPEN` 时不要宣称通过。

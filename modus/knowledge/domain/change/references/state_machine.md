@@ -1,6 +1,6 @@
-﻿# 变更状态
+# 变更状态
 
-实现锚点：`specforge/templates/change/state.json` 的 `stage` 与 `gates`。
+实现锚点：`aiassitrequreimentdev/templates/feature/state.json` 的 `stage` 与 `gates`。
 
 | 阶段 | 进入条件 | 离开条件 |
 | --- | --- | --- |

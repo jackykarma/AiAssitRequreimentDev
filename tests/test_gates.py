@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from specforge.gates import evaluate, init_feature, init_requirement, seal_spec
+from aiassitrequreimentdev.gates import evaluate, init_feature, init_requirement, seal_spec
 
 
 def write_yaml(path: Path, text: str) -> None:

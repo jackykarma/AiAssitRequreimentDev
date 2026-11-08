@@ -16,7 +16,7 @@
  *********************************************************************************/
 """
 
-from specforge.gates import (
+from aiassitrequreimentdev.gates import (
     Report,
     Violation,
     evaluate,

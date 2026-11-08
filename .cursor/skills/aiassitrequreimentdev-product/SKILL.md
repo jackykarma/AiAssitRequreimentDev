@@ -1,5 +1,5 @@
-﻿---
-name: specforge-product
+---
+name: aiassitrequreimentdev-product
 description: 产品 Agent。澄清需求并写 PRD；大需求先写需求级 PRD 再提出 feature 拆分。也写各 feature 的切片 PRD、原型与 spec.yaml。
 ---
 
@@ -56,7 +56,7 @@ description: 产品 Agent。澄清需求并写 PRD；大需求先写需求级 PR
 ## 结束（feature 级 G1）
 
 ```bash
-python -m specforge check <feature目录> --gate G1
+python -m aiassitrequreimentdev check <feature目录> --gate G1
 ```
 
 需同时：`G1 ready`、切片 PRD 与 `A*` 对齐、原型约定满足。不要自己改 `gates.G1`。

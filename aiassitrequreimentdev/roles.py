@@ -37,7 +37,7 @@ ROLES: tuple[Role, ...] = (
     Role(
         id="product",
         label="产品经理",
-        skill="specforge-product",
+        skill="aiassitrequreimentdev-product",
         writes=("prd.md", "prototype/", "spec.yaml"),
         reads=("BOARD.md", "modus/knowledge/"),
         stage_hint="clarify",
@@ -47,17 +47,17 @@ ROLES: tuple[Role, ...] = (
     Role(
         id="architect",
         label="架构师SE",
-        skill="specforge-tech",
-        writes=("tech.yaml",),
+        skill="aiassitrequreimentdev-tech",
+        writes=("tech.md", "tech.yaml"),
         reads=("BOARD.md", "prd.md", "prototype/", "spec.yaml", "ux.yaml", "modus/knowledge/"),
         stage_hint="tech",
         gate_hint="G2T",
-        note="读产品合同后写技术方案。若需交互精修，主控可加派 specforge-ux 写 ux.yaml。",
+        note="读产品合同后写技术方案。若需交互精修，主控可加派 aiassitrequreimentdev-ux 写 ux.yaml。",
     ),
     Role(
         id="developer",
         label="开发",
-        skill="specforge-dev",
+        skill="aiassitrequreimentdev-dev",
         writes=("<任务写集内源码>",),
         reads=("BOARD.md", "spec.yaml", "tech.yaml", "tasks.yaml", "review.yaml"),
         stage_hint="implement",
@@ -67,7 +67,7 @@ ROLES: tuple[Role, ...] = (
     Role(
         id="tester",
         label="测试",
-        skill="specforge-test",
+        skill="aiassitrequreimentdev-test",
         writes=("evidence.yaml",),
         reads=("BOARD.md", "spec.yaml", "tasks.yaml", "review.yaml"),
         stage_hint="verify",
@@ -77,7 +77,7 @@ ROLES: tuple[Role, ...] = (
     Role(
         id="deployer",
         label="部署",
-        skill="specforge-deploy",
+        skill="aiassitrequreimentdev-deploy",
         writes=("deploy.yaml",),
         reads=("BOARD.md", "spec.yaml", "evidence.yaml", "tech.yaml"),
         stage_hint="release",

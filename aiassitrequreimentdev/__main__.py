@@ -4,7 +4,7 @@
  ** All rights reserved.
  **
  ** File: - __main__.py
- ** Description: specforge 命令行。feature 初始化、门禁、角色与全量/轻量路径。
+ ** Description: aiassitrequreimentdev 命令行。feature 初始化、门禁、角色与全量/轻量路径。
  ** Version: 1.4
  ** Date: 2026/11/08
  ** Author: limao2@Apps.Gallery
@@ -24,11 +24,11 @@ import sys
 from pathlib import Path
 from urllib.parse import quote
 
-from specforge.board import adopt_role, refresh_board, set_path
-from specforge.gates import GATES, evaluate, init_feature, init_requirement, seal_spec
-from specforge.paths import menu_text as path_menu_text
-from specforge.paths import recommend_path, resolve_path
-from specforge.roles import menu_text, resolve_menu_choice
+from aiassitrequreimentdev.board import adopt_role, refresh_board, set_path
+from aiassitrequreimentdev.gates import GATES, evaluate, init_feature, init_requirement, seal_spec
+from aiassitrequreimentdev.paths import menu_text as path_menu_text
+from aiassitrequreimentdev.paths import recommend_path, resolve_path
+from aiassitrequreimentdev.roles import menu_text, resolve_menu_choice
 
 
 def _configure_stdio() -> None:
@@ -40,7 +40,7 @@ def _configure_stdio() -> None:
 
 def main(argv: list[str] | None = None) -> int:
     _configure_stdio()
-    parser = argparse.ArgumentParser(prog="specforge", description="规格门禁与 feature 入口")
+    parser = argparse.ArgumentParser(prog="aiassitrequreimentdev", description="规格门禁与 feature 入口")
     sub = parser.add_subparsers(dest="command", required=True)
 
     init_parser = sub.add_parser("init", help="按模板创建一个 feature 目录")

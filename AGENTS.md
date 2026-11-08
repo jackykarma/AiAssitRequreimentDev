@@ -1,6 +1,6 @@
 # AiAssitRequreimentDev
 
-做需求开发时：启用 `specforge-lead`（CLI / 技能目录仍用包名 `specforge`）。
+做需求开发时：启用 `aiassitrequreimentdev-lead`。
 
 1. 选角色（`docs/role-picker.html` + `adopt`）
 2. 按需求推荐并确认路径（`recommend` / `docs/path-picker.html` + `path`）→ `full` 或 `light`
@@ -12,4 +12,4 @@
 
 先读 `docs/architecture.md` 和 `constitution.md`。知识从 `modus/knowledge/architecture-overview.md` 进入。
 
-角色只写自己的工件。门禁：`python -m specforge check <feature目录> --gate <G0|G1|G2|G2T|G3|GR|G4|GD>`。
+角色只写自己的工件。门禁：`python -m aiassitrequreimentdev check <feature目录> --gate <G0|G1|G2|G2T|G3|GR|G4|GD>`。

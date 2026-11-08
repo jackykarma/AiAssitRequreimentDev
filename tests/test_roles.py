@@ -3,9 +3,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from specforge.board import adopt_role, refresh_board
-from specforge.gates import init_feature
-from specforge.roles import menu_text, resolve_menu_choice
+from aiassitrequreimentdev.board import adopt_role, refresh_board
+from aiassitrequreimentdev.gates import init_feature
+from aiassitrequreimentdev.roles import menu_text, resolve_menu_choice
 
 
 class RoleTests(unittest.TestCase):
@@ -29,7 +29,7 @@ class RoleTests(unittest.TestCase):
             self.assertEqual(state["actorLabel"], "产品经理")
             board = (feature / "BOARD.md").read_text(encoding="utf-8")
             self.assertIn("产品经理", board)
-            self.assertIn("specforge-product", board)
+            self.assertIn("aiassitrequreimentdev-product", board)
             self.assertIn("prd.md", board)
 
 

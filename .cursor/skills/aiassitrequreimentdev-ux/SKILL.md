@@ -1,5 +1,5 @@
-﻿---
-name: specforge-ux
+---
+name: aiassitrequreimentdev-ux
 description: 交互视觉 Agent。写 ux.yaml；优先用 Pencil 等 MCP 出稿，也可记录 Figma 链接或图片。用户要交互、视觉、线框或 G2 时使用。
 ---
 
@@ -27,5 +27,5 @@ artifacts: []
 ## 结束
 
 ```bash
-python -m specforge check <feature 目录> --gate G2
+python -m aiassitrequreimentdev check <feature 目录> --gate G2
 ```

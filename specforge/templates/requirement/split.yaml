@@ -1,0 +1,10 @@
+requirementId: REQ-000
+decision: single   # single | multi
+rationale: 待产品根据需求级 PRD 填写：为何一个或为何多个
+confirmedByHuman: false
+features:
+  - id: FEAT-000
+    title: 待填写
+    scope: 本 feature 覆盖的能力与验收边界
+    path: full     # full | light
+    dependsOn: []

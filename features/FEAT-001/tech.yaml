@@ -1,0 +1,31 @@
+# 技术方案结构化合同（架构师 + AI）。给人读的完整文档见 tech.md。
+# 必含：变更文件、选型、风险、快稳省、数据设计、埋点；架构图可选。
+summary: ""
+architectureDiagram:
+  included: false
+  format: ""
+  ref: ""
+changedFiles: []
+techChoices: []
+risks: []
+risksNoneReason: ""
+performancePower:
+  performance:
+    assessment: ""
+    mitigations: ""
+  stability:
+    assessment: ""
+    mitigations: ""
+  power:
+    assessment: ""
+    mitigations: ""
+dataDesign:
+  involved: false
+  tables: []
+  models: []
+  noneReason: ""
+tracking:
+  product: []
+  technical: []
+  noneReason: ""
+acceptance: []

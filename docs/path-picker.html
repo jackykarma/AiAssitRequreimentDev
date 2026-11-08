@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SpecForge 路径选择</title>
+  <style>
+    :root {
+      --bg: #eef3f1;
+      --card: #fbfffd;
+      --ink: #14201c;
+      --muted: #4f635c;
+      --line: #c9dbd3;
+      --accent: #0b6b52;
+      --soft: #d9f0e7;
+      --warn: #8a5a00;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, #dceee6 0, transparent 42%),
+        var(--bg);
+    }
+    main {
+      width: min(760px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(20, 40, 30, 0.08);
+    }
+    h1 { margin: 0 0 8px; font-size: 1.5rem; }
+    p { margin: 0 0 14px; color: var(--muted); line-height: 1.55; }
+    .reco {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--soft);
+      border: 1px solid #b7dfd0;
+    }
+    .reco.show { display: block; }
+    .reco strong { color: var(--accent); }
+    .paths { display: grid; gap: 10px; }
+    button.path {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+    }
+    button.path:hover, button.path[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: var(--soft);
+    }
+    button.path .tag {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #fff7e6;
+      color: var(--warn);
+      font-size: 0.78rem;
+    }
+    ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+    .result {
+      display: none;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px dashed var(--line);
+      background: #f4faf7;
+    }
+    .result.show { display: block; }
+    .copy {
+      margin-top: 10px;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+    code { background: #e7f3ee; padding: 1px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>走全量还是轻量？</h1>
+    <p>系统会根据你的需求描述给出推荐，最终由你确认。确认后请把文案粘贴回 Cursor。</p>
+    <div class="reco" id="reco"></div>
+    <div class="paths" id="paths"></div>
+    <div class="result" id="result">
+      <div id="summary"></div>
+      <button class="copy" type="button" id="copy">复制回复文案</button>
+    </div>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const recommended = params.get("recommend") || "";
+    const reason = params.get("reason") || "";
+    const paths = [
+      {
+        id: "full",
+        label: "全量模式（重）",
+        points: ["PRD + 原型 + spec", "UX / 技术方案", "可多任务", "Review / 测试 / 部署"]
+      },
+      {
+        id: "light",
+        label: "轻量模式（小需求）",
+        points: ["单模块小改", "可跳过 UX 文件", "只能一个任务", "仍要 Review / 测试"]
+      }
+    ];
+    const reco = document.getElementById("reco");
+    if (recommended) {
+      const item = paths.find((p) => p.id === recommended);
+      reco.classList.add("show");
+      reco.innerHTML = `<strong>系统推荐：${item ? item.label : recommended}</strong>` +
+        (reason ? `<div style="margin-top:6px">${decodeURIComponent(reason)}</div>` : "");
+    }
+    const root = document.getElementById("paths");
+    const result = document.getElementById("result");
+    const summary = document.getElementById("summary");
+    let selected = null;
+    paths.forEach((path, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "path";
+      const badge = path.id === recommended ? '<span class="tag">推荐</span>' : "";
+      button.innerHTML = `<strong>${index + 1}. ${path.label}${badge}</strong><ul>${path.points.map((p) => `<li>${p}</li>`).join("")}</ul>`;
+      button.addEventListener("click", () => {
+        selected = path;
+        [...root.querySelectorAll("button.path")].forEach((node) => node.setAttribute("aria-pressed", "false"));
+        button.setAttribute("aria-pressed", "true");
+        summary.innerHTML = `已选：<strong>${path.label}</strong>（<code>${path.id}</code>）<br/>请在 Cursor 回复：<code>路径：${path.id === "full" ? "全量" : "轻量"}</code>`;
+        result.classList.add("show");
+      });
+      root.appendChild(button);
+    });
+    document.getElementById("copy").addEventListener("click", async () => {
+      if (!selected) return;
+      const text = `路径：${selected.id === "full" ? "全量" : "轻量"}`;
+      await navigator.clipboard.writeText(text);
+      document.getElementById("copy").textContent = "已复制";
+      setTimeout(() => { document.getElementById("copy").textContent = "复制回复文案"; }, 1200);
+    });
+  </script>
+</body>
+</html>

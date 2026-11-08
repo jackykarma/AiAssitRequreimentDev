@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SpecForge 角色选择</title>
+  <style>
+    :root {
+      --bg: #f3efe6;
+      --card: #fffdf8;
+      --ink: #1d1a16;
+      --muted: #5f574c;
+      --line: #ddd4c4;
+      --accent: #0f5c4c;
+      --accent-soft: #dceee8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, #efe6d4 0, transparent 40%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    main {
+      width: min(720px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(40, 30, 10, 0.08);
+    }
+    h1 { margin: 0 0 8px; font-size: 1.55rem; }
+    p { margin: 0 0 18px; color: var(--muted); line-height: 1.55; }
+    .roles {
+      display: grid;
+      gap: 10px;
+    }
+    button.role {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      transition: border-color .15s, background .15s;
+    }
+    button.role:hover, button.role[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    button.role strong { display: block; margin-bottom: 4px; }
+    button.role span { color: var(--muted); font-size: 0.92rem; }
+    .result {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #f7f2e8;
+      border: 1px dashed var(--line);
+      display: none;
+    }
+    .result.show { display: block; }
+    code {
+      background: #efe7d8;
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+    .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .copy {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>你现在是什么角色？</h1>
+    <p>选择后，把结果粘贴回 Cursor 对话。主控会写入 <code>state.json</code> 的 <code>actorRole</code>，并进入对应 Agent；产物共享在同一个 <code>features/&lt;id&gt;/</code>。</p>
+    <div class="roles" id="roles"></div>
+    <div class="result" id="result" aria-live="polite">
+      <div id="summary"></div>
+      <div class="actions">
+        <button class="copy" type="button" id="copy">复制回复文案</button>
+      </div>
+    </div>
+  </main>
+  <script>
+    const roles = [
+      { id: "product", label: "产品经理", skill: "specforge-product", writes: "prd.md / prototype / spec.yaml" },
+      { id: "architect", label: "架构师SE", skill: "specforge-tech", writes: "tech.md + tech.yaml（必要时主控加派 ux）" },
+      { id: "developer", label: "开发", skill: "specforge-dev", writes: "任务写集内源码" },
+      { id: "tester", label: "测试", skill: "specforge-test", writes: "evidence.yaml" },
+      { id: "deployer", label: "部署", skill: "specforge-deploy", writes: "deploy.yaml" }
+    ];
+    const root = document.getElementById("roles");
+    const result = document.getElementById("result");
+    const summary = document.getElementById("summary");
+    let selected = null;
+    roles.forEach((role, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "role";
+      button.innerHTML = `<strong>${index + 1}. ${role.label}</strong><span>技能 ${role.skill} · 写出 ${role.writes}</span>`;
+      button.addEventListener("click", () => {
+        selected = role;
+        [...root.querySelectorAll("button.role")].forEach((node) => node.setAttribute("aria-pressed", "false"));
+        button.setAttribute("aria-pressed", "true");
+        summary.innerHTML = `已选：<strong>${role.label}</strong>（<code>${role.id}</code>）<br/>请在 Cursor 回复：<code>角色：${role.label}</code>`;
+        result.classList.add("show");
+      });
+      root.appendChild(button);
+    });
+    document.getElementById("copy").addEventListener("click", async () => {
+      if (!selected) return;
+      const text = `角色：${selected.label}`;
+      await navigator.clipboard.writeText(text);
+      document.getElementById("copy").textContent = "已复制";
+      setTimeout(() => { document.getElementById("copy").textContent = "复制回复文案"; }, 1200);
+    });
+  </script>
+</body>
+</html>

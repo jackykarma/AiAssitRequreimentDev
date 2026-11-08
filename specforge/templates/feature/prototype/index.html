@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>产品原型（待填写）</title>
+  <style>
+    :root {
+      --bg: #f6f4ef;
+      --ink: #1c1b19;
+      --muted: #5c574e;
+      --line: #d9d2c5;
+      --accent: #0f6b5c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    header, main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+    }
+    h1 { margin: 0 0 8px; font-size: 1.5rem; font-weight: 600; }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+    button, a.button {
+      display: inline-block;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+      font: inherit;
+    }
+    .hint { font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>产品原型占位页</h1>
+    <p class="hint">由产品 Agent 替换为真实主流程。本地用浏览器直接打开本文件即可评审。</p>
+  </header>
+  <main>
+    <div class="card">
+      <p>待产品经理与产品 Agent 澄清后，在此实现可点击的主场景。</p>
+      <button type="button" onclick="alert('请替换为真实交互')">示例操作</button>
+    </div>
+  </main>
+</body>
+</html>

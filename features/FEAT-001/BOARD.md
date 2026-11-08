@@ -1,6 +1,6 @@
 # Feature 共仓看板
 
-目录：`D:/Jacky/AndroidProjects/AiAssitRequreimentDev/features/FEAT-001`
+目录：`features/FEAT-001`
 
 各角色只写自己的工件，其余文件只读共享。一条需求可对应多个 feature。切换角色前先刷新本看板。
 
@@ -21,7 +21,8 @@
 | `prototype/index.html` | 产品 HTML 原型（给人） | 已有 |
 | `spec.yaml` | 结构化规格（给 Agent/门禁） | 已有 |
 | `ux.yaml` | 交互视觉 | 已有 |
-| `tech.yaml` | 技术方案 | 已有 |
+| `tech.md` | 技术方案文档（给人） | 已有 |
+| `tech.yaml` | 技术方案合同（给门禁） | 已有 |
 | `tasks.yaml` | 任务图 | 已有 |
 | `review.yaml` | 代码评审 | 已有 |
 | `evidence.yaml` | 测试证据 | 已有 |
@@ -32,7 +33,7 @@
 | 角色 | 技能 | 写出 |
 | --- | --- | --- |
 | 产品经理 | `aiassitrequreimentdev-product` | `prd.md`, `prototype/`, `spec.yaml` |
-| 架构师SE | `aiassitrequreimentdev-tech` | `tech.yaml` |
+| 架构师SE | `aiassitrequreimentdev-tech` | `tech.md`, `tech.yaml` |
 | 开发 | `aiassitrequreimentdev-dev` | `<任务写集内源码>` |
 | 测试 | `aiassitrequreimentdev-test` | `evidence.yaml` |
 | 部署 | `aiassitrequreimentdev-deploy` | `deploy.yaml` |

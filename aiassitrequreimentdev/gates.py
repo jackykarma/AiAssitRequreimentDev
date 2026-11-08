@@ -186,7 +186,11 @@ def _check_g1(change_dir: Path, state: dict, spec: dict, violations: list[Violat
         "id",
         "problem",
         "nonGoals",
+        "userJourneys",
+        "functionalRequirements",
+        "nonFunctionalRequirements",
         "scenarios",
+        "edgeCases",
         "acceptance",
         "constraints",
         "affected",
@@ -202,16 +206,129 @@ def _check_g1(change_dir: Path, state: dict, spec: dict, violations: list[Violat
         violations.append(Violation("G1", "SPEC_OPEN_QUESTIONS", "openQuestions 必须是列表"))
     elif questions:
         violations.append(Violation("G1", "SPEC_OPEN_QUESTIONS", "开放问题未清空，不能冻结规格"))
+
+    journeys = spec.get("userJourneys")
+    if not isinstance(journeys, list) or not journeys:
+        violations.append(Violation("G1", "SPEC_JOURNEY", "userJourneys 至少一条核心用户旅程"))
+    else:
+        _check_id_items(
+            journeys,
+            "UJ",
+            ("persona", "entry", "steps", "success"),
+            "G1",
+            "SPEC_JOURNEY",
+            violations,
+        )
+
+    functional = spec.get("functionalRequirements")
+    if not isinstance(functional, list) or not functional:
+        violations.append(
+            Violation("G1", "SPEC_FUNCTIONAL", "functionalRequirements 至少一条功能需求")
+        )
+    else:
+        _check_id_items(
+            functional,
+            "FR",
+            ("description",),
+            "G1",
+            "SPEC_FUNCTIONAL",
+            violations,
+        )
+
+    nfr = spec.get("nonFunctionalRequirements")
+    if not isinstance(nfr, list):
+        violations.append(
+            Violation("G1", "SPEC_NFR", "nonFunctionalRequirements 必须是列表")
+        )
+    elif not nfr:
+        reason = spec.get("nfrNoneReason")
+        if not isinstance(reason, str) or not reason.strip():
+            violations.append(
+                Violation("G1", "SPEC_NFR", "无非功能需求时须填写 nfrNoneReason")
+            )
+    else:
+        _check_id_items(
+            nfr,
+            "NFR",
+            ("category", "requirement", "measure"),
+            "G1",
+            "SPEC_NFR",
+            violations,
+        )
+
+    scenarios = spec.get("scenarios")
+    if not isinstance(scenarios, list) or not scenarios:
+        violations.append(Violation("G1", "SPEC_SCENARIO", "scenarios 至少一条主流程场景"))
+    else:
+        _check_unique(scenarios, "S", "G1", "SPEC_DUPLICATE_ID", violations)
+        for item in scenarios:
+            if not isinstance(item, dict):
+                violations.append(Violation("G1", "SPEC_SCENARIO", "场景条目必须是映射"))
+                continue
+            identifier = item.get("id")
+            for key in ("trigger", "outcome", "failure"):
+                value = item.get(key)
+                if not isinstance(value, str) or not value.strip():
+                    violations.append(
+                        Violation("G1", "SPEC_SCENARIO", f"{identifier} 缺少 {key}")
+                    )
+
+    edges = spec.get("edgeCases")
+    if not isinstance(edges, list):
+        violations.append(Violation("G1", "SPEC_EDGE", "edgeCases 必须是列表"))
+    elif not edges:
+        reason = spec.get("edgeNoneReason")
+        if not isinstance(reason, str) or not reason.strip():
+            violations.append(
+                Violation("G1", "SPEC_EDGE", "无异常边界时须填写 edgeNoneReason")
+            )
+    else:
+        _check_id_items(
+            edges,
+            "E",
+            ("trigger", "expected"),
+            "G1",
+            "SPEC_EDGE",
+            violations,
+        )
+
     acceptance = spec.get("acceptance")
     if not isinstance(acceptance, list) or not acceptance:
         violations.append(Violation("G1", "SPEC_ACCEPTANCE_SHAPE", "至少要有一条验收"))
     else:
         _check_acceptance_items(acceptance, violations)
-    scenarios = spec.get("scenarios")
-    if isinstance(scenarios, list):
-        _check_unique(scenarios, "S", "G1", "SPEC_DUPLICATE_ID", violations)
     if state.get("gates", {}).get("G1") == "accepted":
         _check_hash(change_dir, state, violations)
+
+
+def _check_id_items(
+    items: list,
+    prefix: str,
+    required_keys: tuple[str, ...],
+    gate: str,
+    code: str,
+    violations: list[Violation],
+) -> None:
+    seen: set[str] = set()
+    for item in items:
+        if not isinstance(item, dict):
+            violations.append(Violation(gate, code, "条目必须是映射"))
+            continue
+        identifier = item.get("id")
+        if (
+            not isinstance(identifier, str)
+            or not identifier.startswith(prefix)
+            or identifier in seen
+        ):
+            violations.append(
+                Violation(gate, code, f"编号重复或非法: {identifier}（须 {prefix}*）")
+            )
+        else:
+            seen.add(identifier)
+        for key in required_keys:
+            value = item.get(key)
+            if not isinstance(value, str) or not value.strip():
+                violations.append(Violation(gate, code, f"{identifier} 缺少 {key}"))
 
 
 def _check_acceptance_items(acceptance: list, violations: list[Violation]) -> None:

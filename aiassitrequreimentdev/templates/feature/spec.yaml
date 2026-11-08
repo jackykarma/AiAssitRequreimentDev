@@ -1,7 +1,15 @@
-id: CH-000
+# feature 级机器合同（G1）。给人读的完整 PRD 见 prd.md。
+# 必含：用户旅程 UJ*、功能 FR*、非功能 NFR*（或 nfrNoneReason）、场景 S*、异常边界 E*（或 edgeNoneReason）、验收 A*。
+id: FEAT-000
 problem: ""
 nonGoals: []
+userJourneys: []
+functionalRequirements: []
+nonFunctionalRequirements: []
+nfrNoneReason: ""
 scenarios: []
+edgeCases: []
+edgeNoneReason: ""
 acceptance: []
 constraints: []
 affected: []

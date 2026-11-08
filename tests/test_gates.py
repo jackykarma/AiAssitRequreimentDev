@@ -20,22 +20,49 @@ id: CH-014
 problem: 重复的支付回调会把订单推进两次
 nonGoals:
   - 不改支付渠道协议
+userJourneys:
+  - id: UJ1
+    persona: 已下单用户
+    entry: 支付渠道回调
+    steps: "1. 收到通知 2. 幂等校验 3. 更新订单为已支付"
+    success: 订单已支付且重复通知不二次推进
+functionalRequirements:
+  - id: FR1
+    description: 相同通知只推进一次订单状态
+    scenarios: [S1]
+  - id: FR2
+    description: 迟到通知不改变已支付订单
+    scenarios: [S1]
+nonFunctionalRequirements:
+  - id: NFR1
+    category: stability
+    requirement: 写库失败可安全重试
+    measure: 失败后状态保持待支付且可再次回调
+nfrNoneReason: ""
 scenarios:
   - id: S1
     trigger: 同一通知到达两次
     outcome: 订单仍为已支付
     failure: 写库失败时保持未支付
+edgeCases:
+  - id: E1
+    trigger: 已支付后迟到通知到达
+    expected: 返回已处理且状态不变
+    userVisible: 订单详情仍显示已支付
+edgeNoneReason: ""
 acceptance:
   - id: A1
     given: 订单处于待支付
     when: 相同通知投递两次
     then: 状态只迁移一次
     verify: CallbackIdempotencyTest
+    covers: [FR1, S1]
   - id: A2
     given: 订单处于已支付
     when: 迟到通知到达
     then: 响应为已处理且状态不变
     verify: LateCallbackTest
+    covers: [FR2, E1]
 constraints:
   - modus/knowledge/domain/order/references/state_machine.md
 affected:

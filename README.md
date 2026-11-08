@@ -43,7 +43,9 @@ python -m unittest tests.test_gates tests.test_roles tests.test_paths
 | 技能 | 只写 |
 | --- | --- |
 | `aiassitrequreimentdev-lead` | `state.json`、`tasks.yaml`、代跑 CLI |
-| `aiassitrequreimentdev-product` | `prd.md`、`prototype/`、`spec.yaml`（大需求另写需求级 PRD / `split.yaml`） |
+| `aiassitrequreimentdev-brainstorm` | 一句话需求时探索意图与方案（不出正式 spec） |
+| `aiassitrequreimentdev-grill` | 系统追问，闭合旅程与规格清单 |
+| `aiassitrequreimentdev-product` | `prd.md`、`prototype/`、`spec.yaml`（用户旅程/功能/非功能/场景/异常/验收；大需求另写需求级 PRD / `split.yaml`） |
 | `aiassitrequreimentdev-ux` | `ux.yaml` |
 | `aiassitrequreimentdev-tech` | `tech.md`、`tech.yaml`（按 feature；架构图可选，变更文件/选型/风险/快稳省/数据/埋点必含） |
 | `aiassitrequreimentdev-dev` | 任务写集内源码 |

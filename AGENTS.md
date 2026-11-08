@@ -1,6 +1,6 @@
-# SpecForge
+# AiAssitRequreimentDev
 
-做需求开发时：启用 `specforge-lead`。
+做需求开发时：启用 `specforge-lead`（CLI / 技能目录仍用包名 `specforge`）。
 
 1. 选角色（`docs/role-picker.html` + `adopt`）
 2. 按需求推荐并确认路径（`recommend` / `docs/path-picker.html` + `path`）→ `full` 或 `light`

@@ -1,4 +1,4 @@
-# SpecForge 架构
+# AiAssitRequreimentDev 架构
 
 对话编排 + 规格门禁多智能体。启动时先选角色，再确认全量/轻量；合同落在 `features/<id>/`，长期知识在 `modus/knowledge/`。门禁用 `python -m specforge check`（主控代跑）。
 

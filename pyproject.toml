@@ -1,7 +1,7 @@
 [project]
 name = "specforge"
 version = "0.1.0"
-description = "规格门禁多智能体的变更合同与门禁检查"
+description = "AiAssitRequreimentDev：规格门禁多智能体的变更合同与门禁检查"
 requires-python = ">=3.11"
 dependencies = ["PyYAML>=6"]
 

@@ -4,7 +4,7 @@
  ** All rights reserved.
  **
  ** File: - __init__.py
- ** Description: SpecForge 门禁检查包。
+ ** Description: AiAssitRequreimentDev 门禁检查包。
  ** Version: 1.1
  ** Date: 2026/11/08
  ** Author: limao2@Apps.Gallery

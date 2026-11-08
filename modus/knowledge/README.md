@@ -1,4 +1,4 @@
-﻿# modus 知识库
+# modus 知识库
 
 长期事实只写在这里。feature 目录里的 yaml 用路径链接进来，禁止复制规则正文。
 
@@ -6,7 +6,7 @@
 
 - `architecture-overview.md`：总入口
 - `constraint/`：全局与团队底线（人持有，Agent 不得覆盖）
-- `domain/change/`：SpecForge 变更流程域
+- `domain/change/`：AiAssitRequreimentDev 变更流程域
 - `domain/_template/`：业务域接入模板（复制后改名，填真实规则）
 
 ## 新增业务域

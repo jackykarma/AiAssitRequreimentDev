@@ -1,6 +1,6 @@
-﻿# SpecForge 总览
+# AiAssitRequreimentDev 总览
 
-本知识库描述 SpecForge 研发系统。业务项目接入时，在 `modus/knowledge/domain/` 下按 `_template/` 合同增加自己的领域，不要把业务规则写进 `domain/change/`。
+本知识库描述 AiAssitRequreimentDev 研发系统。业务项目接入时，在 `modus/knowledge/domain/` 下按 `_template/` 合同增加自己的领域，不要把业务规则写进 `domain/change/`。
 
 ## 怎么读
 

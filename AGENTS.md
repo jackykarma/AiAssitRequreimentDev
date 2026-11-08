@@ -6,7 +6,7 @@
 2. 按需求推荐并确认路径（`recommend` / `docs/path-picker.html` + `path`）→ `full` 或 `light`
 3. 进入对应技能；产物共仓在 `features/<id>/`（`BOARD.md`）
 
-**需求 ≠ feature**：一条需求 → 1..N 个 feature。大需求：产品先写需求级 PRD，再在 `split.yaml` 决定拆几个；主控建目录。小需求可直开单个 feature。feature 内的 `tasks.yaml` 更晚才拆。
+**需求 ≠ feature**：一条需求 → 1..N 个 feature。feature 须对本切片 `A*` 可独立交付（可 G4），不是半成品，也不等于整需求零依赖大包；可有 `dependsOnFeatures`。大需求：产品先写需求级 PRD，再在 `split.yaml` 决定拆几个；主控建目录。小需求可直开单个 feature。feature 内的 `tasks.yaml` 更晚才拆。
 
 主控代跑 `start` / `init` / `check` / `seal` / `board` / `recommend` / `path`。
 

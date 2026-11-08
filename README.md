@@ -15,7 +15,7 @@ AI 辅助需求开发流水线。从意图出发，用结构化规格把产品�
 | 概念 | 含义 |
 | --- | --- |
 | 需求 | 业务问题 / 史诗；大需求可建 `requirements/<REQ-id>/`（需求级 PRD + `split.yaml`） |
-| feature | 可关门禁的交付切片；产物在 `features/<id>/`；一条需求 → 1..N 个 feature |
+| feature | 可关门禁的交付切片（对本切片验收可独立交付；可有 feature 间依赖）；产物在 `features/<id>/`；一条需求 → 1..N 个 feature |
 | task | feature 内实现单元；该 feature 的 `tasks.yaml`（G2T 之后再拆） |
 
 小需求可直开单个 feature。大需求：产品先写需求级 PRD，再在 `split.yaml` 决定拆几个；主控建目录。

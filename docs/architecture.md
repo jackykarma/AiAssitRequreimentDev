@@ -7,7 +7,7 @@
 | 概念 | 含义 |
 | --- | --- |
 | 需求 | 业务问题 / 史诗；目录可选 `requirements/<REQ-id>/`（需求级 PRD + `split.yaml`） |
-| feature | 可 G4 的交付切片；`features/<id>/`；一条需求 → 1..N 个 feature |
+| feature | 可 G4 的交付切片（对本切片 `A*` 可独立验收；≠ 整需求零依赖大包）；`features/<id>/`；一条需求 → 1..N 个 feature |
 | task | feature 内实现单元；该 feature 门禁中后期的 `tasks.yaml` |
 
 **谁拆 feature**：产品主责，依据需求级 PRD 写 `split.yaml`；主控执行创建目录；架构师可建议；开发不拆。  

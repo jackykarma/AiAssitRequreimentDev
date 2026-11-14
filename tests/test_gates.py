@@ -3,7 +3,15 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from aiassitrequreimentdev.gates import evaluate, init_feature, init_requirement, seal_spec
+from aiassitrequreimentdev.gates import (
+    compose_requirement_id,
+    evaluate,
+    init_feature,
+    init_requirement,
+    resolve_requirement_id,
+    seal_spec,
+    validate_requirement_id,
+)
 
 
 def write_yaml(path: Path, text: str) -> None:
@@ -839,7 +847,8 @@ rollback: ""
 
     def test_init_feature_copies_template(self) -> None:
         root = Path(self.tmp.name) / "repo"
-        destination = init_feature(root, "FEAT-100", requirement_id="REQ-100")
+        req_id = "REQ-100-sample-feature-20220305"
+        destination = init_feature(root, "FEAT-100", requirement_id=req_id)
         self.assertTrue((destination / "state.json").is_file())
         self.assertTrue((destination / "spec.yaml").is_file())
         self.assertTrue((destination / "ux.yaml").is_file())
@@ -851,17 +860,41 @@ rollback: ""
         self.assertTrue(str(destination).endswith(str(Path("features") / "FEAT-100")))
         created = json.loads((destination / "state.json").read_text(encoding="utf-8"))
         self.assertEqual(created["path"], "full")
-        self.assertEqual(created["requirementId"], "REQ-100")
+        self.assertEqual(created["requirementId"], req_id)
         self.assertEqual(created["gates"]["GR"], "pending")
         self.assertEqual(created["gates"]["GD"], "pending")
 
     def test_init_requirement_copies_template(self) -> None:
         root = Path(self.tmp.name) / "repo"
-        destination = init_requirement(root, "REQ-200")
+        req_id = "REQ-200-move-album-20220305"
+        destination = init_requirement(root, req_id)
         self.assertTrue((destination / "prd.md").is_file())
         self.assertTrue((destination / "split.yaml").is_file())
+        self.assertTrue(str(destination).endswith(str(Path("requirements") / req_id)))
         split_doc = (destination / "split.yaml").read_text(encoding="utf-8")
-        self.assertIn("REQ-200", split_doc)
+        self.assertIn(req_id, split_doc)
+
+    def test_init_requirement_rejects_short_id(self) -> None:
+        root = Path(self.tmp.name) / "repo"
+        with self.assertRaises(ValueError):
+            init_requirement(root, "REQ-200")
+
+    def test_resolve_requirement_id_full_and_compose(self) -> None:
+        full = "REQ-001-move-album-20220305"
+        self.assertEqual(validate_requirement_id(full), full)
+        self.assertEqual(resolve_requirement_id(full), full)
+        self.assertEqual(
+            compose_requirement_id("REQ-001", "move_album", date_text="20220305"),
+            full,
+        )
+        self.assertEqual(
+            resolve_requirement_id("REQ-001", name="move-album", date_text="20220305"),
+            full,
+        )
+        with self.assertRaises(ValueError):
+            resolve_requirement_id("REQ-001")
+        with self.assertRaises(ValueError):
+            validate_requirement_id("REQ-001-move-album-20221399")
 
 
 if __name__ == "__main__":

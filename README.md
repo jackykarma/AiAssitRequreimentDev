@@ -14,7 +14,7 @@ AI 辅助需求开发流水线。从意图出发，用结构化规格把产品�
 
 | 概念 | 含义 |
 | --- | --- |
-| 需求 | 业务问题 / 史诗；大需求可建 `requirements/<REQ-id>/`（需求级 PRD + `split.yaml`） |
+| 需求 | 业务问题 / 史诗；大需求可建 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`；需求级 PRD + `split.yaml`） |
 | feature | 可关门禁的交付切片（对本切片验收可独立交付；可有 feature 间依赖）；产物在 `features/<id>/`；一条需求 → 1..N 个 feature |
 | task | feature 内实现单元；该 feature 的 `tasks.yaml`（G2T 之后再拆） |
 
@@ -32,8 +32,9 @@ AI 辅助需求开发流水线。从意图出发，用结构化规格把产品�
 
 ```bash
 python -m pip install -e .
-python -m aiassitrequreimentdev init-req REQ-001          # 大需求（可选）
-python -m aiassitrequreimentdev init FEAT-001             # feature
+python -m aiassitrequreimentdev init-req REQ-001-move-album-20220305
+# 或：python -m aiassitrequreimentdev init-req REQ-001 --name move-album [--date 20220305]
+python -m aiassitrequreimentdev init FEAT-001 --requirement REQ-001-move-album-20220305
 python -m aiassitrequreimentdev check features/FEAT-001 --gate G1
 python -m unittest tests.test_gates tests.test_roles tests.test_paths
 ```

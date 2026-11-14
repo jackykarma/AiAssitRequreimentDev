@@ -1,4 +1,4 @@
-requirementId: REQ-000
+requirementId: REQ-000-example-name-20200101
 decision: single   # single | multi
 rationale: 待产品根据需求级 PRD 填写：为何一个或为何多个
 confirmedByHuman: false

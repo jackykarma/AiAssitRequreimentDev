@@ -43,7 +43,7 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 
 ## 需求级产物（大需求）
 
-目录：`requirements/<REQ-id>/`
+目录：`requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`）
 
 | 文件 | 用途 |
 | --- | --- |

@@ -6,7 +6,7 @@
 
 | 概念 | 含义 |
 | --- | --- |
-| 需求 | 业务问题 / 史诗；目录可选 `requirements/<REQ-id>/`（需求级 PRD + `split.yaml`） |
+| 需求 | 业务问题 / 史诗；目录可选 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`；需求级 PRD + `split.yaml`） |
 | feature | 可 G4 的交付切片（对本切片 `A*` 可独立验收；≠ 整需求零依赖大包）；`features/<id>/`；一条需求 → 1..N 个 feature |
 | task | feature 内实现单元；该 feature 门禁中后期的 `tasks.yaml` |
 
@@ -28,7 +28,7 @@
 ## 目录
 
 ```text
-requirements/<REQ-id>/     # 大需求：需求级 PRD + split.yaml + architecture/（可选草图）
+requirements/REQ-<序号>-<名称>-<YYYYMMDD>/  # 如 REQ-001-move-album-20220305；PRD + split + architecture/
 features/<FEAT-id>/        # 交付切片
   state.json               # requirementId、dependsOnFeatures、actorRole、path…
   BOARD.md

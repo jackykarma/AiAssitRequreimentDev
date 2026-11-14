@@ -26,7 +26,14 @@ from pathlib import Path
 from urllib.parse import quote
 
 from aiassitrequreimentdev.board import adopt_role, refresh_board, set_path
-from aiassitrequreimentdev.gates import GATES, evaluate, init_feature, init_requirement, seal_spec
+from aiassitrequreimentdev.gates import (
+    GATES,
+    evaluate,
+    init_feature,
+    init_requirement,
+    resolve_requirement_id,
+    seal_spec,
+)
 from aiassitrequreimentdev.paths import menu_text as path_menu_text
 from aiassitrequreimentdev.paths import recommend_path, resolve_path
 from aiassitrequreimentdev.roles import menu_text, resolve_menu_choice
@@ -54,10 +61,21 @@ def main(argv: list[str] | None = None) -> int:
     init_parser = sub.add_parser("init", help="按模板创建一个 feature 目录")
     init_parser.add_argument("feature_id")
     init_parser.add_argument("--root", default=".", help="仓库根目录")
-    init_parser.add_argument("--requirement", help="关联的 requirementId")
+    init_parser.add_argument(
+        "--requirement",
+        help="关联的 requirementId（REQ-序号-名称-YYYYMMDD）",
+    )
 
-    req_parser = sub.add_parser("init-req", help="创建需求目录（需求级 PRD + split.yaml）")
-    req_parser.add_argument("requirement_id")
+    req_parser = sub.add_parser(
+        "init-req",
+        help="创建需求目录（需求级 PRD + split.yaml）；id=REQ-序号-名称-YYYYMMDD",
+    )
+    req_parser.add_argument(
+        "requirement_id",
+        help="完整 id（REQ-001-move-album-20220305）或仅序号段 REQ-001（须配合 --name）",
+    )
+    req_parser.add_argument("--name", help="kebab 名称，如 move-album；与序号段拼装完整 id")
+    req_parser.add_argument("--date", help="YYYYMMDD，默认今天；仅与 --name 拼装时使用")
     req_parser.add_argument("--root", default=".", help="仓库根目录")
 
     check_parser = sub.add_parser("check", help="检查一个 feature 目录的门禁")
@@ -117,7 +135,16 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "init-req":
-        destination = init_requirement(Path(args.root), args.requirement_id)
+        try:
+            requirement_id = resolve_requirement_id(
+                args.requirement_id,
+                name=args.name,
+                date_text=args.date,
+            )
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+        destination = init_requirement(Path(args.root), requirement_id)
         print(destination)
         print("下一步：产品写需求级 PRD，再填 split.yaml 决定 1 或 N 个 feature。")
         return 0

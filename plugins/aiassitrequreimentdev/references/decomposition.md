@@ -2,7 +2,7 @@
 
 | 概念 | 含义 | 落盘 |
 | --- | --- | --- |
-| 需求 | 业务问题 / 史诗 | `requirements/<REQ-id>/`（需求级 PRD + `split.yaml`） |
+| 需求 | 业务问题 / 史诗 | `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`；需求级 PRD + `split.yaml`） |
 | feature | 可 G4 的交付切片 | `features/<FEAT-id>/` |
 | task | feature 内实现单元 | `tasks.yaml`，在该 feature **G2T 通过之后**由主控拆 |
 

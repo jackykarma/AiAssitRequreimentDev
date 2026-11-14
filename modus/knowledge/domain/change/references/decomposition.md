@@ -4,7 +4,7 @@
 
 | 概念 | 含义 | 落盘 |
 | --- | --- | --- |
-| **需求** | 业务要解决的问题 / 史诗 | `requirements/<REQ-id>/`（需求级 PRD + 拆分决策） |
+| **需求** | 业务要解决的问题 / 史诗 | `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`；需求级 PRD + 拆分决策） |
 | **feature** | 可关门禁、可合并的交付切片 | `features/<FEAT-id>/` |
 | **task** | feature 内实现单元 | `features/.../tasks.yaml` |
 
@@ -37,9 +37,9 @@ Feature **必须**是对本切片验收可独立关门禁（可 G4）的完整�
 
 ```text
 需求对话 / grill
-    → 需求级 PRD（requirements/<REQ>/prd.md）
+    → 需求级 PRD（requirements/REQ-…/prd.md）
     → 整需求架构草图（可选，architecture/；Archify html+svg）
-    → 拆分决策（requirements/<REQ>/split.yaml）  ← 根据 PRD + 架构草图决定 1 或 N
+    → 拆分决策（requirements/REQ-…/split.yaml）  ← 根据 PRD + 架构草图决定 1 或 N
     → 人确认（多 feature 时）
     → 创建 features/FEAT-*，写入 requirementId
     → 每个 feature：切片 PRD + 原型 + spec.yaml → 各自门禁（含各自 tech）
@@ -74,7 +74,7 @@ Feature **必须**是对本切片验收可独立关门禁（可 G4）的完整�
 | 单目录 PRD 已过大、开放问题分区明显 | 按闭合的问题簇拆 |
 | 架构师指出强耦合必须同发 | **合并**回一个 feature，或拆但仍强制同一发布列车并写明依赖 |
 
-决策结果写入 `requirements/<REQ>/split.yaml`，至少包含：`decision`（`single`|`multi`）、`rationale`、`features[]`（id、标题、范围、建议 path、dependsOn）。
+决策结果写入 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/split.yaml`，至少包含：`decision`（`single`|`multi`）、`rationale`、`features[]`（id、标题、范围、建议 path、dependsOn）。
 
 ## feature 内再拆什么
 

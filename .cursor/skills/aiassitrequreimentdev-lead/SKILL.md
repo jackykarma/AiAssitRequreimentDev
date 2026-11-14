@@ -22,7 +22,7 @@ description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让
 | 步骤 | 谁 | 做什么 |
 | --- | --- | --- |
 | 1 | 产品 | 需求级 PRD（大需求用 `init-req`） |
-| 2 | 架构师（建议） | 整需求架构草图 → `requirements/<REQ>/architecture/`（Archify html+svg）；可建议拆分 |
+| 2 | 架构师（建议） | 整需求架构草图 → `requirements/REQ-…/architecture/`（Archify html+svg）；可建议拆分 |
 | 3 | 产品 | 填 `split.yaml`（1 或 N） |
 | 4 | 主控 | `decision: multi` 时打断人确认拆分 |
 | 5 | 主控 | `init` 各 feature，带 `--requirement` |
@@ -33,11 +33,14 @@ description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让
 小需求：直接 `start FEAT-xxx`，一个 feature 到底。
 
 ```bash
-python <本插件>/scripts/aad.py init-req REQ-001
+python <本插件>/scripts/aad.py init-req REQ-001-move-album-20220305
+# 或：init-req REQ-001 --name move-album [--date 20220305]
 # 产品写完 prd + split 后：
-python <本插件>/scripts/aad.py init FEAT-001 --requirement REQ-001
-python <本插件>/scripts/aad.py init FEAT-002 --requirement REQ-001
+python <本插件>/scripts/aad.py init FEAT-001 --requirement REQ-001-move-album-20220305
+python <本插件>/scripts/aad.py init FEAT-002 --requirement REQ-001-move-album-20220305
 ```
+
+需求目录 / `requirementId` 格式：`REQ-<序号>-<kebab名称>-<YYYYMMDD>`。
 
 **不要**在没有需求级 PRD（或未确认的单 feature 捷径）时批量空建 feature。  
 **tasks.yaml** 只在单个 feature 的技术门禁之后拆，不是拆需求。

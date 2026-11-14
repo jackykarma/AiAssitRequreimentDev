@@ -19,19 +19,25 @@
 from aiassitrequreimentdev.gates import (
     Report,
     Violation,
+    compose_requirement_id,
     evaluate,
     init_change,
     init_feature,
     init_requirement,
+    resolve_requirement_id,
     seal_spec,
+    validate_requirement_id,
 )
 
 __all__ = [
     "Report",
     "Violation",
+    "compose_requirement_id",
     "evaluate",
     "init_change",
     "init_feature",
     "init_requirement",
+    "resolve_requirement_id",
     "seal_spec",
+    "validate_requirement_id",
 ]

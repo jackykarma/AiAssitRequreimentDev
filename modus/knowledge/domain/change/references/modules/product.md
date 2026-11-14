@@ -20,7 +20,7 @@
 2. `prototype/**/*.html`：可本地打开的点击原型（无 UI 须在 PRD 声明）
 3. `spec.yaml`：`UJ*` / `FR*` / `NFR*` / `S*` / `E*` / `A*`（G1 / 下游 Agent）
 
-大需求另写需求级 `requirements/<REQ>/prd.md` + `split.yaml`。
+大需求另写需求级 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/prd.md` + `split.yaml`（如 `REQ-001-move-album-20220305`）。
 
 `prd.md` 与 `spec.yaml` 同源同口径，都要；不要用对话草稿文件代替。
 

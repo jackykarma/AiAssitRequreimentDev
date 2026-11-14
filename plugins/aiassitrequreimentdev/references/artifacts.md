@@ -20,6 +20,6 @@
 | `evidence.yaml` | 测试 | 每条验收的 command 与 `exitCode` |
 | `deploy.yaml` | 部署 | 环境、命令、回滚；不代执行上线 |
 
-大需求另有 `requirements/<REQ-id>/`：需求级 `prd.md`、`split.yaml`，可选 `architecture/`（Archify 草图，不进 G2T）。
+大需求另有 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`）：需求级 `prd.md`、`split.yaml`，可选 `architecture/`（Archify 草图，不进 G2T）。
 
 `prd.md` 给人读，`spec.yaml` 给 Agent 与门禁，同一套编号。禁止只交其中一份。改规格必须同步 PRD 及受影响原型。

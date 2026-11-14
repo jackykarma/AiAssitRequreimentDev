@@ -19,6 +19,7 @@
  ** limao2@Apps.Gallery 2026/11/14 1.4 L0/L1 arch + keyDesigns + multi diagrams
  ** limao2@Apps.Gallery 2026/11/14 1.5 nfr/iface/data/tracking + design templates
  ** limao2@Apps.Gallery 2026/11/14 1.6 interactive HTML prototype G1/G2
+ ** limao2@Apps.Gallery 2026/11/14 1.7 requirement id = REQ-seq-name-YYYYMMDD
  *********************************************************************************/
 """
 
@@ -26,11 +27,23 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import shutil
 from dataclasses import dataclass
+from datetime import date, datetime
 from pathlib import Path
 
 import yaml
+
+# REQ-001-move-album-20220305
+REQUIREMENT_ID_RE = re.compile(
+    r"^REQ-(?P<seq>\d+)-(?P<name>[a-z0-9]+(?:-[a-z0-9]+)*)-(?P<date>\d{8})$"
+)
+REQUIREMENT_SEQ_RE = re.compile(r"^REQ-\d+$")
+REQUIREMENT_ID_HINT = (
+    "需求 id 格式：REQ-<序号>-<kebab名称>-<YYYYMMDD>，"
+    "例如 REQ-001-move-album-20220305"
+)
 
 GATES = ("G0", "G1", "G2", "G2T", "G3", "GR", "G4", "GD")
 PATHS = ("full", "light")
@@ -78,7 +91,64 @@ def requirement_template_dir() -> Path:
     return Path(__file__).resolve().parent / "templates" / "requirement"
 
 
+def _validate_requirement_date(value: str) -> str:
+    try:
+        datetime.strptime(value, "%Y%m%d")
+    except ValueError as exc:
+        raise ValueError(f"需求日期须为合法 YYYYMMDD，收到: {value}") from exc
+    return value
+
+
+def validate_requirement_id(requirement_id: str) -> str:
+    """校验并返回完整需求 id：REQ-<序号>-<kebab名称>-<YYYYMMDD>。"""
+    text = requirement_id.strip()
+    matched = REQUIREMENT_ID_RE.fullmatch(text)
+    if not matched:
+        raise ValueError(f"{REQUIREMENT_ID_HINT}；收到: {requirement_id}")
+    _validate_requirement_date(matched.group("date"))
+    return text
+
+
+def compose_requirement_id(
+    seq: str,
+    name: str,
+    *,
+    date_text: str | None = None,
+) -> str:
+    """由序号段与名称拼出完整需求 id；日期默认今天。"""
+    seq_text = seq.strip()
+    if not REQUIREMENT_SEQ_RE.fullmatch(seq_text):
+        raise ValueError(f"需求序号段须为 REQ-<数字>，例如 REQ-001；收到: {seq}")
+    slug = name.strip().lower().replace("_", "-").strip("-")
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+        raise ValueError(
+            f"需求名称须为 kebab-case（小写字母/数字/短横线），例如 move-album；收到: {name}"
+        )
+    day = _validate_requirement_date(date_text) if date_text else date.today().strftime("%Y%m%d")
+    return f"{seq_text}-{slug}-{day}"
+
+
+def resolve_requirement_id(
+    requirement_id: str,
+    *,
+    name: str | None = None,
+    date_text: str | None = None,
+) -> str:
+    """接受完整 id，或 REQ-序号 + --name [--date] 拼装。"""
+    text = requirement_id.strip()
+    if REQUIREMENT_ID_RE.fullmatch(text):
+        if name or date_text:
+            raise ValueError("已提供完整需求 id 时不要再传 --name / --date")
+        return validate_requirement_id(text)
+    if REQUIREMENT_SEQ_RE.fullmatch(text):
+        if not name:
+            raise ValueError(f"{REQUIREMENT_ID_HINT}；也可：init-req REQ-001 --name move-album")
+        return compose_requirement_id(text, name, date_text=date_text)
+    raise ValueError(f"{REQUIREMENT_ID_HINT}；收到: {requirement_id}")
+
+
 def init_requirement(root: Path, requirement_id: str) -> Path:
+    requirement_id = validate_requirement_id(requirement_id)
     destination = root / "requirements" / requirement_id
     if destination.exists():
         raise FileExistsError(f"requirement 已存在: {destination}")
@@ -110,6 +180,7 @@ def init_feature(root: Path, feature_id: str, *, requirement_id: str | None = No
         encoding="utf-8",
     )
     if requirement_id:
+        requirement_id = validate_requirement_id(requirement_id)
         state_path = destination / "state.json"
         state = json.loads(state_path.read_text(encoding="utf-8"))
         state["requirementId"] = requirement_id

@@ -1,7 +1,7 @@
 {
   "name": "aiassitrequreimentdev",
   "displayName": "AiAssitRequreimentDev",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "需求开发流水线：lead/product/ux/tech/dev/review/test/deploy 技能与门禁 CLI",
   "author": { "name": "OPLUS Apps.Gallery" },
   "keywords": ["requirements", "gates", "prd", "tech"]

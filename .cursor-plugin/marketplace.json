@@ -11,7 +11,7 @@
       "name": "aiassitrequreimentdev",
       "source": "plugins/aiassitrequreimentdev",
       "description": "需求开发角色技能与门禁 CLI",
-      "version": "0.1.0"
+      "version": "0.1.1"
     }
   ]
 }

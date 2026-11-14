@@ -17,7 +17,7 @@ description: 部署 Agent。只写 deploy.yaml 部署清单与命令，不执行
 ## 结束
 
 ```bash
-python -m aiassitrequreimentdev check <feature 目录> --gate GD
+python <本插件>/scripts/aad.py check <feature 目录> --gate GD
 ```
 
-输出 `GD ready` 后停，由主控打断人确认是否真正执行上线。
+输出 `GD ready` 后停，由主控打断人确认是否真正执行上线。结束后请主控登记 token（`--role deployer --stage release`）。

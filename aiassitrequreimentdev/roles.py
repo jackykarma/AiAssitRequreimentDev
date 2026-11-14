@@ -42,7 +42,7 @@ ROLES: tuple[Role, ...] = (
         reads=("BOARD.md", "modus/knowledge/"),
         stage_hint="clarify",
         gate_hint="G1",
-        note="对话澄清后交付 PRD、HTML 原型与结构化 spec。",
+        note="对话澄清后交付 PRD、可交互 HTML 产品原型与结构化 spec。",
     ),
     Role(
         id="architect",
@@ -52,7 +52,7 @@ ROLES: tuple[Role, ...] = (
         reads=("BOARD.md", "prd.md", "prototype/", "spec.yaml", "ux.yaml", "modus/knowledge/"),
         stage_hint="tech",
         gate_hint="G2T",
-        note="读产品合同后写技术方案。若需交互精修，主控可加派 aiassitrequreimentdev-ux 写 ux.yaml。",
+        note="读产品合同后写技术方案。若需交互精修，主控可加派 aiassitrequreimentdev-ux 写 ux.yaml 与 prototype/ux/。",
     ),
     Role(
         id="developer",

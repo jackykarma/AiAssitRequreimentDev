@@ -1,8 +1,11 @@
 # feature 级机器合同（G1）。给人读的完整 PRD 见 prd.md。
 # 必含：用户旅程 UJ*、功能 FR*、非功能 NFR*（或 nfrNoneReason）、场景 S*、异常边界 E*（或 edgeNoneReason）、验收 A*。
+# 有 UI：须交付可交互 HTML 产品原型 prototype/index.html；无 UI 时 uiRequired=false 并填 uiNoneReason。
 id: FEAT-000
 problem: ""
 nonGoals: []
+uiRequired: true
+uiNoneReason: ""
 userJourneys: []
 functionalRequirements: []
 nonFunctionalRequirements: []

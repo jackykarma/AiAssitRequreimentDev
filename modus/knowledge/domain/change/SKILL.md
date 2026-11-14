@@ -9,6 +9,8 @@
 | 阶段怎么迁移，哪一道门把任务堵住 | [references/state_machine.md](references/state_machine.md) |
 | 全量还是轻量 | [references/paths.md](references/paths.md) |
 | 大需求如何拆、过程中怎么改 | [references/decomposition.md](references/decomposition.md) |
+| 绘图（Archify，仅 html/svg） | [references/diagrams.md](references/diagrams.md) |
+| 设计展开模板（NFR/接口/库表/埋点/KD） | `aiassitrequreimentdev/templates/design/` |
 | 启动选哪个角色 | [references/roles.md](references/roles.md) |
 | 编号、哈希、写集、工件规则 | [references/rule.md](references/rule.md) |
 | 打断策略何时停下来问人 | [references/interrupt.md](references/interrupt.md) |

@@ -4,10 +4,10 @@
 
 1. 启动流程必须先选择人角色（产品经理 / 架构师SE / 开发 / 测试 / 部署），再根据需求推荐并确认研发路径（`full` 全量 / `light` 轻量）。写入 `actorRole` 与已确认的 `path` 后再派对应技能。工件与 CLI 由 Agent 代跑。
 2. 同一 feature 的产物共仓于 `features/<id>/`，以 `BOARD.md` 为共享索引。角色只写自己的文件，其余只读。一条**需求**可对应一个或多个 feature。
-3. 产品阶段交付：`prd.md`（给人）、`prototype/`（给人）、`spec.yaml`（给 Agent 与门禁）。输入不完整时须先 brainstorm/grill 再出稿。须覆盖核心用户旅程、功能需求、非功能需求、主流程、异常与边界、验收标准；`prd` 与 `spec` 都要，同源同口径；禁止用对话草稿文件代替。
+3. 产品阶段交付：`prd.md`（给人）、可交互 HTML `prototype/index.html`（给人；无 UI 时 `spec.uiRequired=false` + `uiNoneReason`）、`spec.yaml`（给 Agent 与门禁）。输入不完整时须先 brainstorm/grill 再出稿。须覆盖核心用户旅程、功能需求、非功能需求、主流程、异常与边界、验收标准；`prd` 与 `spec` 都要，同源同口径；禁止用对话草稿文件代替。
 4. 一个 feature 只有一份机器规格：`features/<id>/spec.yaml`（`UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*`）。其他 Agent 按编号引用，不改写规格正文。
 5. G1 冻结后修改 `spec.yaml` 必须先把 `gates.G1` 改回 `pending` 并重新签字。检查器用 `specHash` 发现未经退回的修改。改规格须同步 PRD（及受影响原型）。
-6. 交互视觉写 `ux.yaml`，技术方案写 `tech.yaml`。旧 `design.yaml` 退役。产品先出 HTML 原型；视觉精修由交互视觉承接（可从架构师路径加派）。
+6. 交互视觉写 `ux.yaml` + 可交互 `prototype/ux/`（或 `skip`）；技术方案写 `tech.md`（人审）+ `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。旧 `design.yaml` 退役。架构图分 0 层/1 层；流程/时序/类图可多张（`scope` 区分）。绘图一律 Archify，只留 html/svg。
 7. 验收必须能被一条命令判断。`given` / `when` / `then` / `verify` 都要有内容。
 8. `nonGoals` 里的事项，开发工人不得实现。主控直接拒绝。
 9. 知识库中的规则以当前源码为准。规格与技术方案只保存链接。长期事实只定义在 `modus/knowledge/`。

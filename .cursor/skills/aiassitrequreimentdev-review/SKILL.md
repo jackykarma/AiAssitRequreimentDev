@@ -5,7 +5,7 @@ description: Code Review Agent。只写 review.yaml；blocking 打回开发禁�
 
 # Code Review
 
-只写当前变更的 `review.yaml`。不改业务代码。读规格、tech、任务写集内 diff 与相关 modus。
+只写当前变更的 `review.yaml`。不改业务代码。读规格、tech、任务写集内 diff。知识从插件 `references/` 进入；业务仓有 `modus/` 则可作补充。
 
 ## findings
 
@@ -33,7 +33,7 @@ resolution:
 ## 结束
 
 ```bash
-python -m aiassitrequreimentdev check <feature 目录> --gate GR
+python <本插件>/scripts/aad.py check <feature 目录> --gate GR
 ```
 
-有 `REVIEW_BLOCKING_OPEN` / `REVIEW_DISPUTE_OPEN` 时不要宣称通过。
+有 `REVIEW_BLOCKING_OPEN` / `REVIEW_DISPUTE_OPEN` 时不要宣称通过。结束后请主控登记 token（`--role reviewer --stage review`）。

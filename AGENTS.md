@@ -1,6 +1,6 @@
 # AiAssitRequreimentDev
 
-做需求开发时：启用 `aiassitrequreimentdev-lead`。
+做需求开发时：启用 `aiassitrequreimentdev-lead`。若已装团队插件，技能来自 `plugins/aiassitrequreimentdev/`；本仓请保持 `sync_plugin_skills` 无漂移。
 
 1. 选角色（`docs/role-picker.html` + `adopt`）
 2. 按需求推荐并确认路径（`recommend` / `docs/path-picker.html` + `path`）→ `full` 或 `light`
@@ -8,7 +8,7 @@
 
 **需求 ≠ feature**：一条需求 → 1..N 个 feature。feature 须对本切片 `A*` 可独立交付（可 G4），不是半成品，也不等于整需求零依赖大包；可有 `dependsOnFeatures`。大需求：产品先写需求级 PRD，再在 `split.yaml` 决定拆几个；主控建目录。小需求可直开单个 feature。feature 内的 `tasks.yaml` 更晚才拆。
 
-主控代跑 `start` / `init` / `check` / `seal` / `board` / `recommend` / `path`。
+主控代跑 `start` / `init` / `check` / `seal` / `board` / `usage` / `recommend` / `path`。角色结束阶段后记 token：`usage record --role … --stage … --input … --output …`。
 
 先读 `docs/architecture.md` 和 `constitution.md`。知识从 `modus/knowledge/architecture-overview.md` 进入。
 

@@ -1,0 +1,8 @@
+---
+description: 做需求开发时启用 AiAssitRequreimentDev 主控
+alwaysApply: true
+---
+
+在业务仓库做需求 / PRD / feature / 门禁流水线时：启用技能 `aiassitrequreimentdev-lead`。
+门禁与脚手架使用插件脚本 `scripts/aad.py`（转调 `python -m aiassitrequreimentdev`），不要手改 `gates.*.accepted`。
+产物共仓于业务仓 `features/<id>/`。

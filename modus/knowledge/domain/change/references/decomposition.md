@@ -38,11 +38,14 @@ Feature **必须**是对本切片验收可独立关门禁（可 G4）的完整�
 ```text
 需求对话 / grill
     → 需求级 PRD（requirements/<REQ>/prd.md）
-    → 拆分决策（requirements/<REQ>/split.yaml）  ← 根据 PRD 决定 1 或 N
+    → 整需求架构草图（可选，architecture/；Archify html+svg）
+    → 拆分决策（requirements/<REQ>/split.yaml）  ← 根据 PRD + 架构草图决定 1 或 N
     → 人确认（多 feature 时）
     → 创建 features/FEAT-*，写入 requirementId
-    → 每个 feature：切片 PRD + 原型 + spec.yaml → 各自门禁
+    → 每个 feature：切片 PRD + 原型 + spec.yaml → 各自门禁（含各自 tech）
 ```
+
+**思考维度 vs 合同维度**：架构师应从整条需求看模块边界、契约与依赖；G2T 合同仍是**每个 feature 一份** `tech.md`/`tech.yaml`。先发 feature 写清跨切片骨架与接口；后发 feature 引用上游契约，不重写总览。需求级 `architecture/` 是对齐草图，不进 G2T。
 
 **小需求捷径**：明显只需一个 feature 时，可不建 `requirements/`，直接 `features/FEAT-xxx/`，该目录的 `prd.md` 同时充当需求级与 feature 级 PRD；`state.requirementId` 可等于 feature id 或单独 REQ id。
 

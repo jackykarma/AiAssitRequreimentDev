@@ -1,42 +1,50 @@
 ---
 name: aiassitrequreimentdev-tech
-description: 技术方案 Agent。架构师与 AI 共写 tech.md + tech.yaml：架构图（可选）、变更文件路径、选型、风险、快稳省、数据设计、埋点与验收落点。用户要技术方案、接口/库表设计或 G2T 时使用。
+description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门禁）：aiConstraints、关键设计、L0/L1 架构图、可多张流程/时序/类图（Archify html+svg）、接口、变更与验收落点。用户要技术方案或 G2T 时使用。
 ---
 
 # 技术方案
 
-只写当前 feature 的 `tech.md`（给人）与 `tech.yaml`（给门禁/Agent）。不改规格、视觉与源码，不新增验收编号。
+只写当前 feature 的 `tech.md`、`tech.yaml`，以及 `diagrams/` 下 Archify 的 `.html`/`.svg`。不改规格、视觉与业务源码，不新增验收编号。
 
-确认 `state.actorRole` 为 `architect`（或主控已 adopt 架构师SE）。先读 `BOARD.md`、`prd.md`、`prototype/`、`spec.yaml`。确认 G1 已就绪，G2 已通过或已 skip。再写方案。
+确认 `state.actorRole` 为 `architect`。先读 `BOARD.md`、`prd.md`、`prototype/`、`spec.yaml`；有 `requirementId` 时再读需求级 PRD / `architecture/` 与同需求其它 tech。G1 就绪且 G2 通过或 skip 后再写。
 
-## 必含章节（缺一不可）
+## 双受众
 
-| 章节 | 文件落点 | 说明 |
+| 受众 | 读什么 | 目的 |
 | --- | --- | --- |
-| 架构图 | `architectureDiagram` + `tech.md` §2 | **可选**；有图则 `included: true` 且 `ref` 非空 |
-| 变更文件 | `changedFiles` | 至少一条；`path` + `action`（add/modify/delete） |
-| 技术方案选型 | `techChoices` | 至少一条；`topic` / `decision` / `rationale` |
-| 技术风险点 | `risks` | 有则填 `id/description/impact/mitigation`；无则填 `risksNoneReason` |
-| 快稳省 | `performancePower` | `performance` / `stability` / `power` 各写 `assessment` + `mitigations` |
-| 数据设计 | `dataDesign` | 涉及则 `involved: true` 且 tables 或 models 非空；否则 `noneReason` |
-| 埋点 | `tracking` | 产品埋点 `product` + 技术埋点 `technical`；都空则 `noneReason` |
+| 人 | `tech.md` + 图 | 一页纸、L0/L1、关键设计、多图分范围审阅 |
+| AI / 门禁 | `tech.yaml` | 遵守 `aiConstraints` 与每条 `keyDesigns.mustFollow` / `pitfalls` |
 
-`tech.md` 用同样章节写给人看的叙述，与 `tech.yaml` 同口径。
+## 架构分层与多图
 
-## 验收落点
+| 规则 | 说明 |
+| --- | --- |
+| 0 层 | 系统/上下文：外部系统、其它 feature、信任边界 |
+| 1 层 | 本 feature 内部模块/组件与本切片改动 |
+| 成对 | 有 architecture 图时须同时有 layer 0 与 1，或写 `architectureLayerGaps` |
+| 多张 | 同一 `type` 可多条；每条必填 `scope`，feature 大时按子系统/场景拆分 |
 
-`acceptance` 恰好覆盖每个 `A*` 一次。每项含：
+流程 / 时序 / 类图同理：必要时多张，禁止一张塞满。
 
-- `architecture`
-- `interface`
-- `data`
-- `failureRecovery`
-- `constraints`：modus 路径列表
+## 关键设计
 
-高风险写入 `risks`，供主控打断。
+对照 `tech.md` §3.1 写入 `keyDesigns`。每条至少：`judgment`、`problem`、`decision`、`coreScheme`（链路闭环）、`mustFollow`≥1、`pitfalls`。无则 `keyDesignsNoneReason`。
 
-## 结束
+## 接口 / NFR / 数据 / 埋点
+
+- `interfaces`：`direction` provided|consumed，及 `request`/`response`（`errors` 可选列表）
+- `nfr`：performance/stability/power 必填；memory/security/compatibility/romSize/algorithm 按需 `involved`
+- `dataDesign.tables`：涉及时 `name`/`change`/`purpose`；`fields[]` 有则校验 name/type/description
+- `tracking`：event+trigger；`fields[]` 有则校验 id/description/type  
+人读详版模板：`aiassitrequreimentdev/templates/design/`（按需复制到 feature 目录展开）。
+
+## G2T 必含摘要
+
+`summary`、`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams`、`nfr`、变更/选型/风险、数据/埋点、`acceptance` 全覆盖 `A*`。
 
 ```bash
-python -m aiassitrequreimentdev check <feature 目录> --gate G2T
+python <本插件>/scripts/aad.py check <feature 目录> --gate G2T
 ```
+
+结束后请主控登记本阶段 token（`--role architect --stage tech`），见 lead 技能「Token 用量」。

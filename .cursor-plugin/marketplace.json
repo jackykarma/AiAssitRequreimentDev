@@ -1,0 +1,17 @@
+{
+  "name": "aiassitrequreimentdev-team",
+  "owner": {
+    "name": "OPLUS Apps.Gallery"
+  },
+  "metadata": {
+    "description": "AiAssitRequreimentDev 团队插件源"
+  },
+  "plugins": [
+    {
+      "name": "aiassitrequreimentdev",
+      "source": "plugins/aiassitrequreimentdev",
+      "description": "需求开发角色技能与门禁 CLI",
+      "version": "0.1.0"
+    }
+  ]
+}

@@ -39,7 +39,7 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 
 架构师可建议技术边界；开发/测试不拆 feature。任务拆解（`tasks.yaml`）是门禁后主控的事，不是你的事。
 
-决策标准见 `modus/knowledge/domain/change/references/decomposition.md`。
+决策标准见插件 `references/decomposition.md`。业务仓有 `modus/` 则可作补充。
 
 ## 需求级产物（大需求）
 
@@ -57,7 +57,7 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 | 文件 | 给谁 | 用途 |
 | --- | --- | --- |
 | `prd.md` | 人 | 本切片可读 PRD：**核心用户旅程**、功能、非功能、主流程、异常边界、验收 |
-| `prototype/` | 人 | 可点击原型（无 UI 在 PRD 声明） |
+| `prototype/index.html` | 人 | **可交互** HTML 产品原型（多页用按钮/导航切换；无 UI 见下） |
 | `spec.yaml` | Agent + G1 | 机器合同，与 PRD 同口径 |
 
 ### feature `spec.yaml` 必含
@@ -70,13 +70,20 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 | `scenarios` | `S*` | 至少一条主流程；`trigger` / `outcome` / `failure` |
 | `edgeCases` | `E*` | 异常与边界；无则 `edgeNoneReason` |
 | `acceptance` | `A*` | 至少一条；`given` / `when` / `then` / `verify`（可写 `covers`） |
+| `uiRequired` / `uiNoneReason` | — | 有 UI 须 `true` 并交 `prototype/index.html`；无 UI 须 `false` + `uiNoneReason` |
 | `nonGoals` / `constraints` / `affected` / `openQuestions` | — | 非目标、知识约束、影响面；开放问题冻结前必须清空 |
 
 `prd` 与 `spec` 都要，同源同口径。先 PRD/原型，再压 `spec.yaml`。
 
+### 产品原型（G1）
+
+- 入口：`prototype/index.html`（可从模板拷贝改写）。
+- 必须可交互：页面切换、按钮、关键路径可点通；禁止只交静态长文或截图替代。
+- 无界面切片：`uiRequired: false`，并写清 `uiNoneReason`（PRD 同步声明）。
+
 ## 工作方式
 
-1. 读 `constitution.md` 与相关 modus 知识。
+1. 先读插件 `references/`；业务仓有 `modus/` 则可作补充。
 2. 视完整度启用 brainstorm / grill；至问题、用户旅程、非目标、功能、非功能、主流程、异常边界清楚；答不出写入开放问题，不编造。
 3. 大需求：写 `requirements/.../prd.md` → 填 `split.yaml` → 等主控建 feature → 再写各切片合同。
 4. 小需求：直接写 feature 三件套。
@@ -85,7 +92,9 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 ## 结束（feature 级 G1）
 
 ```bash
-python -m aiassitrequreimentdev check <feature目录> --gate G1
+python <本插件>/scripts/aad.py check <feature目录> --gate G1
 ```
 
-需同时：`G1 ready`、切片 PRD 与 `UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*` 对齐、原型约定满足。不要自己改 `gates.G1`。
+需同时：`G1 ready`、切片 PRD 与 `UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*` 对齐、可交互产品原型（或 `uiRequired: false` + 原因）满足。不要自己改 `gates.G1`。
+
+结束后请主控登记本阶段 token（`--role product --stage clarify`）。

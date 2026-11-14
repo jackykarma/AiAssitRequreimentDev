@@ -38,6 +38,23 @@ python -m aiassitrequreimentdev check features/FEAT-001 --gate G1
 python -m unittest tests.test_gates tests.test_roles tests.test_paths
 ```
 
+## 团队插件安装（Cursor / Codex）
+
+本仓库同时是团队 marketplace 源。
+
+### Codex
+1. 将本仓库加入 Codex marketplace（`.agents/plugins/marketplace.json`）
+2. `/plugins` 安装 `aiassitrequreimentdev`
+3. **新开会话**后使用 lead 等技能
+4. CLI：`python <plugin>/scripts/aad.py check features/FEAT-001 --gate G1`
+
+### Cursor
+1. Customize → 从本 Git 仓库 / 团队 marketplace 安装
+2. 新开 Agent 会话
+3. 本仓开发技能同步：`python scripts/sync_plugin_skills.py`
+
+业务仓无需自带完整 `modus/`；知识读插件 `references/`。Python ≥3.11。marketplace 仅含插件目录时，设置 `AAD_GIT_REMOTE` 供 `aad` 懒装 CLI 包。
+
 ## 角色技能（只写自己的工件）
 
 | 技能 | 只写 |
@@ -45,9 +62,9 @@ python -m unittest tests.test_gates tests.test_roles tests.test_paths
 | `aiassitrequreimentdev-lead` | `state.json`、`tasks.yaml`、代跑 CLI |
 | `aiassitrequreimentdev-brainstorm` | 一句话需求时探索意图与方案（不出正式 spec） |
 | `aiassitrequreimentdev-grill` | 系统追问，闭合旅程与规格清单 |
-| `aiassitrequreimentdev-product` | `prd.md`、`prototype/`、`spec.yaml`（用户旅程/功能/非功能/场景/异常/验收；大需求另写需求级 PRD / `split.yaml`） |
-| `aiassitrequreimentdev-ux` | `ux.yaml` |
-| `aiassitrequreimentdev-tech` | `tech.md`、`tech.yaml`（按 feature；架构图可选，变更文件/选型/风险/快稳省/数据/埋点必含） |
+| `aiassitrequreimentdev-product` | `prd.md`、可交互 `prototype/index.html`、`spec.yaml`（用户旅程/功能/非功能/场景/异常/验收；大需求另写需求级 PRD / `split.yaml`） |
+| `aiassitrequreimentdev-ux` | `ux.yaml`、可交互 `prototype/ux/` |
+| `aiassitrequreimentdev-tech` | `tech.md`（人审）+ `tech.yaml`（AI 约束/接口/验收）；图用 [Archify](https://github.com/tt-a1i/archify) 仅 html+svg |
 | `aiassitrequreimentdev-dev` | 任务写集内源码 |
 | `aiassitrequreimentdev-review` | `review.yaml` |
 | `aiassitrequreimentdev-test` | `evidence.yaml` |

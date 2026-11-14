@@ -59,6 +59,15 @@
 
 待填写（含 feature 间依赖线索）。
 
+## 整需求架构草图
+
+大需求建议在拆 feature 前，由架构师（或产品拉架构师）从**整条需求**想清模块边界、契约与同发/先后。产物放 `architecture/`（Archify：只保留 `.html` + `.svg`），此处写链接与结论摘要。
+
+- 草图链接：待填写或「小需求跳过」
+- 结论：哪些必须同发、哪些可先后、先发 feature 须立住的契约
+
+说明：这是思考与对齐层，**不是** G2T；各 feature 仍各自写 `tech.md` / `tech.yaml`。细则见 `modus/knowledge/domain/change/references/decomposition.md` 与 `diagrams.md`。
+
 ## 开放问题
 
 闭合前不要做最终拆分确认。

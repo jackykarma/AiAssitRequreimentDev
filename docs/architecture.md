@@ -1,6 +1,6 @@
 # AiAssitRequreimentDev 架构
 
-对话编排 + 规格门禁多智能体。启动时先选角色，再确认全量/轻量；合同落在 `features/<id>/`，长期知识在 `modus/knowledge/`。门禁用 `python -m aiassitrequreimentdev check`（主控代跑）。
+对话编排 + 规格门禁多智能体。启动时先选角色，再确认全量/轻量；合同落在 `features/<id>/`，长期知识在 `modus/knowledge/`。门禁用 `python -m aiassitrequreimentdev check`（主控代跑）。团队插件入口：`plugins/aiassitrequreimentdev/`（Cursor / Codex marketplace 同一套源）。
 
 ## 需求与 feature
 
@@ -28,15 +28,17 @@
 ## 目录
 
 ```text
-requirements/<REQ-id>/     # 大需求：需求级 PRD + split.yaml
+requirements/<REQ-id>/     # 大需求：需求级 PRD + split.yaml + architecture/（可选草图）
 features/<FEAT-id>/        # 交付切片
   state.json               # requirementId、dependsOnFeatures、actorRole、path…
   BOARD.md
   prd.md / prototype / spec.yaml
-  ux.yaml / tech.md / tech.yaml / tasks.yaml / review.yaml / evidence.yaml / deploy.yaml
+  ux.yaml / tech.md / tech.yaml / diagrams/ / tasks.yaml / review.yaml / evidence.yaml / deploy.yaml
 ```
 
-启动：选角色 → 确认全量/轻量 → 产品 PRD。大需求先 `init-req` 再按 `split.yaml` 建 feature；小需求直接一个 feature。
+启动：选角色 → 确认全量/轻量 → 产品 PRD。大需求先 `init-req`（可含整需求 Archify 草图）再按 `split.yaml` 建 feature；每个 feature 各自写 tech（G2T）。小需求直接一个 feature。
+
+绘图：一律 [Archify](https://github.com/tt-a1i/archify)，只保留 html + svg。详见 `modus/knowledge/domain/change/references/diagrams.md`。
 
 ## 状态与门禁
 
@@ -45,9 +47,9 @@ features/<FEAT-id>/        # 交付切片
 | 门禁 | 条件 |
 | --- | --- |
 | G0 | path 合法；light 的 affected 一项 |
-| G1 | spec 含 UJ/FR/NFR/S/E/A 且形状合法、openQuestions 空；已接受则哈希一致 |
-| G2 | ux 覆盖或 skip；light 可无 ux 文件 |
-| G2T | tech.md + tech.yaml；变更文件/选型/风险/快稳省/数据/埋点齐全；验收落点全覆盖 |
+| G1 | spec 含 UJ/FR/NFR/S/E/A 且形状合法、openQuestions 空；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；已接受则哈希一致 |
+| G2 | ux 覆盖或 skip；有 UI 须可交互 `prototype/ux/`（`htmlPrototype.entry`）；light 可无 ux 文件 |
+| G2T | tech.md + tech.yaml；含 aiConstraints/keyDesigns/interfaces/diagrams（架构 L0+L1 或 gaps；同类型可多图+scope）；变更/选型/风险/快稳省/数据/埋点；acceptance 全覆盖 |
 | G3 | 任务无环、写集不交；light 仅一任务 |
 | GR | 无未关闭 blocking；无未裁决 dispute |
 | G4 | evidence 全覆盖且 exitCode 0 |
@@ -57,9 +59,9 @@ features/<FEAT-id>/        # 交付切片
 
 | 技能 | 只写 |
 | --- | --- |
-| `aiassitrequreimentdev-lead` | `state.json`、`tasks.yaml`、代跑 CLI |
-| `aiassitrequreimentdev-product` | `prd.md`、`prototype/`、`spec.yaml` |
-| `aiassitrequreimentdev-ux` | `ux.yaml` |
+| `aiassitrequreimentdev-lead` | `state.json`、`tasks.yaml`、`usage.yaml`（经 CLI）、代跑 CLI |
+| `aiassitrequreimentdev-product` | `prd.md`、`prototype/index.html`、`spec.yaml` |
+| `aiassitrequreimentdev-ux` | `ux.yaml`、`prototype/ux/` |
 | `aiassitrequreimentdev-tech` | `tech.md`、`tech.yaml` |
 | `aiassitrequreimentdev-dev` | 任务写集 |
 | `aiassitrequreimentdev-review` | `review.yaml` |

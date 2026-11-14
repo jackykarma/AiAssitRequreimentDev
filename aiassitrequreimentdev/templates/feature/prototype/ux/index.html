@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UX 交互视觉原型（可交互）</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a222c;
+      --ink: #e8eef5;
+      --muted: #9aabbc;
+      --line: #2c3a49;
+      --accent: #3d8bfd;
+      --ok: #3ecf8e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(1200px 600px at 10% -10%, #1b2a3d, var(--bg));
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .shell { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { margin: 0 0 6px; font-size: 1.35rem; font-weight: 600; }
+    .hint { margin: 0 0 18px; color: var(--muted); font-size: 0.92rem; }
+    .phone {
+      max-width: 390px;
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 16px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+    .view { display: none; padding: 16px; min-height: 520px; }
+    .view.active { display: block; }
+    .title { font-size: 1.15rem; font-weight: 600; margin: 0 0 8px; }
+    .card {
+      background: #121820;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      margin: 10px 0;
+    }
+    .row { display: flex; gap: 8px; margin-top: 14px; }
+    button {
+      flex: 1;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px;
+      font: inherit;
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); color: #fff; }
+    button.secondary { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+    .toast {
+      margin-top: 12px;
+      color: var(--ok);
+      font-size: 0.88rem;
+      min-height: 1.2em;
+    }
+    .dock {
+      display: flex;
+      border-top: 1px solid var(--line);
+      background: #121820;
+    }
+    .dock button {
+      border-radius: 0;
+      background: transparent;
+      color: var(--muted);
+      border: 0;
+      border-right: 1px solid var(--line);
+    }
+    .dock button:last-child { border-right: 0; }
+    .dock button[aria-current="page"] { color: var(--ink); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <h1>UX 原型 · 交互精修（占位，请替换）</h1>
+    <p class="hint">在产品 HTML 主流程之上做视觉与交互精修。须可点击切换页面/状态；正式产物只保留本目录 HTML。</p>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span>UX Proto</span></div>
+      <section id="list" class="view active">
+        <p class="title">列表 / 首页</p>
+        <div class="card">主内容卡片（替换为真实信息架构）</div>
+        <div class="card">次要入口</div>
+        <div class="row">
+          <button type="button" class="primary" data-open="detail">进入详情</button>
+          <button type="button" class="secondary" data-open="empty">空态</button>
+        </div>
+        <p class="toast" id="list-toast"></p>
+      </section>
+      <section id="detail" class="view">
+        <p class="title">详情</p>
+        <div class="card">展示关键字段、主操作与次要操作。</div>
+        <div class="row">
+          <button type="button" class="primary" id="btn-act">主操作</button>
+          <button type="button" class="secondary" data-open="list">返回</button>
+        </div>
+        <p class="toast" id="detail-toast"></p>
+      </section>
+      <section id="empty" class="view">
+        <p class="title">空态 / 异常</p>
+        <div class="card">说明为何为空，并给出可点的恢复动作。</div>
+        <div class="row">
+          <button type="button" class="primary" data-open="list">回到列表</button>
+        </div>
+      </section>
+      <nav class="dock" aria-label="底部导航">
+        <button type="button" data-open="list" aria-current="page">首页</button>
+        <button type="button" data-open="detail">详情</button>
+        <button type="button" data-open="empty">空态</button>
+      </nav>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var views = document.querySelectorAll(".view");
+      var dockBtns = document.querySelectorAll(".dock button");
+      function open(id) {
+        views.forEach(function (v) { v.classList.toggle("active", v.id === id); });
+        dockBtns.forEach(function (b) {
+          b.setAttribute("aria-current", b.getAttribute("data-open") === id ? "page" : "false");
+        });
+      }
+      document.querySelectorAll("[data-open]").forEach(function (el) {
+        el.addEventListener("click", function () { open(el.getAttribute("data-open")); });
+      });
+      var act = document.getElementById("btn-act");
+      if (act) {
+        act.addEventListener("click", function () {
+          document.getElementById("detail-toast").textContent = "主操作已触发（请换成真实反馈）";
+        });
+      }
+      document.getElementById("list-toast").textContent = "UX 可交互原型已加载";
+    })();
+  </script>
+</body>
+</html>

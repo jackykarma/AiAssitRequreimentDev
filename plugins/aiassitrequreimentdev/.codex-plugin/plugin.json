@@ -1,0 +1,6 @@
+{
+  "name": "aiassitrequreimentdev",
+  "version": "0.1.0",
+  "description": "AI-assisted requirements pipeline skills and gate CLI",
+  "skills": "./skills/"
+}

@@ -13,6 +13,7 @@
  ** <author> <date> <version> <desc>
  ** ------------------------------------------------------------------------------
  ** limao2@Apps.Gallery 2026/11/08 1.4 rename change→feature
+ ** limao2@Apps.Gallery 2026/11/14 1.5 usage token stats CLI
  *********************************************************************************/
 """
 
@@ -29,6 +30,13 @@ from aiassitrequreimentdev.gates import GATES, evaluate, init_feature, init_requ
 from aiassitrequreimentdev.paths import menu_text as path_menu_text
 from aiassitrequreimentdev.paths import recommend_path, resolve_path
 from aiassitrequreimentdev.roles import menu_text, resolve_menu_choice
+from aiassitrequreimentdev.usage import (
+    USAGE_STAGES,
+    format_usage_report,
+    record_usage,
+    summarize_usage,
+    load_usage,
+)
 
 
 def _configure_stdio() -> None:
@@ -86,6 +94,25 @@ def main(argv: list[str] | None = None) -> int:
     start_parser.add_argument("--role", help="若已知角色，直接 adopt")
     start_parser.add_argument("--need", help="需求原文，用于推荐 full/light")
     start_parser.add_argument("--path", help="若已知路径，直接确认")
+
+    usage_parser = sub.add_parser("usage", help="记录或查看各角色阶段 token 用量")
+    usage_sub = usage_parser.add_subparsers(dest="usage_command", required=True)
+    usage_record = usage_sub.add_parser("record", help="追加一条用量记录")
+    usage_record.add_argument("feature_dir")
+    usage_record.add_argument("--role", required=True, help="product/architect/developer/tester/deployer/lead/ux/reviewer")
+    usage_record.add_argument(
+        "--stage",
+        help="阶段，默认取角色建议阶段；可选 " + "|".join(USAGE_STAGES),
+    )
+    usage_record.add_argument("--input", type=int, default=0, dest="input_tokens", help="input tokens")
+    usage_record.add_argument("--output", type=int, default=0, dest="output_tokens", help="output tokens")
+    usage_record.add_argument("--total", type=int, default=None, dest="total_tokens", help="若省略则=input+output")
+    usage_record.add_argument("--model", default="", help="模型名（可选）")
+    usage_record.add_argument("--gate", default="", help="关联门禁，如 G1")
+    usage_record.add_argument("--note", default="", help="备注")
+    usage_show = usage_sub.add_parser("show", help="打印用量汇总")
+    usage_show.add_argument("feature_dir")
+    usage_show.add_argument("--json", action="store_true", help="输出 JSON")
 
     args = parser.parse_args(argv)
 
@@ -226,6 +253,42 @@ def main(argv: list[str] | None = None) -> int:
             print("")
             print(f"已确认路径：{option.label}（{option.id}）")
         return 0
+
+    if args.command == "usage":
+        feature_dir = Path(args.feature_dir)
+        if args.usage_command == "record":
+            try:
+                entry = record_usage(
+                    feature_dir,
+                    role=args.role,
+                    stage=args.stage,
+                    input_tokens=args.input_tokens,
+                    output_tokens=args.output_tokens,
+                    total_tokens=args.total_tokens,
+                    model=args.model,
+                    gate=args.gate,
+                    note=args.note,
+                )
+            except ValueError as exc:
+                print(str(exc), file=sys.stderr)
+                return 2
+            refresh_board(feature_dir)
+            print(json.dumps(entry, ensure_ascii=False))
+            return 0
+        if args.usage_command == "show":
+            if args.json:
+                doc = load_usage(feature_dir)
+                print(
+                    json.dumps(
+                        {"entries": doc.get("entries", []), "summary": summarize_usage(doc)},
+                        ensure_ascii=False,
+                        indent=2,
+                    )
+                )
+            else:
+                print(format_usage_report(feature_dir))
+            return 0
+        return 2
 
     report = evaluate(Path(args.feature_dir))
     selected = report.violations

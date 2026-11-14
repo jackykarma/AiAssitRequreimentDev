@@ -5,8 +5,8 @@
  **
  ** File: - gates.py
  ** Description: 规格门禁检查。门禁是否通过由工件结构决定，不由模型判断。
- ** Version: 1.1
- ** Date: 2026/11/03
+ ** Version: 1.2
+ ** Date: 2026/11/14
  ** Author: limao2@Apps.Gallery
  **
  ** ------------------------------- Revision History: ----------------------------
@@ -14,6 +14,11 @@
  ** ------------------------------------------------------------------------------
  ** limao2@Apps.Gallery 2026/11/03 1.0 INIT
  ** limao2@Apps.Gallery 2026/11/03 1.1 ux/tech/review/deploy gates
+ ** limao2@Apps.Gallery 2026/11/14 1.2 archify html+svg diagram contract
+ ** limao2@Apps.Gallery 2026/11/14 1.3 dual-audience tech + diagrams[]
+ ** limao2@Apps.Gallery 2026/11/14 1.4 L0/L1 arch + keyDesigns + multi diagrams
+ ** limao2@Apps.Gallery 2026/11/14 1.5 nfr/iface/data/tracking + design templates
+ ** limao2@Apps.Gallery 2026/11/14 1.6 interactive HTML prototype G1/G2
  *********************************************************************************/
 """
 
@@ -30,6 +35,24 @@ import yaml
 GATES = ("G0", "G1", "G2", "G2T", "G3", "GR", "G4", "GD")
 PATHS = ("full", "light")
 REVIEW_SEVERITIES = ("nit", "dispute", "blocking")
+DIAGRAM_TYPES = (
+    "architecture",
+    "sequence",
+    "workflow",
+    "class",
+    "dataflow",
+    "lifecycle",
+    "erd",
+    "tree",
+    "timeline",
+    "waterfall",
+)
+INTERFACE_KINDS = ("api", "function", "event", "db")
+INTERFACE_DIRECTIONS = ("provided", "consumed")
+ARCHITECTURE_LAYERS = (0, 1)
+KEY_DESIGN_KINDS = ("cornerstone", "highlight", "difficulty")
+NFR_CORE = ("performance", "stability", "power")
+NFR_OPTIONAL = ("memory", "security", "compatibility", "romSize", "algorithm")
 
 
 @dataclass(frozen=True)
@@ -297,8 +320,73 @@ def _check_g1(change_dir: Path, state: dict, spec: dict, violations: list[Violat
         violations.append(Violation("G1", "SPEC_ACCEPTANCE_SHAPE", "至少要有一条验收"))
     else:
         _check_acceptance_items(acceptance, violations)
+
+    _check_product_html_prototype(change_dir, spec, violations)
+
     if state.get("gates", {}).get("G1") == "accepted":
         _check_hash(change_dir, state, violations)
+
+
+def _looks_interactive_html(path: Path) -> bool:
+    text = path.read_text(encoding="utf-8", errors="ignore").lower()
+    markers = (
+        "<button",
+        "onclick=",
+        "addeventlistener",
+        'href="#',
+        "role=\"tab\"",
+        "data-go=",
+        "data-open=",
+        "data-screen=",
+    )
+    return any(marker in text for marker in markers)
+
+
+def _check_product_html_prototype(
+    change_dir: Path, spec: dict, violations: list[Violation]
+) -> None:
+    ui_required = spec.get("uiRequired")
+    if ui_required is False:
+        reason = spec.get("uiNoneReason")
+        if not isinstance(reason, str) or not reason.strip():
+            violations.append(
+                Violation(
+                    "G1",
+                    "PROTO_SKIP_REASON",
+                    "uiRequired 为 false 时须填写 uiNoneReason",
+                )
+            )
+        return
+    if ui_required is not True and ui_required is not False:
+        # 缺省视为需要 UI 原型（与模板 uiRequired: true 一致）
+        if "uiRequired" in spec:
+            violations.append(
+                Violation("G1", "PROTO_UI_FLAG", "uiRequired 必须是布尔")
+            )
+            return
+    entry = change_dir / "prototype" / "index.html"
+    if not entry.is_file():
+        violations.append(
+            Violation(
+                "G1",
+                "PROTO_MISSING",
+                "有 UI 时须交付可交互产品原型 prototype/index.html",
+            )
+        )
+        return
+    if entry.stat().st_size < 200:
+        violations.append(
+            Violation("G1", "PROTO_EMPTY", "prototype/index.html 过短，须为可评审的 HTML 原型")
+        )
+        return
+    if not _looks_interactive_html(entry):
+        violations.append(
+            Violation(
+                "G1",
+                "PROTO_NOT_INTERACTIVE",
+                "产品原型须可交互（含 button / 事件 / 可切换页面等）",
+            )
+        )
 
 
 def _check_id_items(
@@ -400,6 +488,38 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
             Violation("G2", "UX_UNMAPPED", "视觉未覆盖: " + ", ".join(sorted(missing)))
         )
 
+    html_proto = ux.get("htmlPrototype")
+    entry_rel = "prototype/ux/index.html"
+    if isinstance(html_proto, dict):
+        raw_entry = html_proto.get("entry")
+        if isinstance(raw_entry, str) and raw_entry.strip():
+            entry_rel = raw_entry.strip().replace("\\", "/")
+    entry = (change_dir / entry_rel).resolve()
+    try:
+        entry.relative_to(change_dir.resolve())
+    except ValueError:
+        violations.append(
+            Violation("G2", "UX_PROTO_PATH", "htmlPrototype.entry 必须落在 feature 目录内")
+        )
+        return
+    if not entry.is_file():
+        violations.append(
+            Violation(
+                "G2",
+                "UX_PROTO_MISSING",
+                f"有 UI 时须交付可交互 UX HTML 原型: {entry_rel}",
+            )
+        )
+        return
+    if entry.stat().st_size < 200 or not _looks_interactive_html(entry):
+        violations.append(
+            Violation(
+                "G2",
+                "UX_PROTO_NOT_INTERACTIVE",
+                "UX 原型须为可交互 HTML（含 button / 事件 / 可切换页面等）",
+            )
+        )
+
 
 def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:
     # light 仍要求 tech，保证验收有技术落点
@@ -416,7 +536,7 @@ def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Viola
     )
     if tech is None:
         return
-    _check_tech_doc_sections(tech, violations)
+    _check_tech_doc_sections(tech, violations, change_dir)
     expected = _acceptance_ids(spec)
     mapped = tech.get("acceptance")
     if not isinstance(mapped, list):
@@ -450,24 +570,330 @@ def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Viola
         )
 
 
-def _check_tech_doc_sections(tech: dict, violations: list[Violation]) -> None:
-    """技术方案必含：变更文件、选型、风险、快稳省、数据设计、埋点；架构图可选。"""
-    diagram = tech.get("architectureDiagram")
-    if diagram is not None:
-        if not isinstance(diagram, dict):
-            violations.append(Violation("G2T", "TECH_DIAGRAM", "architectureDiagram 必须是映射"))
+def _check_diagram_artifact_path(
+    change_dir: Path | None,
+    rel: object,
+    label: str,
+    index: int,
+    violations: list[Violation],
+    *,
+    suffix: str,
+) -> None:
+    if not isinstance(rel, str) or not rel.strip():
+        violations.append(
+            Violation("G2T", "TECH_DIAGRAM", f"diagrams[{index}].{label} 不能为空")
+        )
+        return
+    path_text = rel.strip()
+    if not path_text.lower().endswith(suffix):
+        violations.append(
+            Violation(
+                "G2T",
+                "TECH_DIAGRAM",
+                f"diagrams[{index}].{label} 须以 {suffix} 结尾",
+            )
+        )
+        return
+    if change_dir is None:
+        return
+    target = (change_dir / path_text).resolve()
+    try:
+        target.relative_to(change_dir.resolve())
+    except ValueError:
+        violations.append(
+            Violation(
+                "G2T",
+                "TECH_DIAGRAM",
+                f"diagrams[{index}].{label} 必须落在 feature 目录内",
+            )
+        )
+        return
+    if not target.is_file():
+        violations.append(
+            Violation(
+                "G2T",
+                "TECH_DIAGRAM",
+                f"diagrams[{index}].{label} 文件不存在: {path_text}",
+            )
+        )
+
+
+def _check_tech_doc_sections(
+    tech: dict, violations: list[Violation], change_dir: Path | None = None
+) -> None:
+    """技术方案：AI 约束 + 接口 + 图示 + 变更/选型/风险/快稳省/数据/埋点。"""
+    summary = tech.get("summary")
+    if not isinstance(summary, str) or not summary.strip():
+        violations.append(Violation("G2T", "TECH_SUMMARY", "summary 不能为空"))
+
+    constraints = tech.get("aiConstraints")
+    if not isinstance(constraints, dict):
+        violations.append(Violation("G2T", "TECH_AI", "缺少 aiConstraints（开发 Agent 必遵约束）"))
+    else:
+        must_follow = constraints.get("mustFollow")
+        if not isinstance(must_follow, list) or not must_follow:
+            violations.append(
+                Violation("G2T", "TECH_AI", "aiConstraints.mustFollow 至少一条")
+            )
         else:
-            included = diagram.get("included")
-            if included is not True and included is not False:
-                violations.append(
-                    Violation("G2T", "TECH_DIAGRAM", "architectureDiagram.included 必须是布尔")
-                )
-            elif included is True:
-                ref = diagram.get("ref")
-                if not isinstance(ref, str) or not ref.strip():
+            for index, item in enumerate(must_follow):
+                if not isinstance(item, str) or not item.strip():
                     violations.append(
-                        Violation("G2T", "TECH_DIAGRAM", "有架构图时 ref 不能为空")
+                        Violation(
+                            "G2T",
+                            "TECH_AI",
+                            f"aiConstraints.mustFollow[{index}] 不能为空",
+                        )
                     )
+        must_not = constraints.get("mustNot")
+        if not isinstance(must_not, list):
+            violations.append(Violation("G2T", "TECH_AI", "aiConstraints.mustNot 必须是列表"))
+        elif not must_not:
+            reason = constraints.get("mustNotNoneReason")
+            if not isinstance(reason, str) or not reason.strip():
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_AI",
+                        "无禁止项时须填写 aiConstraints.mustNotNoneReason",
+                    )
+                )
+        else:
+            for index, item in enumerate(must_not):
+                if not isinstance(item, str) or not item.strip():
+                    violations.append(
+                        Violation(
+                            "G2T",
+                            "TECH_AI",
+                            f"aiConstraints.mustNot[{index}] 不能为空",
+                        )
+                    )
+        invariants = constraints.get("invariants")
+        if not isinstance(invariants, list):
+            violations.append(
+                Violation("G2T", "TECH_AI", "aiConstraints.invariants 必须是列表")
+            )
+        elif not invariants:
+            reason = constraints.get("invariantsNoneReason")
+            if not isinstance(reason, str) or not reason.strip():
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_AI",
+                        "无不变量时须填写 aiConstraints.invariantsNoneReason",
+                    )
+                )
+        else:
+            for index, item in enumerate(invariants):
+                if not isinstance(item, str) or not item.strip():
+                    violations.append(
+                        Violation(
+                            "G2T",
+                            "TECH_AI",
+                            f"aiConstraints.invariants[{index}] 不能为空",
+                        )
+                    )
+
+    interfaces = tech.get("interfaces")
+    if not isinstance(interfaces, list):
+        violations.append(Violation("G2T", "TECH_IFACE", "interfaces 必须是列表"))
+    elif not interfaces:
+        reason = tech.get("interfacesNoneReason")
+        if not isinstance(reason, str) or not reason.strip():
+            violations.append(
+                Violation("G2T", "TECH_IFACE", "无接口契约时须填写 interfacesNoneReason")
+            )
+    else:
+        for index, item in enumerate(interfaces):
+            if not isinstance(item, dict):
+                violations.append(
+                    Violation("G2T", "TECH_IFACE", f"interfaces[{index}] 必须是映射")
+                )
+                continue
+            for key in ("name", "contract", "request", "response"):
+                value = item.get(key)
+                if not isinstance(value, str) or not value.strip():
+                    violations.append(
+                        Violation("G2T", "TECH_IFACE", f"interfaces[{index}] 缺少 {key}")
+                    )
+            kind = item.get("kind")
+            if kind not in INTERFACE_KINDS:
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_IFACE",
+                        f"interfaces[{index}].kind 须为 {'|'.join(INTERFACE_KINDS)}",
+                    )
+                )
+            direction = item.get("direction")
+            if direction not in INTERFACE_DIRECTIONS:
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_IFACE",
+                        f"interfaces[{index}].direction 须为 provided|consumed",
+                    )
+                )
+            errors = item.get("errors")
+            if errors is not None and not isinstance(errors, list):
+                violations.append(
+                    Violation("G2T", "TECH_IFACE", f"interfaces[{index}].errors 必须是列表")
+                )
+
+    key_designs = tech.get("keyDesigns")
+    if not isinstance(key_designs, list):
+        violations.append(Violation("G2T", "TECH_KEY", "keyDesigns 必须是列表"))
+    elif not key_designs:
+        reason = tech.get("keyDesignsNoneReason")
+        if not isinstance(reason, str) or not reason.strip():
+            violations.append(
+                Violation(
+                    "G2T",
+                    "TECH_KEY",
+                    "无关键设计时须填写 keyDesignsNoneReason（并对照判定原则说明）",
+                )
+            )
+    else:
+        for index, item in enumerate(key_designs):
+            if not isinstance(item, dict):
+                violations.append(
+                    Violation("G2T", "TECH_KEY", f"keyDesigns[{index}] 必须是映射")
+                )
+                continue
+            for key in ("id", "title", "judgment", "problem", "decision", "coreScheme"):
+                value = item.get(key)
+                if not isinstance(value, str) or not value.strip():
+                    violations.append(
+                        Violation("G2T", "TECH_KEY", f"keyDesigns[{index}] 缺少 {key}")
+                    )
+            kinds = item.get("kinds")
+            if not isinstance(kinds, list) or not kinds:
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_KEY",
+                        f"keyDesigns[{index}].kinds 至少一项（cornerstone|highlight|difficulty）",
+                    )
+                )
+            else:
+                for kind_index, kind in enumerate(kinds):
+                    if kind not in KEY_DESIGN_KINDS:
+                        violations.append(
+                            Violation(
+                                "G2T",
+                                "TECH_KEY",
+                                f"keyDesigns[{index}].kinds[{kind_index}] 非法",
+                            )
+                        )
+            must_follow = item.get("mustFollow")
+            if not isinstance(must_follow, list) or not must_follow:
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_KEY",
+                        f"keyDesigns[{index}].mustFollow 至少一条（供 AI 落实）",
+                    )
+                )
+            elif any(not isinstance(x, str) or not x.strip() for x in must_follow):
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_KEY",
+                        f"keyDesigns[{index}].mustFollow 条目不能为空",
+                    )
+                )
+            pitfalls = item.get("pitfalls")
+            if not isinstance(pitfalls, list):
+                violations.append(
+                    Violation("G2T", "TECH_KEY", f"keyDesigns[{index}].pitfalls 必须是列表")
+                )
+            for list_key in ("relatedDiagrams", "relatedAcceptance"):
+                related = item.get(list_key)
+                if related is not None and not isinstance(related, list):
+                    violations.append(
+                        Violation(
+                            "G2T",
+                            "TECH_KEY",
+                            f"keyDesigns[{index}].{list_key} 必须是列表",
+                        )
+                    )
+
+    diagrams = tech.get("diagrams")
+    if not isinstance(diagrams, list):
+        violations.append(Violation("G2T", "TECH_DIAGRAM", "diagrams 必须是列表"))
+    elif not diagrams:
+        reason = tech.get("diagramsNoneReason")
+        if not isinstance(reason, str) or not reason.strip():
+            violations.append(
+                Violation("G2T", "TECH_DIAGRAM", "无图时须填写 diagramsNoneReason")
+            )
+    else:
+        architecture_layers: set[int] = set()
+        for index, item in enumerate(diagrams):
+            if not isinstance(item, dict):
+                violations.append(
+                    Violation("G2T", "TECH_DIAGRAM", f"diagrams[{index}] 必须是映射")
+                )
+                continue
+            diagram_type = item.get("type")
+            if diagram_type not in DIAGRAM_TYPES:
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_DIAGRAM",
+                        f"diagrams[{index}].type 须为 Archify 支持类型",
+                    )
+                )
+            if item.get("tool") != "archify":
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_DIAGRAM",
+                        f"diagrams[{index}].tool 必须为 archify",
+                    )
+                )
+            for key in ("id", "title", "scope"):
+                value = item.get(key)
+                if not isinstance(value, str) or not value.strip():
+                    violations.append(
+                        Violation(
+                            "G2T",
+                            "TECH_DIAGRAM",
+                            f"diagrams[{index}] 缺少 {key}（多图时用 scope 区分范围）",
+                        )
+                    )
+            if diagram_type == "architecture":
+                layer = item.get("layer")
+                if layer in (0, "0"):
+                    architecture_layers.add(0)
+                elif layer in (1, "1"):
+                    architecture_layers.add(1)
+                else:
+                    violations.append(
+                        Violation(
+                            "G2T",
+                            "TECH_DIAGRAM",
+                            f"diagrams[{index}] 为 architecture 时 layer 须为 0 或 1",
+                        )
+                    )
+            _check_diagram_artifact_path(
+                change_dir, item.get("html"), "html", index, violations, suffix=".html"
+            )
+            _check_diagram_artifact_path(
+                change_dir, item.get("svg"), "svg", index, violations, suffix=".svg"
+            )
+        if architecture_layers and architecture_layers != {0, 1}:
+            gaps = tech.get("architectureLayerGaps")
+            if not isinstance(gaps, str) or not gaps.strip():
+                missing = sorted(set(ARCHITECTURE_LAYERS) - architecture_layers)
+                violations.append(
+                    Violation(
+                        "G2T",
+                        "TECH_DIAGRAM",
+                        "架构图须同时覆盖 0 层与 1 层，或填写 architectureLayerGaps 说明缺层 "
+                        f"（缺少 layer {missing}）",
+                    )
+                )
 
     changed = tech.get("changedFiles")
     if not isinstance(changed, list) or not changed:
@@ -520,21 +946,59 @@ def _check_tech_doc_sections(tech: dict, violations: list[Violation]) -> None:
                 if not isinstance(value, str) or not value.strip():
                     violations.append(Violation("G2T", "TECH_RISK", f"risks[{index}] 缺少 {key}"))
 
-    perf = tech.get("performancePower")
-    if not isinstance(perf, dict):
-        violations.append(Violation("G2T", "TECH_PERF", "缺少 performancePower（快稳省）"))
-    else:
-        for section in ("performance", "stability", "power"):
-            block = perf.get(section)
+    nfr = tech.get("nfr")
+    if not isinstance(nfr, dict):
+        legacy = tech.get("performancePower")
+        if isinstance(legacy, dict):
+            nfr = legacy
+        else:
+            violations.append(Violation("G2T", "TECH_PERF", "缺少 nfr（快稳省及扩展评估）"))
+            nfr = None
+    if isinstance(nfr, dict):
+        for section in NFR_CORE:
+            block = nfr.get(section)
             if not isinstance(block, dict):
-                violations.append(Violation("G2T", "TECH_PERF", f"performancePower.{section} 必须是映射"))
+                violations.append(Violation("G2T", "TECH_PERF", f"nfr.{section} 必须是映射"))
                 continue
             for key in ("assessment", "mitigations"):
                 value = block.get(key)
                 if not isinstance(value, str) or not value.strip():
                     violations.append(
-                        Violation("G2T", "TECH_PERF", f"performancePower.{section}.{key} 不能为空")
+                        Violation("G2T", "TECH_PERF", f"nfr.{section}.{key} 不能为空")
                     )
+        for section in NFR_OPTIONAL:
+            block = nfr.get(section)
+            if block is None:
+                continue
+            if not isinstance(block, dict):
+                violations.append(Violation("G2T", "TECH_PERF", f"nfr.{section} 必须是映射"))
+                continue
+            involved = block.get("involved")
+            if involved is not True and involved is not False:
+                violations.append(
+                    Violation("G2T", "TECH_PERF", f"nfr.{section}.involved 必须是布尔")
+                )
+            elif involved is False:
+                reason = block.get("noneReason")
+                if not isinstance(reason, str) or not reason.strip():
+                    violations.append(
+                        Violation(
+                            "G2T",
+                            "TECH_PERF",
+                            f"nfr.{section} 不适用时须填写 noneReason",
+                        )
+                    )
+            else:
+                for key in ("assessment", "mitigations"):
+                    value = block.get(key)
+                    if not isinstance(value, str) or not value.strip():
+                        violations.append(
+                            Violation(
+                                "G2T",
+                                "TECH_PERF",
+                                f"nfr.{section}.{key} 不能为空",
+                            )
+                        )
 
     data = tech.get("dataDesign")
     if not isinstance(data, dict):
@@ -558,6 +1022,62 @@ def _check_tech_doc_sections(tech: dict, violations: list[Violation]) -> None:
                 violations.append(
                     Violation("G2T", "TECH_DATA", "涉及数据设计时 tables 或 models 至少一项")
                 )
+            if has_tables:
+                for index, table in enumerate(tables):
+                    if not isinstance(table, dict):
+                        violations.append(
+                            Violation("G2T", "TECH_DATA", f"dataDesign.tables[{index}] 必须是映射")
+                        )
+                        continue
+                    for key in ("name", "change", "purpose"):
+                        value = table.get(key)
+                        if not isinstance(value, str) or not value.strip():
+                            violations.append(
+                                Violation(
+                                    "G2T",
+                                    "TECH_DATA",
+                                    f"dataDesign.tables[{index}] 缺少 {key}",
+                                )
+                            )
+                    if table.get("change") not in ("add", "modify", "delete"):
+                        violations.append(
+                            Violation(
+                                "G2T",
+                                "TECH_DATA",
+                                f"dataDesign.tables[{index}].change 须为 add|modify|delete",
+                            )
+                        )
+                    fields = table.get("fields")
+                    if fields is not None:
+                        if not isinstance(fields, list):
+                            violations.append(
+                                Violation(
+                                    "G2T",
+                                    "TECH_DATA",
+                                    f"dataDesign.tables[{index}].fields 必须是列表",
+                                )
+                            )
+                        else:
+                            for field_index, field in enumerate(fields):
+                                if not isinstance(field, dict):
+                                    violations.append(
+                                        Violation(
+                                            "G2T",
+                                            "TECH_DATA",
+                                            f"dataDesign.tables[{index}].fields[{field_index}] 必须是映射",
+                                        )
+                                    )
+                                    continue
+                                for key in ("name", "type", "description"):
+                                    value = field.get(key)
+                                    if not isinstance(value, str) or not value.strip():
+                                        violations.append(
+                                            Violation(
+                                                "G2T",
+                                                "TECH_DATA",
+                                                f"dataDesign.tables[{index}].fields[{field_index}] 缺少 {key}",
+                                            )
+                                        )
 
     tracking = tech.get("tracking")
     if not isinstance(tracking, dict):
@@ -595,6 +1115,38 @@ def _check_tech_doc_sections(tech: dict, violations: list[Violation]) -> None:
                                     f"tracking.{kind}[{index}] 缺少 {key}",
                                 )
                             )
+                    fields = item.get("fields")
+                    if fields is None:
+                        continue
+                    if not isinstance(fields, list):
+                        violations.append(
+                            Violation(
+                                "G2T",
+                                "TECH_TRACKING",
+                                f"tracking.{kind}[{index}].fields 必须是列表",
+                            )
+                        )
+                        continue
+                    for field_index, field in enumerate(fields):
+                        if not isinstance(field, dict):
+                            violations.append(
+                                Violation(
+                                    "G2T",
+                                    "TECH_TRACKING",
+                                    f"tracking.{kind}[{index}].fields[{field_index}] 必须是映射",
+                                )
+                            )
+                            continue
+                        for key in ("id", "description", "type"):
+                            value = field.get(key)
+                            if not isinstance(value, str) or not value.strip():
+                                violations.append(
+                                    Violation(
+                                        "G2T",
+                                        "TECH_TRACKING",
+                                        f"tracking.{kind}[{index}].fields[{field_index}] 缺少 {key}",
+                                    )
+                                )
 
 
 def _check_g3(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:

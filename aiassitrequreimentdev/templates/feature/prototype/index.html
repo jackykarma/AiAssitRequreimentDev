@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>产品原型（待填写）</title>
+  <title>产品原型（可交互）</title>
   <style>
     :root {
-      --bg: #f6f4ef;
-      --ink: #1c1b19;
-      --muted: #5c574e;
-      --line: #d9d2c5;
-      --accent: #0f6b5c;
+      --bg: #f4f1ea;
+      --ink: #1a1a1a;
+      --muted: #5a564c;
+      --line: #d6d0c4;
+      --accent: #0b6e4f;
+      --card: #fff;
     }
     * { box-sizing: border-box; }
     body {
@@ -20,47 +21,129 @@
       background: var(--bg);
       line-height: 1.5;
     }
-    header, main {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 24px 20px;
+    header, main { max-width: 880px; margin: 0 auto; padding: 20px; }
+    header { border-bottom: 1px solid var(--line); }
+    h1 { margin: 0 0 8px; font-size: 1.4rem; }
+    .hint { color: var(--muted); font-size: 0.92rem; margin: 0; }
+    nav.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+    nav.tabs button {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 999px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font: inherit;
     }
-    header {
-      border-bottom: 1px solid var(--line);
+    nav.tabs button[aria-selected="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
     }
-    h1 { margin: 0 0 8px; font-size: 1.5rem; font-weight: 600; }
-    p { margin: 0 0 12px; color: var(--muted); }
-    .card {
-      background: #fff;
+    .screen {
+      display: none;
+      background: var(--card);
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 16px;
-      margin-top: 16px;
+      min-height: 280px;
     }
-    button, a.button {
-      display: inline-block;
+    .screen.active { display: block; }
+    .actions { margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+    button.primary, a.button {
       border: 0;
       border-radius: 8px;
       padding: 10px 14px;
       background: var(--accent);
       color: #fff;
+      cursor: pointer;
+      font: inherit;
       text-decoration: none;
+    }
+    button.ghost {
+      border: 1px solid var(--line);
+      background: transparent;
+      border-radius: 8px;
+      padding: 10px 14px;
       cursor: pointer;
       font: inherit;
     }
-    .hint { font-size: 0.9rem; }
+    .status { margin-top: 12px; color: var(--muted); font-size: 0.9rem; }
+    ul { padding-left: 1.2rem; }
   </style>
 </head>
 <body>
   <header>
-    <h1>产品原型占位页</h1>
-    <p class="hint">由产品 Agent 替换为真实主流程。本地用浏览器直接打开本文件即可评审。</p>
+    <h1>产品原型 · 主流程（占位，请替换）</h1>
+    <p class="hint">产品交付：可本地打开的可交互 HTML。点击 Tab / 按钮切换场景，覆盖核心用户旅程。</p>
   </header>
   <main>
-    <div class="card">
-      <p>待产品经理与产品 Agent 澄清后，在此实现可点击的主场景。</p>
-      <button type="button" onclick="alert('请替换为真实交互')">示例操作</button>
-    </div>
+    <nav class="tabs" role="tablist" aria-label="原型场景">
+      <button type="button" role="tab" aria-selected="true" data-screen="home">入口</button>
+      <button type="button" role="tab" aria-selected="false" data-screen="flow">主流程</button>
+      <button type="button" role="tab" aria-selected="false" data-screen="edge">异常/边界</button>
+    </nav>
+
+    <section id="home" class="screen active" role="tabpanel">
+      <h2>入口</h2>
+      <p>说明用户从哪进来、看到什么。</p>
+      <ul>
+        <li>旅程：UJ1（待替换）</li>
+        <li>成功终点：待替换</li>
+      </ul>
+      <div class="actions">
+        <button type="button" class="primary" data-go="flow">开始主流程</button>
+      </div>
+      <p class="status" id="home-status">待命</p>
+    </section>
+
+    <section id="flow" class="screen" role="tabpanel" hidden>
+      <h2>主流程</h2>
+      <p>在此放关键步骤与可点击控件（表单、列表项、确认等）。</p>
+      <div class="actions">
+        <button type="button" class="primary" id="btn-success">模拟成功</button>
+        <button type="button" class="ghost" data-go="edge">走到异常</button>
+        <button type="button" class="ghost" data-go="home">返回入口</button>
+      </div>
+      <p class="status" id="flow-status">未操作</p>
+    </section>
+
+    <section id="edge" class="screen" role="tabpanel" hidden>
+      <h2>异常 / 边界</h2>
+      <p>展示空态、失败、权限拒绝等，须可点回主流程。</p>
+      <div class="actions">
+        <button type="button" class="primary" data-go="flow">重试主流程</button>
+        <button type="button" class="ghost" data-go="home">回入口</button>
+      </div>
+    </section>
   </main>
+  <script>
+    (function () {
+      var screens = document.querySelectorAll(".screen");
+      var tabs = document.querySelectorAll("nav.tabs button");
+      function show(id) {
+        screens.forEach(function (el) {
+          var on = el.id === id;
+          el.classList.toggle("active", on);
+          el.hidden = !on;
+        });
+        tabs.forEach(function (btn) {
+          btn.setAttribute("aria-selected", btn.getAttribute("data-screen") === id ? "true" : "false");
+        });
+      }
+      tabs.forEach(function (btn) {
+        btn.addEventListener("click", function () { show(btn.getAttribute("data-screen")); });
+      });
+      document.querySelectorAll("[data-go]").forEach(function (btn) {
+        btn.addEventListener("click", function () { show(btn.getAttribute("data-go")); });
+      });
+      var success = document.getElementById("btn-success");
+      if (success) {
+        success.addEventListener("click", function () {
+          document.getElementById("flow-status").textContent = "已模拟成功（请换成真实文案与状态）";
+        });
+      }
+      document.getElementById("home-status").textContent = "可交互原型已加载";
+    })();
+  </script>
 </body>
 </html>

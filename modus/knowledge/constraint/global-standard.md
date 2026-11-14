@@ -5,6 +5,7 @@
 - 规格只有 `features/<id>/spec.yaml` 一份。G1 冻结后的字节哈希存在 `state.json` 的 `specHash`。
 - 验收编号 `A*` 一旦出现在已签字的规格里，ux / tech / 任务 / 证据只能引用，不能重编号。
 - 旧 `design.yaml` 已退役；交互视觉写 `ux.yaml`，技术方案写 `tech.md` + `tech.yaml`（架构图可选；变更文件、选型、风险、快稳省、数据设计、产品+技术埋点必含）。
+- 架构思考可从整条需求出发；G2T 按 feature。`tech.md` 对人友好，`tech.yaml` 对 AI 友好（`aiConstraints` + `keyDesigns`）。架构图分 0/1 层；流程/时序/类图可多张（`scope` 区分）。绘图用 [Archify](https://github.com/tt-a1i/archify)，只留 `.html`/`.svg`。
 - 写集按目录前缀相交即视为冲突，冲突任务不得并行。
 - 证据的 `exitCode` 必须来自真实命令。未运行的验收不能写成 0。
 - 知识与源码冲突时以源码为准，再修订知识的原定义处。

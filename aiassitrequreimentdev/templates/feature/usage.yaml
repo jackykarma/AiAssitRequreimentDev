@@ -1,0 +1,15 @@
+# 各角色阶段 token 用量。由主控代跑 CLI 追加；看板汇总。
+# record: python -m aiassitrequreimentdev usage <feature目录> record --role product --stage clarify --input N --output N
+version: 1
+entries: []
+# entries[] 项：
+# - role: product|architect|developer|tester|deployer|lead|ux|reviewer
+#   roleLabel: 产品经理
+#   stage: clarify|ux|tech|plan|implement|review|verify|release|...
+#   gate: G1
+#   inputTokens: 0
+#   outputTokens: 0
+#   totalTokens: 0
+#   model: ""
+#   note: ""
+#   recordedAt: "2026-11-14T00:00:00+00:00"

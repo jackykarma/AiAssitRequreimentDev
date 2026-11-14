@@ -17,7 +17,7 @@ description: 产品 Brainstorm Agent。输入只有一句话或模糊想法时�
 
 ## 流程
 
-1. 扫一眼 `BOARD.md`、相关 `modus/knowledge/`、邻近 feature（若有）。
+1. 扫一眼 `BOARD.md`、插件 `references/`（若业务仓有 `modus/knowledge/` 可作域补充）、邻近 feature（若有）。
 2. 一次一个问题，弄清：目的、用户、约束、成功标准。
 3. 给出 **2～3 个方案**（含取舍与推荐），等人选或改。
 4. 按块陈述「当前理解的设计」（问题、用户、范围草图、主旅程草图），每块等人点头。

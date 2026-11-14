@@ -1,15 +1,24 @@
-# 技术方案结构化合同（架构师 + AI）。给人读的完整文档见 tech.md。
-# 必含：变更文件、选型、风险、快稳省、数据设计、埋点；架构图可选。
+# 技术方案机器合同（G2T + 开发 Agent 必读）。叙事见 tech.md。
+# 详版人读模板见 templates/design/（nfr、interface、database、analytics-tracking、key-design-kd）。
 summary: ""
-architectureDiagram:
-  included: false
-  format: ""
-  ref: ""
+aiConstraints:
+  mustFollow: []
+  mustNot: []
+  mustNotNoneReason: ""
+  invariants: []
+  invariantsNoneReason: ""
+keyDesigns: []
+keyDesignsNoneReason: ""
+interfaces: []
+interfacesNoneReason: ""
+diagrams: []
+diagramsNoneReason: ""
+architectureLayerGaps: ""
 changedFiles: []
 techChoices: []
 risks: []
 risksNoneReason: ""
-performancePower:
+nfr:
   performance:
     assessment: ""
     mitigations: ""
@@ -19,13 +28,43 @@ performancePower:
   power:
     assessment: ""
     mitigations: ""
+  memory:
+    involved: false
+    noneReason: ""
+    assessment: ""
+    mitigations: ""
+  security:
+    involved: false
+    noneReason: ""
+    assessment: ""
+    mitigations: ""
+  compatibility:
+    involved: false
+    noneReason: ""
+    assessment: ""
+    mitigations: ""
+  romSize:
+    involved: false
+    noneReason: ""
+    assessment: ""
+    mitigations: ""
+  algorithm:
+    involved: false
+    noneReason: ""
+    assessment: ""
+    mitigations: ""
 dataDesign:
   involved: false
   tables: []
   models: []
+  consistencyNotes: ""
   noneReason: ""
 tracking:
   product: []
   technical: []
   noneReason: ""
 acceptance: []
+# keyDesigns[]：须含 coreScheme（链路闭环叙述）
+# interfaces[]：direction provided|consumed；request/response/errors/concurrencyNotes
+# dataDesign.tables[]：name/change/purpose/fields[]/indexes[]/migration
+# tracking.*.fields[]：id/description/type/range/example（可选，有则校验）

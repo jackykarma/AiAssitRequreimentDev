@@ -1,19 +1,21 @@
 # 技术方案模块
 
-技能：`aiassitrequreimentdev-tech`。架构师与 AI 共写：
+| 文件 | 受众 | 用途 |
+| --- | --- | --- |
+| `tech.md` | 人 | 一页纸、L0/L1、关键设计判定与正文、多图说明 |
+| `tech.yaml` | AI + G2T | `aiConstraints`、`keyDesigns`、`diagrams`、接口与验收 |
+| `diagrams/*.{html,svg}` | 人 | Archify 图 |
 
-- `tech.md`：给人读的方案文档
-- `tech.yaml`：机器合同与 G2T
+## 关键设计
 
-## 必含
+`keyDesigns`：`cornerstone` / `highlight` / `difficulty`；必含 `coreScheme`（链路闭环叙述）。判定原则见 `tech.md` §3.1。
 
-1. 架构图（可选）
-2. 变更文件清单（路径 + 新增/修改/删除）
-3. 技术方案选型
-4. 技术风险点与消解
-5. 快稳省（性能 / 稳定 / 功耗）评估与消解
-6. 数据设计（库表、数据模型；涉及才展开）
-7. 埋点：产品埋点 + 技术埋点
-8. 按 `A*` 的架构 / 接口 / 数据 / 失败恢复落点
+## 接口 / 数据 / 埋点 / NFR
 
-约束链到 modus。高风险项标出供主控打断。
+`interfaces`（provided/consumed + request/response/errors）、`dataDesign.tables` 字段级、`tracking.*.fields`、`nfr`（快稳省必填，扩展按需）。人读详版：`aiassitrequreimentdev/templates/design/`。
+
+## 图
+
+- 架构：分 0 层 / 1 层；可各多张
+- 流程 / 时序 / 类图：可多张，必填 `scope`
+- 详见 [diagrams.md](../diagrams.md)

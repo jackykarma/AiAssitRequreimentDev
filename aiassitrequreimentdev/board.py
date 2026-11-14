@@ -14,6 +14,7 @@
  ** ------------------------------------------------------------------------------
  ** limao2@Apps.Gallery 2026/11/08 1.0 INIT
  ** limao2@Apps.Gallery 2026/11/08 1.1 path confirm
+ ** limao2@Apps.Gallery 2026/11/14 1.2 token usage section
  *********************************************************************************/
 """
 
@@ -24,19 +25,22 @@ from pathlib import Path
 
 from aiassitrequreimentdev.paths import PATH_BY_ID, resolve_path
 from aiassitrequreimentdev.roles import ROLE_BY_ID, ROLES, resolve_menu_choice
+from aiassitrequreimentdev.usage import board_usage_section
 
 
 ARTIFACTS = (
     ("prd.md", "产品 PRD（给人）"),
-    ("prototype/index.html", "产品 HTML 原型（给人）"),
+    ("prototype/index.html", "产品可交互 HTML 原型（给人）"),
     ("spec.yaml", "结构化规格（给 Agent/门禁）"),
-    ("ux.yaml", "交互视觉"),
+    ("ux.yaml", "交互视觉合同"),
+    ("prototype/ux/index.html", "UX 可交互 HTML 原型（给人）"),
     ("tech.md", "技术方案文档（给人）"),
     ("tech.yaml", "技术方案合同（给门禁）"),
     ("tasks.yaml", "任务图"),
     ("review.yaml", "代码评审"),
     ("evidence.yaml", "测试证据"),
     ("deploy.yaml", "部署清单"),
+    ("usage.yaml", "角色阶段 token 用量"),
 )
 
 
@@ -128,7 +132,10 @@ def refresh_board(change_dir: Path) -> Path:
             status = "已有" if path.is_file() else "缺失"
         lines.append(f"| `{relative}` | {title} | {status} |")
 
-    lines.extend(["", "## 角色入口", "", "| 角色 | 技能 | 写出 |", "| --- | --- | --- |"])
+    lines.append("")
+    lines.extend(board_usage_section(change_dir))
+
+    lines.extend(["## 角色入口", "", "| 角色 | 技能 | 写出 |", "| --- | --- | --- |"])
     for item in ROLES:
         lines.append(
             f"| {item.label} | `{item.skill}` | {', '.join(f'`{w}`' for w in item.writes)} |"

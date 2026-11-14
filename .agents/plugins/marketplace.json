@@ -1,0 +1,20 @@
+{
+  "name": "aiassitrequreimentdev-team",
+  "interface": {
+    "displayName": "AiAssitRequreimentDev Team"
+  },
+  "plugins": [
+    {
+      "name": "aiassitrequreimentdev",
+      "source": {
+        "source": "local",
+        "path": "./plugins/aiassitrequreimentdev"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

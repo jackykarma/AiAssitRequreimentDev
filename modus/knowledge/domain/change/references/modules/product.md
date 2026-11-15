@@ -20,7 +20,7 @@
 2. `prototype/**/*.html`：可交互；主路径 + 异常/空态；引 `shared/ui-kit/`
 3. `spec.yaml`：机器合同；必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选
 
-原则：清晰无歧义、验收可执行、边界尽量全面；不写实现细节。
+原则：清晰无歧义、验收可执行、边界尽量全面；不写实现细节。G1 seal 前过人审 A*/verify 清单（covers 矩阵、then 可观察、verify 失败须非 0）。
 
 大需求另写需求级 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/prd.md` + `split.yaml`。
 

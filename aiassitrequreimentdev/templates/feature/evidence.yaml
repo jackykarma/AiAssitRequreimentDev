@@ -1,1 +1,10 @@
+# 每条 A* 一条结果。command 须对应 spec.acceptance[].verify（同名/同源）。
+# 未实际运行不得填 exitCode: 0。禁止 true / exit 0 / 未断言 then 的空转命令。
+# excerpt 须含与 then 相关的可观察片段。
+# 示例：
+# results:
+#   - acceptanceId: A1
+#     command: ./gradlew :app:testDebugUnitTest --tests MoveAlbumHappyPath
+#     exitCode: 0
+#     excerpt: MoveAlbumHappyPath PASSED
 results: []

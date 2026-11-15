@@ -33,6 +33,8 @@ edgeCases:
   []
 edgeNoneReason: ""
 acceptance:
+  # verify：具名用例或可执行命令/包装脚本；须能在 then 不成立时返回非 0。
+  # 禁止：待补充、手工看看、true/exit 0 空转。covers 须挂上对应 P0 的 FR/NFR/E。
   # - id: A1
   #   given: 图集 A 有照片且图集 B 存在
   #   when: 用户将照片从 A 移动到 B 并确认

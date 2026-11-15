@@ -101,12 +101,29 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 
 改 `spec.yaml` / PRD / 产品原型前：**先请主控记 C3 到 `change.yaml`**（发起人、原因、影响、时间），人确认后再退回 G1 并重 seal。不得私自改已冻结合同。见 `references/change-control.md`。
 
+## Seal 前人审清单（A* / verify）
+
+`check G1` 只保证字段形状；**准不准靠本清单**。未勾完不要请主控 `seal`：
+
+- [ ] 每个 P0 的 FR/NFR/E 至少被一条 A 的 `covers` 挂上（可口头/表列出 covers 矩阵）
+- [ ] 主路径与至少一条异常/空态各有 A
+- [ ] 每条 A：陌生人只读 given/when/then 能否复现可观察结果（禁止「更好/适当/正常」）
+- [ ] 每条 `verify` 能说清「then 不成立时谁返回非 0」；禁止「手工看看 / 待补充 / exit 0 空转」
+- [ ] `verify` 优先具名用例或可执行命令/包装脚本；人工步骤须包成可退出码化脚本后再写进合同
+- [ ] PRD 验收表与 `spec.acceptance` 同编号、同口径；A 写行为不写实现类名/库细节
+
+三问（任一条答不出 → 回 grill 或标 `openQuestions`）：
+
+1. then 失败时，这条 verify 会不会非 0？
+2. 去掉实现细节后验收是否仍成立？
+3. 原型主路径/异常是否能点出对应 then？
+
 ## 结束（feature 级 G1）
 
 ```bash
 python <本插件>/scripts/aad.py check <feature目录> --gate G1
 ```
 
-需同时：`G1 ready`、PRD 章节齐全、`UJ/FR/NFR/E/A` 对齐、原型（或无 UI 原因）满足。不要自己改 `gates.G1`。
+需同时：`G1 ready`、PRD 章节齐全、`UJ/FR/NFR/E/A` 对齐、原型（或无 UI 原因）满足、**上节 seal 清单已勾完**。不要自己改 `gates.G1`。
 
 结束后请主控登记 token（`--role product --stage clarify`）。

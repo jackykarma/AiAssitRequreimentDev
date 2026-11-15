@@ -8,7 +8,7 @@
 4. 一个 feature 只有一份机器规格 `spec.yaml`（`UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*`）。其他角色按编号引用，不改写规格正文。
 5. **G1 冻结后改 `spec.yaml` 必须先把 `gates.G1` 改回 `pending` 并重新 `seal`。** 检查器用 `specHash` 发现未经退回的修改。改规格须同步 PRD 及受影响原型。**变更须先记 `change.yaml`（发起人/原因/影响/时间）**，见 `change-control.md`。不要手改 `gates.*.accepted`。
 6. 交互视觉写 `ux.yaml` + 可交互 `prototype/ux/`（或 `skip`）。技术方案写 `tech.md` + `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。架构/流程/时序/类图须用 [Archify](https://github.com/tt-a1i/archify) `finalize` 真出图（禁止手写/Mermaid 冒充），只留 html/svg。
-7. 验收必须能被一条命令判断。`given` / `when` / `then` / `verify` 都要有内容。**通过与否看命令退出码**（记入 `evidence.yaml` 的 `exitCode`）。
+7. 验收必须能被一条命令判断。`given` / `when` / `then` / `verify` 都要有内容。**通过与否看命令退出码**（记入 `evidence.yaml` 的 `exitCode`）。`verify`/证据命令禁止空转成功；G1 seal 前人过 A* 清单（见产品技能）。
 8. `nonGoals` 里的事项开发不得实现。主控直接拒绝。
 9. 知识与源码冲突时以当前源码为准。规格与技术方案只保存链接。长期事实在业务仓 `modus/knowledge/`（可选）；插件内以本目录为准。
 10. 写集相交的任务不得并行。检查器报告 `TASK_SCOPE_OVERLAP` 时，合并任务或改成 `blockedBy`。

@@ -15,7 +15,7 @@ description: 开发 Agent。按单个任务包在写集内改代码；也可承�
 2. 只在写集内修改；需要扩大范围则停下来提问。
 3. 改变场景/验收/契约的问题退回 G1，不在分支补临时规则。
 4. `nonGoals`、`aiConstraints.mustNot` 与关键设计中的禁止项不做。
-5. 跑任务 `verify`；输出交给测试写证据，自己不写 `evidence.yaml`。
+5. 跑任务 `verify`（须对应 `spec.acceptance` 的 verify，禁止空转 `exit 0`）；输出交给测试写证据，自己不写 `evidence.yaml`。
 6. 若本轮是 Review 修复：针对指定 finding 修完并说明，等待复审。
 
 完成时说明改了哪些文件、验证退出码、未做事项；并请主控登记 token（`--role developer --stage implement`）。

@@ -43,7 +43,7 @@ python <本插件>/scripts/aad.py init FEAT-002 --requirement REQ-001-move-album
 需求目录 / `requirementId` 格式：`REQ-<序号>-<kebab名称>-<YYYYMMDD>`。
 
 **不要**在没有需求级 PRD（或未确认的单 feature 捷径）时批量空建 feature。  
-**tasks.yaml** 只在单个 feature 的技术门禁之后拆，不是拆需求。
+**tasks.yaml** 只在单个 feature 的技术门禁之后拆，不是拆需求。任务的验证命令须与 `spec.acceptance[].verify` **同名/同源**（可补全可跑路径，不得另起总能成功的假命令）。
 
 ## 启动（单 feature 捷径）
 

@@ -44,7 +44,10 @@ description: 产品 Grill Agent。在输入不完整时系统追问，补齐功�
 澄清够用后，用简短摘要交给 `aiassitrequreimentdev-product`，至少含：
 
 - 已闭合编号草稿（`UJ*`/`FR*`/`NFR*`/`E*`/`A*`，可选 `S*`）
+- **covers 矩阵**：每条 P0 的 FR/NFR/E → 覆盖它的 `A*`；每条 A 的草稿 `verify`（具名用例/命令意向，禁止「待定」）
 - 仍开放的问题（进 `openQuestions`）
 - 建议：需求级 PRD + split，或小需求直开单个 feature
+
+A 草稿自检：given/when/then 可观察；`verify` 须能回答「失败时谁非 0」。未闭合则不要宣称可写 PRD。
 
 然后由产品技能写正式文件并跑 G1。

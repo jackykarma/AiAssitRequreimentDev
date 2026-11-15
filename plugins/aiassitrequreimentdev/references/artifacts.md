@@ -20,7 +20,7 @@
 | `tasks.yaml` | 主控 | G2T 之后的任务图：依赖、写集、验收、验证命令 |
 | `change.yaml` | 主控 | 变更台账：发起人、原因、级别、影响文件/门禁、时间、状态 |
 | `review.yaml` | Review | `findings[]`：`blocking` / `dispute` / `nit` |
-| `evidence.yaml` | 测试 | 每条验收的 command 与 `exitCode` |
+| `evidence.yaml` | 测试 | 每条验收的 command 与 `exitCode`；command 须对应 `spec.verify`，禁止空转成功 |
 | `deploy.yaml` | 部署 | 环境、命令、回滚；不代执行上线 |
 
 大需求另有 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`）：需求级 `prd.md`、`split.yaml`，可选 `architecture/`（Archify 草图，不进 G2T）。

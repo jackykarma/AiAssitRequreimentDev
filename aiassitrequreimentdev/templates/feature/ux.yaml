@@ -1,8 +1,35 @@
-# 交互视觉合同（G2）。有 UI 时须交付可交互 HTML：prototype/ux/index.html（可多页）。
+# 交互视觉合同（G2）· 私人项目默认无专职设计师。
+# 分工：产品 prototype/index.html = 业务可点通；本文件 + prototype/ux/ = 交互规则精修 + 视觉落点。
+# 视觉基线：prototype/shared/ui-kit/（uk-*）。Pencil/Figma 仅探索，必须回流 HTML，链接进 artifacts。
+# 无 UI：skip=true 并写 reason。
 skip: false
 reason: ""
+uiKit:
+  baseline: shared/ui-kit
+  showcase: prototype/shared/ui-kit/showcase.html
+interactionRules:
+  # - id: IR1
+  #   when: 用户确认主操作
+  #   behavior: 展示进度并禁用重复点击，成功 toast，失败进入异常屏
+  #   states: idle|loading|success|error
+  #   feedback: toast / sheet / 全屏异常
+  #   coversAcceptance: [A1]
+  []
+visual:
+  baseline: ui-kit   # ui-kit（默认）| custom（须说明为何不用 kit）
+  notes: ""          # 色板/层级/插画等补充；默认可空
+  motion: []         # 可选动效规则
+  # - id: M1
+  #   trigger: 主操作成功
+  #   effect: toast 滑入
+  #   durationHint: ~300ms
 htmlPrototype:
   entry: prototype/ux/index.html
   pages: []
 acceptance: []
 artifacts: []
+# artifacts 示例（探索稿，非门禁主交付）：
+# - type: pencil|figma|image|other
+#   title: 视觉探索 A
+#   uri: ""
+#   note: 已回流到 prototype/ux/index.html

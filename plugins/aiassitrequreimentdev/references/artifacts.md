@@ -11,8 +11,8 @@
 | `prototype/index.html` | 产品 | 可交互产品原型（G1；主路径+异常）；无 UI 时 `uiRequired=false` + `uiNoneReason` |
 | `prototype/shared/ui-kit/` | 共享（模板） | 产品/UX 共用手机组件 CSS + `showcase.html`（ColorOS/相册风） |
 | `spec.yaml` | 产品 | 全流程机器事实源与 G1/`seal`：必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选；`uiRequired` |
-| `ux.yaml` | 交互视觉 | 覆盖需 UI 的验收 + `htmlPrototype`；或 `skip: true` + `reason`（不写 ux-design.md） |
-| `prototype/ux/` | 交互视觉 | 可交互 UX HTML（G2；入口默认 `index.html`，须引 ui-kit） |
+| `ux.yaml` | 交互视觉 | G2：必填 `interactionRules`；可选 `visual`/`motion`；验收映射；Pencil/Figma→`artifacts`；或 `skip` |
+| `prototype/ux/` | 交互视觉 | 可交互 UX HTML（规则+视觉精修；须引 ui-kit；与产品原型分工见 UX 技能） |
 | `tech.md` / `tech-spec.md` / KD·NFR·接口·库表·埋点 | 架构师 | 人读：严格按 `templates/feature/tech.md` 等；展开件 `templates/design/` |
 | `tech.yaml` | 架构师 | 给 AI/门禁：`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams[]` |
 | `tasks.md` | 主控/架构 | 人读拆解：按 `templates/feature/tasks.md`；机器件仍为 `tasks.yaml` |

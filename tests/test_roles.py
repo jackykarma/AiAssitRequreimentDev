@@ -11,12 +11,14 @@ from aiassitrequreimentdev.roles import menu_text, resolve_menu_choice
 class RoleTests(unittest.TestCase):
     def test_resolve_chinese_and_number(self) -> None:
         self.assertEqual(resolve_menu_choice("产品经理").id, "product")
-        self.assertEqual(resolve_menu_choice("2").id, "architect")
+        self.assertEqual(resolve_menu_choice("2").id, "ux")
+        self.assertEqual(resolve_menu_choice("3").id, "architect")
+        self.assertEqual(resolve_menu_choice("交互视觉").id, "ux")
         self.assertEqual(resolve_menu_choice("tester").id, "tester")
 
-    def test_menu_lists_five_roles(self) -> None:
+    def test_menu_lists_six_roles(self) -> None:
         text = menu_text()
-        for label in ("产品经理", "架构师SE", "开发", "测试", "部署"):
+        for label in ("产品经理", "交互视觉", "架构师SE", "开发", "测试", "部署"):
             self.assertIn(label, text)
 
     def test_adopt_writes_state_and_board(self) -> None:

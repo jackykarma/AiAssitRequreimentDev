@@ -84,6 +84,7 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 ### 产品原型（G1）
 
 - 入口：`prototype/index.html`；共享 `prototype/shared/ui-kit/`（`uk-*`）。
+- **本阶段目标=业务可点通**（主路径 + 关键异常对齐 UJ/E）；交互规则精修与视觉/动效交给 G2 `aiassitrequreimentdev-ux`，不要在产品阶段追求效果稿完整度。
 - **patch**：截图 → `assets/` → 热区 + 局部叠层；**new**：组件拼页。
 - 必须可交互；禁止静态长文/截图替代。
 - 交稿前删掉与本需求无关的模板演示文案；屏上标签尽量标 UJ/E 编号。

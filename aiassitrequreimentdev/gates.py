@@ -25,6 +25,7 @@
  ** limao2@Apps.Gallery 2026/11/15 1.10 Archify HTML 溯源（generator + reader-contract）
  ** limao2@Apps.Gallery 2026/11/15 1.11 specify 模板章节标题强制对齐
  ** limao2@Apps.Gallery 2026/11/15 1.12 product SSOT；G1 的 S* 改为可选
+ ** limao2@Apps.Gallery 2026/11/15 1.13 G2 interactionRules + ui-kit visual baseline
  *********************************************************************************/
 """
 
@@ -595,6 +596,8 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
         if not isinstance(reason, str) or not reason.strip():
             violations.append(Violation("G2", "UX_SKIP_REASON", "ux.skip 为 true 时必须写 reason"))
         return
+    _check_ux_interaction_rules(ux, violations)
+    _check_ux_visual(ux, violations)
     expected = _acceptance_ids(spec)
     mapped = ux.get("acceptance")
     if not isinstance(mapped, list):
@@ -603,16 +606,16 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
     seen: set[str] = set()
     for item in mapped:
         if not isinstance(item, dict):
-            violations.append(Violation("G2", "UX_UNMAPPED", "视觉落点必须是映射"))
+            violations.append(Violation("G2", "UX_UNMAPPED", "验收落点必须是映射"))
             continue
         identifier = item.get("id")
         if identifier not in expected:
             violations.append(
-                Violation("G2", "UX_UNKNOWN_ACCEPTANCE", f"视觉引用了规格中不存在的 {identifier}")
+                Violation("G2", "UX_UNKNOWN_ACCEPTANCE", f"UX 引用了规格中不存在的 {identifier}")
             )
             continue
         if identifier in seen:
-            violations.append(Violation("G2", "UX_DUPLICATE", f"{identifier} 被视觉映射了多次"))
+            violations.append(Violation("G2", "UX_DUPLICATE", f"{identifier} 被 UX 映射了多次"))
         seen.add(identifier)
         for key in ("flow", "surface"):
             value = item.get(key)
@@ -621,7 +624,7 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
     missing = expected - seen
     if missing:
         violations.append(
-            Violation("G2", "UX_UNMAPPED", "视觉未覆盖: " + ", ".join(sorted(missing)))
+            Violation("G2", "UX_UNMAPPED", "UX 未覆盖验收: " + ", ".join(sorted(missing)))
         )
 
     html_proto = ux.get("htmlPrototype")
@@ -655,6 +658,99 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
                 "UX 原型须为可交互 HTML（含 button / 事件 / 可切换页面等）",
             )
         )
+        return
+    proto_text = entry.read_text(encoding="utf-8", errors="ignore").lower()
+    if "ui-kit" not in proto_text and "uk-" not in proto_text:
+        violations.append(
+            Violation(
+                "G2",
+                "UX_PROTO_UIKIT",
+                "UX 原型须引用 shared/ui-kit（tokens/components/phone 或 uk-* 类名）",
+            )
+        )
+
+
+def _check_ux_interaction_rules(ux: dict, violations: list[Violation]) -> None:
+    rules = ux.get("interactionRules")
+    if not isinstance(rules, list) or not rules:
+        violations.append(
+            Violation(
+                "G2",
+                "UX_RULES",
+                "有 UI 时须填写 interactionRules（≥1：when/behavior；交互规则是 G2 主交付）",
+            )
+        )
+        return
+    seen: set[str] = set()
+    for item in rules:
+        if not isinstance(item, dict):
+            violations.append(Violation("G2", "UX_RULES", "interactionRules 条目必须是映射"))
+            continue
+        identifier = item.get("id")
+        if (
+            not isinstance(identifier, str)
+            or not identifier.startswith("IR")
+            or identifier in seen
+        ):
+            violations.append(
+                Violation("G2", "UX_RULES", f"交互规则编号非法或重复: {identifier}（须 IR*）")
+            )
+        else:
+            seen.add(identifier)
+        for key in ("when", "behavior"):
+            value = item.get(key)
+            if not isinstance(value, str) or not value.strip():
+                violations.append(Violation("G2", "UX_RULES", f"{identifier} 缺少 {key}"))
+
+
+def _check_ux_visual(ux: dict, violations: list[Violation]) -> None:
+    visual = ux.get("visual")
+    if visual is None:
+        return
+    if not isinstance(visual, dict):
+        violations.append(Violation("G2", "UX_VISUAL", "visual 必须是映射（可省略整块）"))
+        return
+    baseline = visual.get("baseline")
+    if baseline is not None and baseline not in ("ui-kit", "custom"):
+        violations.append(
+            Violation("G2", "UX_VISUAL", "visual.baseline 须为 ui-kit 或 custom")
+        )
+    if baseline == "custom":
+        notes = visual.get("notes")
+        if not isinstance(notes, str) or not notes.strip():
+            violations.append(
+                Violation(
+                    "G2",
+                    "UX_VISUAL",
+                    "visual.baseline=custom 时须在 notes 说明为何不用 ui-kit",
+                )
+            )
+    motion = visual.get("motion")
+    if motion is None:
+        return
+    if not isinstance(motion, list):
+        violations.append(Violation("G2", "UX_MOTION", "visual.motion 必须是列表"))
+        return
+    seen: set[str] = set()
+    for item in motion:
+        if not isinstance(item, dict):
+            violations.append(Violation("G2", "UX_MOTION", "motion 条目必须是映射"))
+            continue
+        identifier = item.get("id")
+        if (
+            not isinstance(identifier, str)
+            or not identifier.startswith("M")
+            or identifier in seen
+        ):
+            violations.append(
+                Violation("G2", "UX_MOTION", f"动效编号非法或重复: {identifier}（须 M*）")
+            )
+        else:
+            seen.add(identifier)
+        for key in ("trigger", "effect"):
+            value = item.get(key)
+            if not isinstance(value, str) or not value.strip():
+                violations.append(Violation("G2", "UX_MOTION", f"{identifier} 缺少 {key}"))
 
 
 def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:

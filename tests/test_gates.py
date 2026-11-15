@@ -70,12 +70,14 @@ def write_interactive_html(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         """<!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"/><title>proto</title></head>
+<html lang="zh-CN"><head><meta charset="utf-8"/><title>proto</title>
+<link rel="stylesheet" href="../shared/ui-kit/tokens.css" />
+</head>
 <body>
-<button type="button" data-go="home">首页</button>
-<button type="button" data-go="detail">详情</button>
-<section id="home">首页内容</section>
-<section id="detail" hidden>详情内容</section>
+<button type="button" class="uk-btn" data-go="home">首页</button>
+<button type="button" class="uk-btn" data-go="detail">详情</button>
+<section id="home" class="uk-screen">首页内容</section>
+<section id="detail" class="uk-screen" hidden>详情内容</section>
 <script>
 document.querySelectorAll("[data-go]").forEach(function (btn) {
   btn.addEventListener("click", function () {
@@ -173,6 +175,19 @@ def valid_ux() -> str:
     return """
 skip: false
 reason: ""
+uiKit:
+  baseline: shared/ui-kit
+interactionRules:
+  - id: IR1
+    when: 收到重复支付回调
+    behavior: 详情页状态保持已支付，不闪烁二次成功
+    states: settled
+    feedback: 无额外弹窗
+    coversAcceptance: [A1, A2]
+visual:
+  baseline: ui-kit
+  notes: ""
+  motion: []
 htmlPrototype:
   entry: prototype/ux/index.html
   pages: []
@@ -520,6 +535,10 @@ class GateTests(unittest.TestCase):
             """
 skip: false
 reason: ""
+interactionRules:
+  - id: IR1
+    when: 主路径
+    behavior: 可点通
 acceptance:
   - id: A1
     flow: 仅一条
@@ -527,6 +546,22 @@ acceptance:
 """,
         )
         self.assertIn("UX_UNMAPPED", self.codes("G2"))
+
+    def test_g2_requires_interaction_rules(self) -> None:
+        self.put_state()
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(
+            self.change / "ux.yaml",
+            valid_ux().replace(
+                "interactionRules:\n  - id: IR1\n    when: 收到重复支付回调\n"
+                "    behavior: 详情页状态保持已支付，不闪烁二次成功\n"
+                "    states: settled\n    feedback: 无额外弹窗\n"
+                "    coversAcceptance: [A1, A2]\n",
+                "interactionRules: []\n",
+            ),
+        )
+        write_interactive_html(self.change / "prototype" / "ux" / "index.html")
+        self.assertIn("UX_RULES", self.codes("G2"))
 
     def test_g2_accepts_skip_with_reason(self) -> None:
         self.put_state()

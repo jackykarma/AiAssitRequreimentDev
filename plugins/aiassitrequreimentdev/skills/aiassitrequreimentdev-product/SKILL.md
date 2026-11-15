@@ -77,8 +77,11 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 
 ### 产品原型（G1）
 
-- 入口：`prototype/index.html`（可从模板拷贝改写）。
+- 入口：`prototype/index.html`（模板含 **patch / new** 双模式，可用 `?mode=patch|new`）。
+- **共享视觉**：引用 `prototype/shared/ui-kit/`（`tokens.css` / `components.css` / `phone.css`），用 `uk-*` 拼屏；橱窗见 `shared/ui-kit/showcase.html`。禁止另起色板。
 - 必须可交互：页面切换、按钮、关键路径可点通；禁止只交静态长文或截图替代。
+- **patch（改已有页）**：真机/设计稿截图 → `prototype/assets/` → `background-image`；`uk-hotspot` + `data-go` / `data-open` 串路径；**仅新增控件**用 `uk-overlay-widget` / `uk-sheet` 叠层。截图只作底图。
+- **new（新增页）**：用 UI Kit 组件还原新页并绑点击；从旧页跳入时入口可与 patch 混用。
 - 无界面切片：`uiRequired: false`，并写清 `uiNoneReason`（PRD 同步声明）。
 
 ## 工作方式

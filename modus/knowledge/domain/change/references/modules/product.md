@@ -17,7 +17,7 @@
 通过对话澄清后交付：
 
 1. `prd.md`：给人评审（**核心用户旅程**、功能、非功能、主流程、异常边界、验收）
-2. `prototype/**/*.html`：可本地打开的点击原型（无 UI 须在 PRD 声明）
+2. `prototype/**/*.html`：可本地打开的点击原型；引 `shared/ui-kit/`。**patch**=截图+热区+叠层；**new**=`uk-*` 拼页；须可交互（无 UI 须在 PRD 声明）
 3. `spec.yaml`：`UJ*` / `FR*` / `NFR*` / `S*` / `E*` / `A*`（G1 / 下游 Agent）
 
 大需求另写需求级 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/prd.md` + `split.yaml`（如 `REQ-001-move-album-20220305`）。

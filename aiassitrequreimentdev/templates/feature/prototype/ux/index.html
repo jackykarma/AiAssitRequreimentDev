@@ -3,148 +3,228 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>UX 交互视觉原型（可交互）</title>
-  <style>
-    :root {
-      --bg: #0f1419;
-      --panel: #1a222c;
-      --ink: #e8eef5;
-      --muted: #9aabbc;
-      --line: #2c3a49;
-      --accent: #3d8bfd;
-      --ok: #3ecf8e;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: radial-gradient(1200px 600px at 10% -10%, #1b2a3d, var(--bg));
-      color: var(--ink);
-      line-height: 1.5;
-      min-height: 100vh;
-    }
-    .shell { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
-    h1 { margin: 0 0 6px; font-size: 1.35rem; font-weight: 600; }
-    .hint { margin: 0 0 18px; color: var(--muted); font-size: 0.92rem; }
-    .phone {
-      max-width: 390px;
-      margin: 0 auto;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,.35);
-    }
-    .status-bar {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 16px;
-      font-size: 0.75rem;
-      color: var(--muted);
-      border-bottom: 1px solid var(--line);
-    }
-    .view { display: none; padding: 16px; min-height: 520px; }
-    .view.active { display: block; }
-    .title { font-size: 1.15rem; font-weight: 600; margin: 0 0 8px; }
-    .card {
-      background: #121820;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 12px;
-      margin: 10px 0;
-    }
-    .row { display: flex; gap: 8px; margin-top: 14px; }
-    button {
-      flex: 1;
-      border: 0;
-      border-radius: 12px;
-      padding: 12px;
-      font: inherit;
-      cursor: pointer;
-    }
-    button.primary { background: var(--accent); color: #fff; }
-    button.secondary { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-    .toast {
-      margin-top: 12px;
-      color: var(--ok);
-      font-size: 0.88rem;
-      min-height: 1.2em;
-    }
-    .dock {
-      display: flex;
-      border-top: 1px solid var(--line);
-      background: #121820;
-    }
-    .dock button {
-      border-radius: 0;
-      background: transparent;
-      color: var(--muted);
-      border: 0;
-      border-right: 1px solid var(--line);
-    }
-    .dock button:last-child { border-right: 0; }
-    .dock button[aria-current="page"] { color: var(--ink); }
-  </style>
+  <title>UX 交互视觉原型（UI Kit）</title>
+  <link rel="stylesheet" href="../shared/ui-kit/tokens.css" />
+  <link rel="stylesheet" href="../shared/ui-kit/components.css" />
+  <link rel="stylesheet" href="../shared/ui-kit/phone.css" />
 </head>
-<body>
-  <div class="shell">
-    <h1>UX 原型 · 交互精修（占位，请替换）</h1>
-    <p class="hint">在产品 HTML 主流程之上做视觉与交互精修。须可点击切换页面/状态；正式产物只保留本目录 HTML。</p>
-    <div class="phone">
-      <div class="status-bar"><span>9:41</span><span>UX Proto</span></div>
-      <section id="list" class="view active">
-        <p class="title">列表 / 首页</p>
-        <div class="card">主内容卡片（替换为真实信息架构）</div>
-        <div class="card">次要入口</div>
-        <div class="row">
-          <button type="button" class="primary" data-open="detail">进入详情</button>
-          <button type="button" class="secondary" data-open="empty">空态</button>
-        </div>
-        <p class="toast" id="list-toast"></p>
-      </section>
-      <section id="detail" class="view">
-        <p class="title">详情</p>
-        <div class="card">展示关键字段、主操作与次要操作。</div>
-        <div class="row">
-          <button type="button" class="primary" id="btn-act">主操作</button>
-          <button type="button" class="secondary" data-open="list">返回</button>
-        </div>
-        <p class="toast" id="detail-toast"></p>
-      </section>
-      <section id="empty" class="view">
-        <p class="title">空态 / 异常</p>
-        <div class="card">说明为何为空，并给出可点的恢复动作。</div>
-        <div class="row">
-          <button type="button" class="primary" data-open="list">回到列表</button>
-        </div>
-      </section>
-      <nav class="dock" aria-label="底部导航">
-        <button type="button" data-open="list" aria-current="page">首页</button>
-        <button type="button" data-open="detail">详情</button>
-        <button type="button" data-open="empty">空态</button>
-      </nav>
-    </div>
+<body class="uk-studio">
+  <header class="uk-studio-header">
+    <h1>UX 原型 · 共享 UI Kit</h1>
+    <p class="uk-hint">
+      必引 <code>prototype/shared/ui-kit/</code>；用 <code>uk-*</code> 精修交互与视觉，勿另起色板。
+      橱窗：<a href="../shared/ui-kit/showcase.html">showcase.html</a>。Pencil 稿可写入 <code>ux.yaml</code> artifacts。
+    </p>
+  </header>
+
+  <div class="uk-studio-toolbar" role="toolbar" aria-label="UX 场景">
+    <button type="button" class="uk-tool-btn" role="tab" aria-selected="true" data-view="home">首页</button>
+    <button type="button" class="uk-tool-btn" role="tab" aria-selected="false" data-view="detail">详情</button>
+    <button type="button" class="uk-tool-btn" role="tab" aria-selected="false" data-view="empty">空态</button>
+    <span class="uk-chip" id="route-chip">当前：首页</span>
   </div>
+
+  <main class="uk-studio-main">
+    <div class="uk-phone" aria-label="UX 手机预览">
+      <div class="uk-phone-stage">
+        <section id="home" class="uk-screen is-active" data-view-panel="home">
+          <div class="uk-app">
+            <div class="uk-topbar">
+              <span class="uk-topbar__title">首页（替换）</span>
+              <button type="button" class="uk-topbar__action" data-view="detail">下一步</button>
+            </div>
+            <div class="uk-body">
+              <div class="uk-card">
+                <div class="uk-card__title">核心用户旅程入口</div>
+                <p class="uk-card__desc">对齐产品 PRD / 验收；视觉遵循 UI Kit token。</p>
+              </div>
+              <div class="uk-list">
+                <button type="button" class="uk-cell" data-view="detail">
+                  <span class="uk-cell__main">
+                    <span class="uk-cell__title">进入详情</span>
+                    <span class="uk-cell__sub">主路径</span>
+                  </span>
+                  <span class="uk-cell__chevron" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="uk-cell" data-view="empty">
+                  <span class="uk-cell__main">
+                    <span class="uk-cell__title">查看空态</span>
+                  </span>
+                  <span class="uk-cell__chevron" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+            <nav class="uk-dock" aria-label="主导航">
+              <button type="button" class="uk-dock__item is-active">首页</button>
+              <button type="button" class="uk-dock__item" data-view="detail">详情</button>
+              <button type="button" class="uk-dock__item" data-view="empty">更多</button>
+            </nav>
+          </div>
+        </section>
+
+        <section id="detail" class="uk-screen" data-view-panel="detail" hidden>
+          <div class="uk-app">
+            <div class="uk-topbar">
+              <button type="button" class="uk-back" data-view="home" aria-label="返回"></button>
+              <span class="uk-topbar__title">详情（替换）</span>
+            </div>
+            <div class="uk-body">
+              <div class="uk-seg" role="tablist" aria-label="详情分段">
+                <button type="button" class="uk-seg__item is-active">信息</button>
+                <button type="button" class="uk-seg__item">相关</button>
+              </div>
+              <div class="uk-card">
+                <div class="uk-card__title">关键内容区</div>
+                <p class="uk-card__desc">替换为真实文案与控件；可开半屏确认。</p>
+              </div>
+              <div class="uk-list">
+                <button type="button" class="uk-cell" data-open="ux-sheet">
+                  <span class="uk-cell__main">
+                    <span class="uk-cell__title">打开确认半屏</span>
+                  </span>
+                  <span class="uk-tag">交互</span>
+                  <span class="uk-cell__chevron" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+            <div class="uk-footer">
+              <button type="button" class="uk-btn uk-btn--primary uk-btn--block" id="ux-success">主操作成功</button>
+            </div>
+            <div id="ux-sheet" class="uk-sheet" role="dialog" aria-modal="true" aria-hidden="true">
+              <div class="uk-sheet__grab"></div>
+              <h3 class="uk-sheet__title">确认变更</h3>
+              <p class="uk-sheet__desc">UX 阶段精修文案、层级与反馈。</p>
+              <div class="uk-sheet__actions">
+                <button type="button" class="uk-btn uk-btn--ghost" data-close="ux-sheet">取消</button>
+                <button type="button" class="uk-btn uk-btn--primary" data-close="ux-sheet" id="ux-sheet-ok">确认</button>
+              </div>
+            </div>
+            <div class="uk-toast" id="ux-toast">已完成</div>
+          </div>
+        </section>
+
+        <section id="empty" class="uk-screen" data-view-panel="empty" hidden>
+          <div class="uk-app">
+            <div class="uk-topbar">
+              <button type="button" class="uk-back" data-view="home" aria-label="返回"></button>
+              <span class="uk-topbar__title">空态 / 异常</span>
+            </div>
+            <div class="uk-body">
+              <div class="uk-empty">
+                <div class="uk-empty__icon">∅</div>
+                <span class="uk-empty__title">暂无内容</span>
+                对齐验收中的异常与边界文案。
+              </div>
+            </div>
+            <div class="uk-footer">
+              <button type="button" class="uk-btn uk-btn--primary uk-btn--block" data-view="home">返回首页</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <aside class="uk-side">
+      <span class="uk-tag">UX · G2</span>
+      <h2>使用约定</h2>
+      <p class="uk-mode-desc">在产品可点流程上精修；引用共享 kit，保持与产品同源视觉。</p>
+      <ol>
+        <li>改结构 / 文案 / 动效反馈，不改 token 色板</li>
+        <li><code>acceptance</code> 映射写在 <code>ux.yaml</code></li>
+        <li>Pencil / Figma 链接进 <code>artifacts</code></li>
+      </ol>
+      <p class="uk-status" id="status">UX UI Kit 原型已加载。</p>
+    </aside>
+  </main>
+
   <script>
     (function () {
-      var views = document.querySelectorAll(".view");
-      var dockBtns = document.querySelectorAll(".dock button");
-      function open(id) {
-        views.forEach(function (v) { v.classList.toggle("active", v.id === id); });
-        dockBtns.forEach(function (b) {
-          b.setAttribute("aria-current", b.getAttribute("data-open") === id ? "page" : "false");
+      var labels = { home: "首页", detail: "详情", empty: "空态" };
+      var statusEl = document.getElementById("status");
+      var routeChip = document.getElementById("route-chip");
+      var toastTimer;
+
+      function closeSheets() {
+        document.querySelectorAll(".uk-sheet").forEach(function (el) {
+          el.classList.remove("is-open");
+          el.setAttribute("aria-hidden", "true");
         });
       }
-      document.querySelectorAll("[data-open]").forEach(function (el) {
-        el.addEventListener("click", function () { open(el.getAttribute("data-open")); });
+
+      function showToast(text) {
+        var toast = document.getElementById("ux-toast");
+        if (!toast) return;
+        if (text) toast.textContent = text;
+        toast.classList.add("is-show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toast.classList.remove("is-show");
+        }, 1600);
+      }
+
+      function show(id) {
+        closeSheets();
+        document.querySelectorAll("[data-view-panel]").forEach(function (el) {
+          var on = el.getAttribute("data-view-panel") === id;
+          el.classList.toggle("is-active", on);
+          el.hidden = !on;
+        });
+        document.querySelectorAll("[data-view].uk-tool-btn").forEach(function (btn) {
+          btn.setAttribute(
+            "aria-selected",
+            btn.getAttribute("data-view") === id ? "true" : "false"
+          );
+        });
+        routeChip.textContent = "当前：" + (labels[id] || id);
+        statusEl.textContent = "已切换到「" + (labels[id] || id) + "」";
+      }
+
+      document.querySelectorAll("[data-view]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          show(el.getAttribute("data-view"));
+        });
       });
-      var act = document.getElementById("btn-act");
-      if (act) {
-        act.addEventListener("click", function () {
-          document.getElementById("detail-toast").textContent = "主操作已触发（请换成真实反馈）";
+
+      document.querySelectorAll("[data-open]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var sheet = document.getElementById(btn.getAttribute("data-open"));
+          if (!sheet) return;
+          sheet.classList.add("is-open");
+          sheet.setAttribute("aria-hidden", "false");
+        });
+      });
+
+      document.querySelectorAll("[data-close]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var sheet = document.getElementById(btn.getAttribute("data-close"));
+          if (!sheet) return;
+          sheet.classList.remove("is-open");
+          sheet.setAttribute("aria-hidden", "true");
+        });
+      });
+
+      var success = document.getElementById("ux-success");
+      if (success) {
+        success.addEventListener("click", function () {
+          showToast("操作成功");
+          statusEl.textContent = "主操作成功（替换真实反馈）";
         });
       }
-      document.getElementById("list-toast").textContent = "UX 可交互原型已加载";
+      var sheetOk = document.getElementById("ux-sheet-ok");
+      if (sheetOk) {
+        sheetOk.addEventListener("click", function () {
+          showToast("已确认");
+        });
+      }
+
+      document.querySelectorAll(".uk-seg__item").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          btn.parentElement.querySelectorAll(".uk-seg__item").forEach(function (b) {
+            b.classList.remove("is-active");
+          });
+          btn.classList.add("is-active");
+        });
+      });
     })();
   </script>
 </body>

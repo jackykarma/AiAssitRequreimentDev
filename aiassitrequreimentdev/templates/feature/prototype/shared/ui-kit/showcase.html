@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UI Kit 橱窗 · ColorOS / Gallery</title>
+  <link rel="stylesheet" href="./tokens.css" />
+  <link rel="stylesheet" href="./components.css" />
+  <link rel="stylesheet" href="./phone.css" />
+  <style>
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+    }
+    .gallery-item h2 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--uk-ink-secondary);
+    }
+    .gallery .uk-phone {
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body class="uk-studio">
+  <header class="uk-studio-header">
+    <h1>Prototype UI Kit 橱窗</h1>
+    <p class="uk-hint">共享资源 · 偏 ColorOS / 相册类。产品与 UX HTML 请引用本目录 CSS，用 <code>uk-*</code> 拼屏。</p>
+  </header>
+
+  <div class="gallery">
+    <div class="gallery-item">
+      <h2>列表 · 卡片 · 开关</h2>
+      <div class="uk-phone" aria-label="列表示范">
+        <div class="uk-phone-stage">
+          <div class="uk-app">
+            <div class="uk-topbar">
+              <span class="uk-topbar__title">图库设置</span>
+              <button type="button" class="uk-topbar__action">完成</button>
+            </div>
+            <div class="uk-body">
+              <p class="uk-section-label">通用</p>
+              <div class="uk-list">
+                <button type="button" class="uk-cell">
+                  <span class="uk-cell__main">
+                    <span class="uk-cell__title">整理相册</span>
+                    <span class="uk-cell__sub">自动归类与建议</span>
+                  </span>
+                  <span class="uk-cell__chevron" aria-hidden="true"></span>
+                </button>
+                <div class="uk-cell" style="cursor:default">
+                  <span class="uk-cell__main">
+                    <span class="uk-cell__title">仅 WLAN 下同步</span>
+                  </span>
+                  <label class="uk-switch">
+                    <input type="checkbox" checked />
+                    <span class="uk-switch__track"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="uk-card">
+                <div class="uk-card__title">空间占用</div>
+                <p class="uk-card__desc">可回收约 1.2 GB · <span class="uk-tag">建议</span></p>
+              </div>
+            </div>
+            <div class="uk-footer">
+              <button type="button" class="uk-btn uk-btn--primary uk-btn--block">一键清理</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-item">
+      <h2>半屏 · 分段 · 空态</h2>
+      <div class="uk-phone" aria-label="半屏示范">
+        <div class="uk-phone-stage">
+          <div class="uk-app">
+            <div class="uk-topbar">
+              <button type="button" class="uk-back" aria-label="返回"></button>
+              <span class="uk-topbar__title">选择目标</span>
+            </div>
+            <div class="uk-body">
+              <div class="uk-seg" role="tablist">
+                <button type="button" class="uk-seg__item is-active">相册</button>
+                <button type="button" class="uk-seg__item">人物</button>
+                <button type="button" class="uk-seg__item">地点</button>
+              </div>
+              <div class="uk-empty">
+                <div class="uk-empty__icon">▢</div>
+                <span class="uk-empty__title">暂无内容</span>
+                创建后可在此查看
+              </div>
+            </div>
+            <div class="uk-sheet is-open" role="dialog" aria-modal="true">
+              <div class="uk-sheet__grab"></div>
+              <h3 class="uk-sheet__title">移动到相册</h3>
+              <p class="uk-sheet__desc">已选 12 项，确认后立即生效。</p>
+              <div class="uk-sheet__actions">
+                <button type="button" class="uk-btn uk-btn--ghost">取消</button>
+                <button type="button" class="uk-btn uk-btn--primary">确认</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-item">
+      <h2>底栏 · Toast · 标签</h2>
+      <div class="uk-phone" aria-label="底栏示范">
+        <div class="uk-phone-stage">
+          <div class="uk-app">
+            <div class="uk-topbar">
+              <span class="uk-topbar__title">照片</span>
+              <button type="button" class="uk-topbar__action">选择</button>
+            </div>
+            <div class="uk-body">
+              <div class="uk-card">
+                <div class="uk-card__title">今日精选</div>
+                <p class="uk-card__desc">
+                  <span class="uk-tag">新增</span>
+                  <span class="uk-tag uk-tag--muted">本地</span>
+                  <span class="uk-tag uk-tag--danger">冲突</span>
+                </p>
+              </div>
+              <div class="uk-list">
+                <button type="button" class="uk-cell" id="demo-toast-btn">
+                  <span class="uk-cell__main">
+                    <span class="uk-cell__title">点我弹出 Toast</span>
+                  </span>
+                  <span class="uk-cell__meta">演示</span>
+                  <span class="uk-cell__chevron" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+            <nav class="uk-dock" aria-label="主导航">
+              <button type="button" class="uk-dock__item is-active">照片</button>
+              <button type="button" class="uk-dock__item">相册</button>
+              <button type="button" class="uk-dock__item">发现</button>
+            </nav>
+            <div class="uk-toast" id="demo-toast">已保存到相册</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var btn = document.getElementById("demo-toast-btn");
+      var toast = document.getElementById("demo-toast");
+      var timer;
+      btn.addEventListener("click", function () {
+        toast.classList.add("is-show");
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          toast.classList.remove("is-show");
+        }, 1800);
+      });
+    })();
+  </script>
+</body>
+</html>

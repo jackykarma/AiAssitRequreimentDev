@@ -9,9 +9,10 @@
 | `usage.yaml` | 主控（`usage record`） | 各角色阶段 token 用量 |
 | `prd.md` | 产品 | 给人读：旅程、功能、非功能、主流程、异常边界、验收；与 spec 同口径 |
 | `prototype/index.html` | 产品 | 可交互产品原型（G1）；无 UI 时不交，改 `uiRequired=false` + `uiNoneReason` |
+| `prototype/shared/ui-kit/` | 共享（模板） | 产品/UX 共用手机组件 CSS + `showcase.html`（ColorOS/相册风） |
 | `spec.yaml` | 产品 | 机器合同与 G1/`seal`：`UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*`、`uiRequired` |
 | `ux.yaml` | 交互视觉 | 覆盖需 UI 的验收 + `htmlPrototype`；或 `skip: true` + `reason` |
-| `prototype/ux/` | 交互视觉 | 可交互 UX HTML（G2；入口默认 `index.html`） |
+| `prototype/ux/` | 交互视觉 | 可交互 UX HTML（G2；入口默认 `index.html`，须引 ui-kit） |
 | `tech.md` | 架构师 | 给人读：一页纸、L0/L1、关键设计 |
 | `tech.yaml` | 架构师 | 给 AI/门禁：`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams[]` |
 | `diagrams/*` | 架构师 | Archify，仅 `.html` + `.svg` |

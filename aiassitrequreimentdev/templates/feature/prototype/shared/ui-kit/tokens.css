@@ -1,0 +1,91 @@
+/*********************************************************************************
+ ** Copyright (C), 2019-2029, OPLUS Mobile Comm Corp., Ltd
+ ** All rights reserved.
+ **
+ ** File: - tokens.css
+ ** Description: Prototype UI Kit design tokens (ColorOS / Gallery-like)
+ ** Version: 1.0
+ ** Date: 2026/11/14
+ ** Author: limao2@Apps.Gallery
+ **
+ ** ------------------------------- Revision History: ----------------------------
+ ** <author> <date> <version> <desc>
+ ** ------------------------------------------------------------------------------
+ ** limao2@Apps.Gallery 2026/11/14 1.0 INIT
+ *********************************************************************************/
+
+:root {
+  /* Surface */
+  --uk-bg: #f5f5f5;
+  --uk-bg-studio: #eceff3;
+  --uk-surface: #ffffff;
+  --uk-surface-muted: #fafafa;
+  --uk-scrim: rgba(0, 0, 0, 0.36);
+
+  /* Ink */
+  --uk-ink: #1a1a1a;
+  --uk-ink-secondary: #4d4d4d;
+  --uk-muted: #8c8c8c;
+  --uk-inverse: #ffffff;
+
+  /* Line */
+  --uk-line: #ebebeb;
+  --uk-line-strong: #d9d9d9;
+
+  /* Accent — restrained system teal (not neon) */
+  --uk-accent: #2d6b5a;
+  --uk-accent-soft: #e7f2ee;
+  --uk-accent-press: #245748;
+
+  /* Semantic */
+  --uk-danger: #c63c3c;
+  --uk-danger-soft: #fdecec;
+  --uk-warning: #c47d1a;
+  --uk-ok: #2f8f62;
+
+  /* Type */
+  --uk-font: "OPPO Sans", "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+  --uk-fs-xs: 11px;
+  --uk-fs-sm: 13px;
+  --uk-fs-md: 15px;
+  --uk-fs-lg: 17px;
+  --uk-fs-xl: 20px;
+  --uk-fs-display: 24px;
+  --uk-lh: 1.45;
+  --uk-fw-regular: 400;
+  --uk-fw-medium: 500;
+  --uk-fw-semibold: 600;
+
+  /* Space */
+  --uk-space-1: 4px;
+  --uk-space-2: 8px;
+  --uk-space-3: 12px;
+  --uk-space-4: 16px;
+  --uk-space-5: 20px;
+  --uk-space-6: 24px;
+  --uk-space-8: 32px;
+
+  /* Radius — ColorOS-like generous */
+  --uk-radius-sm: 10px;
+  --uk-radius-md: 14px;
+  --uk-radius-lg: 18px;
+  --uk-radius-xl: 22px;
+  --uk-radius-pill: 999px;
+
+  /* Elevation — weak */
+  --uk-shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --uk-shadow-sheet: 0 -8px 28px rgba(0, 0, 0, 0.12);
+
+  /* Phone */
+  --uk-phone-w: 360px;
+  --uk-phone-h: 740px;
+  --uk-phone-bezel: #1c1c1c;
+
+  /* Motion */
+  --uk-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --uk-duration: 220ms;
+
+  /* Hotspot authoring */
+  --uk-hotspot: rgba(45, 107, 90, 0.22);
+  --uk-hotspot-border: rgba(45, 107, 90, 0.85);
+}

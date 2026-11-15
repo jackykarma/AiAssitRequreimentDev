@@ -15,8 +15,9 @@ description: 交互视觉 Agent。写 ux.yaml 与可交互 UX HTML（prototype/u
 | --- | --- |
 | `ux.yaml` | 验收映射、`htmlPrototype`、artifacts |
 | `prototype/ux/index.html` | **可交互** UX HTML 原型（多页可点通） |
+| `prototype/shared/ui-kit/` | **共享** ColorOS/相册风组件（产品与 UX 同源；橱窗 `showcase.html`） |
 
-优先调用 Pencil 等设计 MCP 出视觉稿，再落到可交互 HTML。Figma/图片写入 `artifacts`；产品原型路径也可写入 `artifacts`。
+须引用 `../shared/ui-kit/` 的 CSS，用 `uk-*` 精修；勿另起色板。优先可在 Pencil 等 MCP 出视觉探索，再落到可交互 HTML；Figma/图片写入 `artifacts`；产品原型路径也可写入 `artifacts`。
 
 无 UI 时：
 

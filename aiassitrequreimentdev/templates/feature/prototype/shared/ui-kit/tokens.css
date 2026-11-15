@@ -3,60 +3,41 @@
  ** All rights reserved.
  **
  ** File: - tokens.css
- ** Description: Prototype UI Kit design tokens (ColorOS / Gallery-like)
- ** Version: 1.0
- ** Date: 2026/11/14
+ ** Description: Prototype UI Kit tokens — Apple Music–inspired light + dark
+ ** Version: 2.0
+ ** Date: 2026/11/15
  ** Author: limao2@Apps.Gallery
  **
  ** ------------------------------- Revision History: ----------------------------
  ** <author> <date> <version> <desc>
  ** ------------------------------------------------------------------------------
- ** limao2@Apps.Gallery 2026/11/14 1.0 INIT
+ ** limao2@Apps.Gallery 2026/11/14 1.0 ColorOS / Gallery INIT
+ ** limao2@Apps.Gallery 2026/11/15 2.0 Apple Music–like dual theme (light/dark)
  *********************************************************************************/
 
+/**
+ * 主题：
+ * - html[data-uk-theme="light|dark"] 显式指定（推荐）
+ * - 未指定：默认 dark；若系统 prefers-color-scheme: light 则用 light
+ * 规范见 THEME.md
+ */
+
 :root {
-  /* Surface */
-  --uk-bg: #f5f5f5;
-  --uk-bg-studio: #eceff3;
-  --uk-surface: #ffffff;
-  --uk-surface-muted: #fafafa;
-  --uk-scrim: rgba(0, 0, 0, 0.36);
-
-  /* Ink */
-  --uk-ink: #1a1a1a;
-  --uk-ink-secondary: #4d4d4d;
-  --uk-muted: #8c8c8c;
-  --uk-inverse: #ffffff;
-
-  /* Line */
-  --uk-line: #ebebeb;
-  --uk-line-strong: #d9d9d9;
-
-  /* Accent — restrained system teal (not neon) */
-  --uk-accent: #2d6b5a;
-  --uk-accent-soft: #e7f2ee;
-  --uk-accent-press: #245748;
-
-  /* Semantic */
-  --uk-danger: #c63c3c;
-  --uk-danger-soft: #fdecec;
-  --uk-warning: #c47d1a;
-  --uk-ok: #2f8f62;
-
-  /* Type */
-  --uk-font: "OPPO Sans", "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+  /* Shared structure */
+  --uk-font: -apple-system, "SF Pro Text", "SF Pro Display", "PingFang SC",
+    "Helvetica Neue", "Segoe UI", sans-serif;
   --uk-fs-xs: 11px;
   --uk-fs-sm: 13px;
   --uk-fs-md: 15px;
   --uk-fs-lg: 17px;
-  --uk-fs-xl: 20px;
-  --uk-fs-display: 24px;
-  --uk-lh: 1.45;
+  --uk-fs-xl: 22px;
+  --uk-fs-display: 34px;
+  --uk-lh: 1.35;
   --uk-fw-regular: 400;
-  --uk-fw-medium: 500;
+  --uk-fw-medium: 510;
   --uk-fw-semibold: 600;
+  --uk-fw-bold: 700;
 
-  /* Space */
   --uk-space-1: 4px;
   --uk-space-2: 8px;
   --uk-space-3: 12px;
@@ -65,27 +46,127 @@
   --uk-space-6: 24px;
   --uk-space-8: 32px;
 
-  /* Radius — ColorOS-like generous */
   --uk-radius-sm: 10px;
-  --uk-radius-md: 14px;
-  --uk-radius-lg: 18px;
-  --uk-radius-xl: 22px;
+  --uk-radius-md: 12px;
+  --uk-radius-lg: 16px;
+  --uk-radius-xl: 20px;
   --uk-radius-pill: 999px;
 
-  /* Elevation — weak */
-  --uk-shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.06);
-  --uk-shadow-sheet: 0 -8px 28px rgba(0, 0, 0, 0.12);
-
-  /* Phone */
   --uk-phone-w: 360px;
   --uk-phone-h: 740px;
-  --uk-phone-bezel: #1c1c1c;
+  --uk-phone-bezel: #1c1c1e;
 
-  /* Motion */
   --uk-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --uk-duration: 220ms;
+  --uk-duration: 280ms;
 
-  /* Hotspot authoring */
-  --uk-hotspot: rgba(45, 107, 90, 0.22);
-  --uk-hotspot-border: rgba(45, 107, 90, 0.85);
+  /* Brand accent — shared */
+  --uk-accent: #ff2d55;
+  --uk-accent-press: #e0264b;
+  --uk-on-accent: #ffffff;
+  --uk-danger: #ff453a;
+  --uk-warning: #ff9f0a;
+  --uk-ok: #30d158;
+
+  /* Default palette = dark (Music) */
+  color-scheme: dark;
+  --uk-bg: #000000;
+  --uk-bg-studio: #0b0b0f;
+  --uk-surface: #1c1c1e;
+  --uk-surface-muted: #2c2c2e;
+  --uk-surface-elevated: #2c2c2e;
+  --uk-scrim: rgba(0, 0, 0, 0.55);
+  --uk-ink: #f5f5f7;
+  --uk-ink-secondary: #d1d1d6;
+  --uk-muted: #8e8e93;
+  --uk-inverse: #000000;
+  --uk-line: rgba(84, 84, 88, 0.65);
+  --uk-line-strong: rgba(142, 142, 147, 0.45);
+  --uk-accent-soft: rgba(255, 45, 85, 0.22);
+  --uk-danger-soft: rgba(255, 69, 58, 0.22);
+  --uk-shadow-soft: 0 10px 32px rgba(0, 0, 0, 0.45);
+  --uk-shadow-sheet: 0 -12px 40px rgba(0, 0, 0, 0.55);
+  --uk-hotspot: rgba(255, 45, 85, 0.28);
+  --uk-hotspot-border: rgba(255, 45, 85, 0.95);
+  --uk-dock-bg: rgba(28, 28, 30, 0.92);
+  --uk-toast-bg: rgba(44, 44, 46, 0.96);
+  --uk-toast-ink: #f5f5f7;
+}
+
+[data-uk-theme="light"],
+.uk-theme-light {
+  color-scheme: light;
+  --uk-bg: #f2f2f7;
+  --uk-bg-studio: #e8e8ed;
+  --uk-surface: #ffffff;
+  --uk-surface-muted: #f9f9fb;
+  --uk-surface-elevated: #ffffff;
+  --uk-scrim: rgba(0, 0, 0, 0.4);
+  --uk-ink: #1c1c1e;
+  --uk-ink-secondary: #3a3a3c;
+  --uk-muted: #8e8e93;
+  --uk-inverse: #ffffff;
+  --uk-line: rgba(60, 60, 67, 0.12);
+  --uk-line-strong: rgba(60, 60, 67, 0.29);
+  --uk-accent-soft: rgba(255, 45, 85, 0.12);
+  --uk-danger-soft: rgba(255, 69, 58, 0.12);
+  --uk-shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.08);
+  --uk-shadow-sheet: 0 -10px 36px rgba(0, 0, 0, 0.14);
+  --uk-hotspot: rgba(255, 45, 85, 0.2);
+  --uk-hotspot-border: rgba(255, 45, 85, 0.9);
+  --uk-dock-bg: rgba(255, 255, 255, 0.86);
+  --uk-toast-bg: rgba(28, 28, 30, 0.92);
+  --uk-toast-ink: #ffffff;
+}
+
+[data-uk-theme="dark"],
+.uk-theme-dark {
+  color-scheme: dark;
+  --uk-bg: #000000;
+  --uk-bg-studio: #0b0b0f;
+  --uk-surface: #1c1c1e;
+  --uk-surface-muted: #2c2c2e;
+  --uk-surface-elevated: #2c2c2e;
+  --uk-scrim: rgba(0, 0, 0, 0.55);
+  --uk-ink: #f5f5f7;
+  --uk-ink-secondary: #d1d1d6;
+  --uk-muted: #8e8e93;
+  --uk-inverse: #000000;
+  --uk-line: rgba(84, 84, 88, 0.65);
+  --uk-line-strong: rgba(142, 142, 147, 0.45);
+  --uk-accent-soft: rgba(255, 45, 85, 0.22);
+  --uk-danger-soft: rgba(255, 69, 58, 0.22);
+  --uk-shadow-soft: 0 10px 32px rgba(0, 0, 0, 0.45);
+  --uk-shadow-sheet: 0 -12px 40px rgba(0, 0, 0, 0.55);
+  --uk-hotspot: rgba(255, 45, 85, 0.28);
+  --uk-hotspot-border: rgba(255, 45, 85, 0.95);
+  --uk-dock-bg: rgba(28, 28, 30, 0.92);
+  --uk-toast-bg: rgba(44, 44, 46, 0.96);
+  --uk-toast-ink: #f5f5f7;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-uk-theme]) {
+    color-scheme: light;
+    --uk-bg: #f2f2f7;
+    --uk-bg-studio: #e8e8ed;
+    --uk-surface: #ffffff;
+    --uk-surface-muted: #f9f9fb;
+    --uk-surface-elevated: #ffffff;
+    --uk-scrim: rgba(0, 0, 0, 0.4);
+    --uk-ink: #1c1c1e;
+    --uk-ink-secondary: #3a3a3c;
+    --uk-muted: #8e8e93;
+    --uk-inverse: #ffffff;
+    --uk-line: rgba(60, 60, 67, 0.12);
+    --uk-line-strong: rgba(60, 60, 67, 0.29);
+    --uk-accent-soft: rgba(255, 45, 85, 0.12);
+    --uk-danger-soft: rgba(255, 69, 58, 0.12);
+    --uk-shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.08);
+    --uk-shadow-sheet: 0 -10px 36px rgba(0, 0, 0, 0.14);
+    --uk-hotspot: rgba(255, 45, 85, 0.2);
+    --uk-hotspot-border: rgba(255, 45, 85, 0.9);
+    --uk-dock-bg: rgba(255, 255, 255, 0.86);
+    --uk-toast-bg: rgba(28, 28, 30, 0.92);
+    --uk-toast-ink: #ffffff;
+  }
 }

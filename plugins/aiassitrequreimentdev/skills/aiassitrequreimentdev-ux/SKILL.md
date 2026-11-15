@@ -20,10 +20,11 @@ description: 交互视觉 Agent。写 ux.yaml（交互规则 + 可选视觉/动�
 
 ## 视觉工具策略
 
-1. **默认**：`shared/ui-kit/`（`tokens.css` / `components.css` / `phone.css`，`uk-*`）。橱窗：`showcase.html`。
-2. **Pencil MCP（可选）**：只做视觉探索/多方案对比；**必须回流**到 `prototype/ux/` HTML，并把链接写入 `artifacts`（`type: pencil`）。未回流不算交付。
-3. **Figma/静图**：有参考时进 `artifacts`；同样不能替代可交互 HTML。
-4. **动效**：关键反馈先做（toast / sheet / 切换）；复杂动效写入 `visual.motion`（`M*`），HTML 能示意即可。
+1. **默认**：`shared/ui-kit/`（Apple Music–inspired **light + dark** 双规范，见 `THEME.md`）。`uk-*` + `html[data-uk-theme=light|dark]`。橱窗：`showcase.html` 可切换。
+2. **`visual.theme`**：写 `dark` 或 `light`，与原型 `data-uk-theme` 一致；关键验收建议可一键切两套。
+3. **Pencil MCP（可选）**：只做探索；**必须回流** HTML，链接进 `artifacts`。
+4. **Figma/静图**：进 `artifacts`；不能替代可交互 HTML。
+5. **动效**：关键反馈先做；复杂写入 `visual.motion`（`M*`）。
 
 确认 G1 已就绪。读 `prd.md`、`spec.yaml`、产品原型。知识从插件 `references/README.md` 进入。
 

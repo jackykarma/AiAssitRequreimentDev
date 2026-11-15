@@ -9,7 +9,7 @@
 | 栏 | 必填？ | 内容 |
 | --- | --- | --- |
 | 交互规则 `interactionRules`（`IR*`） | 有 UI 时必填 | when / behavior（状态、反馈） |
-| 视觉 `visual` | 建议 | 默认 `baseline: ui-kit`；custom 须说明 |
+| 视觉 `visual` | 建议 | 默认 `baseline: ui-kit`（Music 亮/暗，见 `THEME.md`）；`theme: dark|light`；custom 须说明 |
 | 动效 `visual.motion`（`M*`） | 可选 | trigger / effect |
 | UX HTML | 有 UI 时必填 | `prototype/ux/`，须引 ui-kit |
 | `artifacts` | 可选 | Pencil/Figma 探索稿；须回流 HTML |

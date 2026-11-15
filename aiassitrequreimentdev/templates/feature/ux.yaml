@@ -16,8 +16,9 @@ interactionRules:
   #   coversAcceptance: [A1]
   []
 visual:
-  baseline: ui-kit   # ui-kit（默认）| custom（须说明为何不用 kit）
-  notes: ""          # 色板/层级/插画等补充；默认可空
+  baseline: ui-kit   # ui-kit（默认 Music 亮/暗）| custom（须说明为何不用 kit）
+  theme: dark        # dark | light；须与 html data-uk-theme 一致；关键屏建议两套都可切
+  notes: ""          # 补充说明；规范见 prototype/shared/ui-kit/THEME.md
   motion: []         # 可选动效规则
   # - id: M1
   #   trigger: 主操作成功

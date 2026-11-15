@@ -3,15 +3,16 @@
  ** All rights reserved.
  **
  ** File: - components.css
- ** Description: Mobile prototype components (uk-*) ColorOS / Gallery-like
- ** Version: 1.0
- ** Date: 2026/11/14
+ ** Description: Mobile prototype components (uk-*) Apple Music–like dual theme
+ ** Version: 1.1
+ ** Date: 2026/11/15
  ** Author: limao2@Apps.Gallery
  **
  ** ------------------------------- Revision History: ----------------------------
  ** <author> <date> <version> <desc>
  ** ------------------------------------------------------------------------------
- ** limao2@Apps.Gallery 2026/11/14 1.0 INIT
+ ** limao2@Apps.Gallery 2026/11/14 1.0 ColorOS INIT
+ ** limao2@Apps.Gallery 2026/11/15 1.1 theme tokens for light/dark Music kit
  *********************************************************************************/
 
 * {
@@ -190,8 +191,8 @@
 .uk-cell__chevron {
   width: 8px;
   height: 8px;
-  border-right: 2px solid #c2c2c2;
-  border-top: 2px solid #c2c2c2;
+  border-right: 2px solid var(--uk-muted);
+  border-top: 2px solid var(--uk-muted);
   transform: rotate(45deg);
   flex-shrink: 0;
 }
@@ -218,7 +219,7 @@
 
 .uk-btn--primary {
   background: var(--uk-accent);
-  color: var(--uk-inverse);
+  color: var(--uk-on-accent);
 }
 
 .uk-btn--primary:active {
@@ -337,7 +338,7 @@
 .uk-seg {
   display: flex;
   padding: 3px;
-  background: #e8e8e8;
+  background: var(--uk-surface-muted);
   border-radius: var(--uk-radius-pill);
   gap: 2px;
 }
@@ -374,7 +375,7 @@
 }
 
 .uk-tag--muted {
-  background: #f0f0f0;
+  background: var(--uk-surface-muted);
   color: var(--uk-muted);
 }
 
@@ -399,7 +400,7 @@
 .uk-switch__track {
   position: absolute;
   inset: 0;
-  background: #d6d6d6;
+  background: var(--uk-line-strong);
   border-radius: var(--uk-radius-pill);
   transition: background var(--uk-duration) var(--uk-ease);
   cursor: pointer;
@@ -454,8 +455,8 @@
   max-width: 80%;
   padding: 10px 14px;
   border-radius: var(--uk-radius-md);
-  background: rgba(26, 26, 26, 0.88);
-  color: var(--uk-inverse);
+  background: var(--uk-toast-bg);
+  color: var(--uk-toast-ink);
   font-size: var(--uk-fs-sm);
   opacity: 0;
   pointer-events: none;
@@ -470,8 +471,9 @@
 
 .uk-dock {
   display: flex;
-  background: var(--uk-surface);
+  background: var(--uk-dock-bg);
   border-top: 1px solid var(--uk-line);
+  backdrop-filter: blur(16px);
   flex-shrink: 0;
 }
 

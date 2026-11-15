@@ -1,6 +1,6 @@
 # 流程：G0 → GD
 
-启动：选角色 → 确认 `full` 或 `light`（须 `pathConfirmed`）→ 产品 PRD。大需求先写需求级 PRD 与 `split.yaml`，再创建各 feature；小需求直接一个 feature。
+启动：主控在**对话内**弹选项选角色 → 确认 `full` / `light` / `light-auto`（须 `pathConfirmed`）→ 产品 PRD。HTML picker 仅备用。大需求先写需求级 PRD 与 `split.yaml`，再创建各 feature；小需求直接一个 feature。
 
 `stage`：`intake` → `clarify` → `ux` → `tech` → `plan` → `implement` → `review` → `verify` → `release` → `done`。
 
@@ -10,7 +10,7 @@
 | --- | --- | --- | --- |
 | 1 | G0 | intake，进入 clarify 前 | 主控 `check`：path 合法 |
 | 2 | G1 | clarify 结束，随后 `seal` | 产品：prd / 原型 / spec |
-| 3 | G2 | ux | 交互视觉；无 UI 或 light 可 skip |
+| 3 | G2 | ux | 交互视觉；无 UI 或轻量族可 skip |
 | 4 | G2T | tech | 架构师：`tech.md` + `tech.yaml` |
 | 5 | G3 | plan | G2T 后主控写 `tasks.yaml`，再 `check G3`（检查器判定任务图） |
 | 6 | — | implement | 开发只改任务写集 |
@@ -20,7 +20,9 @@
 
 全量角色链：产品（可先 brainstorm → grill）→ 交互视觉 → 架构师 → 主控拆任务 → 开发 → Review → 测试 → 部署。
 
-交互视觉不是启动五角色之一，需要 UI 精修时加派。轻量路径可无 ux 文件，`affected` 恰好一项，且只能一个任务。
+交互视觉不是启动五角色之一，需要 UI 精修时加派。轻量族（`light` / `light-auto`）可无 ux 文件，`affected` 恰好一项，且只能一个任务。
+
+**`light-auto`**：须 `uiRequired=false`；G1 `seal` 后主控 goal 式连跑 tech→单任务→开发→Review→测试至 G4；`I_TECH_RISK` / dispute / 测试卡死 / 部署仍打断。详见 lead 技能。
 
 主控代跑 CLI，优先 `python <本插件>/scripts/aad.py`（或 PATH 上的 `aad`）：`start` / `adopt` / `path` / `init` / `init-req` / `check` / `seal` / `board` / `usage` / `change`。与 `python -m aiassitrequreimentdev` 语义相同。变更控制见 `change-control.md`。
 

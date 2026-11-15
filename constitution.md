@@ -2,7 +2,7 @@
 
 本仓库用对话编排 + 规格门禁多智能体做需求开发。角色技能、modus 知识库和门禁检查器都服从下面这些规则。
 
-1. 启动流程必须先选择人角色（产品经理 / 架构师SE / 开发 / 测试 / 部署），再根据需求推荐并确认研发路径（`full` 全量 / `light` 轻量）。写入 `actorRole` 与已确认的 `path` 后再派对应技能。工件与 CLI 由 Agent 代跑。
+1. 启动流程必须先选择人角色（产品经理 / 架构师SE / 开发 / 测试 / 部署），再根据需求推荐并确认研发路径（`full` 全量 / `light` 轻量 / `light-auto` 轻量自动）。角色与路径须由主控在**本会话内**弹选项确认（AskQuestion 或编号菜单），再写入 `actorRole` / `path` 并派技能；HTML picker 仅备用，不得要求用户先打开网页。工件与 CLI 由 Agent 代跑。`light-auto` 仅适用于无 UX/UI 的小需求：G1 seal 后人闸，之后连跑至 G4；部署确认仍打断。
 2. 同一 feature 的产物共仓于 `features/<id>/`，以 `BOARD.md` 为共享索引。角色只写自己的文件，其余只读。一条**需求**可对应一个或多个 feature。
 3. 产品阶段交付：`prd.md`（给人）、可交互 HTML `prototype/index.html`（给人；无 UI 时 `spec.uiRequired=false` + `uiNoneReason`）、`spec.yaml`（给 Agent 与门禁）。输入不完整时须先 brainstorm/grill 再出稿。须覆盖核心用户旅程、功能需求、非功能需求、异常与边界、验收标准（清晰无歧义、可验收）；`prd` 与 `spec` 与原型是**全流程一套事实源**，同源同编号；禁止用对话草稿文件或平行口径代替。
 4. 一个 feature 只有一份机器规格：`features/<id>/spec.yaml`（必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选）。其他 Agent 按编号引用，不改写规格正文。

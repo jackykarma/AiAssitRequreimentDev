@@ -97,7 +97,7 @@
 </head>
 <body>
   <main>
-    <h1>走全量还是轻量？</h1>
+    <h1>走哪条路径？</h1>
     <p>系统会根据你的需求描述给出推荐，最终由你确认。确认后请把文案粘贴回 Cursor。</p>
     <div class="reco" id="reco"></div>
     <div class="paths" id="paths"></div>
@@ -110,6 +110,11 @@
     const params = new URLSearchParams(location.search);
     const recommended = params.get("recommend") || "";
     const reason = params.get("reason") || "";
+    const replyLabel = {
+      full: "全量",
+      light: "轻量",
+      "light-auto": "轻量自动"
+    };
     const paths = [
       {
         id: "full",
@@ -120,6 +125,11 @@
         id: "light",
         label: "轻量模式（小需求）",
         points: ["单模块小改", "可跳过 UX 文件", "只能一个任务", "仍要 Review / 测试"]
+      },
+      {
+        id: "light-auto",
+        label: "轻量自动（无 UI）",
+        points: ["须无 UX/UI", "G1 seal 后连跑至 G4", "单任务", "部署仍打断确认"]
       }
     ];
     const reco = document.getElementById("reco");
@@ -143,14 +153,16 @@
         selected = path;
         [...root.querySelectorAll("button.path")].forEach((node) => node.setAttribute("aria-pressed", "false"));
         button.setAttribute("aria-pressed", "true");
-        summary.innerHTML = `已选：<strong>${path.label}</strong>（<code>${path.id}</code>）<br/>请在 Cursor 回复：<code>路径：${path.id === "full" ? "全量" : "轻量"}</code>`;
+        const label = replyLabel[path.id] || path.id;
+        summary.innerHTML = `已选：<strong>${path.label}</strong>（<code>${path.id}</code>）<br/>请在 Cursor 回复：<code>路径：${label}</code>`;
         result.classList.add("show");
       });
       root.appendChild(button);
     });
     document.getElementById("copy").addEventListener("click", async () => {
       if (!selected) return;
-      const text = `路径：${selected.id === "full" ? "全量" : "轻量"}`;
+      const label = replyLabel[selected.id] || selected.id;
+      const text = `路径：${label}`;
       await navigator.clipboard.writeText(text);
       document.getElementById("copy").textContent = "已复制";
       setTimeout(() => { document.getElementById("copy").textContent = "复制回复文案"; }, 1200);

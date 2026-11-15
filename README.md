@@ -27,8 +27,8 @@ AI 辅助需求开发流水线。从意图出发，用结构化规格把产品�
 
 在 Cursor 中启用 `aiassitrequreimentdev-lead`：
 
-1. 选角色（[docs/role-picker.html](docs/role-picker.html) + `adopt`）
-2. 确认路径全量/轻量（[docs/path-picker.html](docs/path-picker.html) + `recommend` / `path`）
+1. 主控在对话内选角色 → `adopt`（[role-picker.html](docs/role-picker.html) 仅备用）
+2. 主控在对话内确认路径 → `path`（`full` / `light` / `light-auto`；[path-picker.html](docs/path-picker.html) 仅备用）
 3. 进入对应技能；共仓产物见各 feature 的 `BOARD.md`
 
 底层等价于：

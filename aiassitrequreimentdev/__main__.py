@@ -102,23 +102,33 @@ def main(argv: list[str] | None = None) -> int:
     board_parser = sub.add_parser("board", help="刷新 features/<id>/BOARD.md 共仓看板")
     board_parser.add_argument("feature_dir")
 
-    recommend_parser = sub.add_parser("recommend", help="根据需求描述推荐 full/light")
+    recommend_parser = sub.add_parser(
+        "recommend", help="根据需求描述推荐 full/light/light-auto"
+    )
     recommend_parser.add_argument("--text", required=True, help="用户需求原文")
     recommend_parser.add_argument("--json", action="store_true", help="输出 JSON")
 
-    path_parser = sub.add_parser("path", help="确认并写入研发路径 full/light")
+    path_parser = sub.add_parser(
+        "path", help="确认并写入研发路径 full/light/light-auto"
+    )
     path_parser.add_argument("feature_dir")
-    path_parser.add_argument("--path", required=True, help="full / light / 全量 / 轻量 / 1 / 2")
+    path_parser.add_argument(
+        "--path",
+        required=True,
+        help="full / light / light-auto / 全量 / 轻量 / 轻量自动 / 1 / 2 / 3",
+    )
     path_parser.add_argument("--recommended", help="系统推荐值，写入 state.pathRecommended")
 
-    paths_parser = sub.add_parser("paths", help="打印全量/轻量菜单，可附带推荐")
+    paths_parser = sub.add_parser("paths", help="打印路径菜单，可附带推荐")
     paths_parser.add_argument("--text", help="需求原文，用于生成推荐")
 
     start_parser = sub.add_parser("start", help="初始化或复用 feature，并打印角色/路径选择提示")
     start_parser.add_argument("feature_id")
     start_parser.add_argument("--root", default=".", help="仓库根目录")
     start_parser.add_argument("--role", help="若已知角色，直接 adopt")
-    start_parser.add_argument("--need", help="需求原文，用于推荐 full/light")
+    start_parser.add_argument(
+        "--need", help="需求原文，用于推荐 full/light/light-auto"
+    )
     start_parser.add_argument("--path", help="若已知路径，直接确认")
 
     usage_parser = sub.add_parser("usage", help="记录或查看各角色阶段 token 用量")
@@ -251,7 +261,7 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(path_menu_text(recommendation))
             print("")
-            print("选择页：" + payload["picker"])
+            print("请在对话内确认路径；备用选择页：" + payload["picker"])
         return 0
 
     if args.command == "paths":
@@ -260,14 +270,14 @@ def main(argv: list[str] | None = None) -> int:
         if recommendation is not None:
             print("")
             print(
-                "选择页：docs/path-picker.html?recommend="
+                "请在对话内确认路径；备用选择页：docs/path-picker.html?recommend="
                 + recommendation.path
                 + "&reason="
                 + quote(recommendation.reasons[0], safe="")
             )
         else:
             print("")
-            print("选择页：docs/path-picker.html")
+            print("请在对话内确认路径；备用选择页：docs/path-picker.html")
         return 0
 
     if args.command == "path":
@@ -298,7 +308,7 @@ def main(argv: list[str] | None = None) -> int:
         print("")
         print(menu_text())
         print("")
-        print("角色选择页：docs/role-picker.html")
+        print("请在对话内选择角色（AskQuestion 或回复编号）；主控再 adopt。HTML picker 仅备用。")
         if args.role:
             adopt_role(destination, args.role)
             role = resolve_menu_choice(args.role)
@@ -308,6 +318,8 @@ def main(argv: list[str] | None = None) -> int:
         recommendation = recommend_path(args.need) if args.need else None
         print("")
         print(path_menu_text(recommendation))
+        print("")
+        print("请在对话内确认路径（AskQuestion 或回复编号）；主控再 path。HTML picker 仅备用。")
         if recommendation is not None:
             picker = (
                 "docs/path-picker.html?recommend="
@@ -315,11 +327,9 @@ def main(argv: list[str] | None = None) -> int:
                 + "&reason="
                 + quote(recommendation.reasons[0], safe="")
             )
-            print("")
-            print("路径选择页：" + picker)
+            print("备用选择页：" + picker)
         else:
-            print("")
-            print("路径选择页：docs/path-picker.html（可先提供需求后再 recommend）")
+            print("备用选择页：docs/path-picker.html（可先提供需求后再 recommend）")
         if args.path:
             set_path(
                 destination,

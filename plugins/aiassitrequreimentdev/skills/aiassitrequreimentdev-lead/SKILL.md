@@ -47,10 +47,41 @@ python <本插件>/scripts/aad.py init FEAT-002 --requirement REQ-001-move-album
 
 ## 启动（单 feature 捷径）
 
-1. `python <本插件>/scripts/aad.py start <FEAT-id> [--need "..."]`
-2. 角色弹窗 → `adopt`
-3. 路径推荐弹窗 → `path`
+1. `python <本插件>/scripts/aad.py start <FEAT-id> [--need "..."]`（可带 `--need` 供路径推荐）
+2. **在对话内**选角色 → `adopt`（打断码 `I_ROLE_SELECT`）
+3. **在对话内**确认路径 → `path`（`full` / `light` / `light-auto`；打断码 `I_PATH_SELECT`）
 4. 派对应技能
+
+### 角色 / 路径怎么问人（禁止要求先开 HTML）
+
+主控遇到未选角色或未确认路径时，**必须在本会话内弹出选择**，等用户点选或回复后再写 state：
+
+1. **优先**：宿主若提供结构化选择题（如 Cursor `AskQuestion`），用单选列出角色或路径；路径题须标出系统推荐项。
+2. **否则**：直接在对话里贴 CLI 菜单（`roles` / `paths` / `recommend` 打印的编号列表），请用户回复编号或名称。
+3. 用户确认后主控代跑 `adopt` / `path`，**不要**让用户自己去复制粘贴命令。
+
+`docs/role-picker.html` / `docs/path-picker.html` **仅备用**（浏览器可视化、离线演示）；**不是**启动必经步骤。文档与 `start` 输出里若出现选择页链接，当作可选，不得写成「请先打开 HTML」。
+
+## 路径与执行
+
+| path | 适用 | 执行方式 |
+| --- | --- | --- |
+| `full` | 新能力 / 跨模块 / 改契约 | 完整角色链，按阶段推进 |
+| `light` | 单模块小改（可有 UI） | 可跳 UX；单任务；阶段仍逐步派角色 |
+| `light-auto` | **无 UX/UI** 的小需求 | 与 light 同门禁约束，且须 `uiRequired=false`；**G1 `seal` 后人闸，之后 goal 式连跑至 G4** |
+
+### `light-auto` 连跑规则（主控必须遵守）
+
+前置：`pathConfirmed` + G1 已 `seal` + `uiRequired=false` + `openQuestions=[]` + 单 `affected`。
+
+seal **之后**不要停下来等人点「下一步」，连续完成：
+
+1. 架构师 → `tech.md` / `tech.yaml` → `check G2T`（G2 无 ux 文件即视为 skip）
+2. 主控写**一个**任务 → `check G3`
+3. 开发 → Review →（blocking 清零后）测试写 `evidence.yaml` → `check G4`
+
+仍须打断：`I_PRODUCT_OPEN`、`I_TECH_RISK`、`I_REVIEW_DISPUTE`、`I_TEST_STUCK`、`I_DEPLOY_CONFIRM`、`I_CHANGE_CONFIRM`（C3/C4）。  
+部署（GD）**不要**自动上线确认。有 UI / 需逐步确认时改选 `light` 或 `full`，不要硬套 `light-auto`。
 
 ## 角色写出
 

@@ -2,8 +2,8 @@
 
 做需求开发时：启用 `aiassitrequreimentdev-lead`。若已装团队插件，技能来自 `plugins/aiassitrequreimentdev/`；本仓请保持 `sync_plugin_skills` 无漂移。
 
-1. 选角色（`docs/role-picker.html` + `adopt`）
-2. 按需求推荐并确认路径（`recommend` / `docs/path-picker.html` + `path`）→ `full` 或 `light`
+1. 主控在对话内弹窗/选项选角色 → `adopt`（HTML picker 仅备用）
+2. 主控在对话内推荐并确认路径 → `path`（`full` / `light` / `light-auto`；`recommend` 可选）
 3. 进入对应技能；产物共仓在 `features/<id>/`（`BOARD.md`）。产品输入不完整时：`aiassitrequreimentdev-brainstorm` → `aiassitrequreimentdev-grill` → `aiassitrequreimentdev-product`
 
 **需求 ≠ feature**：一条需求 → 1..N 个 feature。feature 须对本切片 `A*` 可独立交付（可 G4），不是半成品，也不等于整需求零依赖大包；可有 `dependsOnFeatures`。大需求：产品先写需求级 PRD，再在 `split.yaml` 决定拆几个；主控建目录。小需求可直开单个 feature。feature 内的 `tasks.yaml` 更晚才拆。

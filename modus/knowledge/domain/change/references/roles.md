@@ -14,7 +14,7 @@ python -m aiassitrequreimentdev adopt features/FEAT-001 --role 产品经理
 python -m aiassitrequreimentdev board features/FEAT-001
 ```
 
-选择页：`docs/role-picker.html`。
+主控选角色时优先在对话内弹选项（AskQuestion 或 `roles` 菜单）；`docs/role-picker.html` 仅备用可视化。
 
 ## 共仓
 

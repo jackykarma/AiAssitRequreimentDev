@@ -6,5 +6,5 @@ features:
   - id: FEAT-000
     title: 待填写
     scope: 本 feature 覆盖的能力与验收边界
-    path: full     # full | light
+    path: full     # full | light | light-auto
     dependsOn: []

@@ -8,7 +8,7 @@
 | --- | --- |
 | Requirement ID | REQ-000-example-name-20200101 |
 | 状态 | 草稿 / 可拆分 / 执行中 |
-| 建议 path | full / light（各 feature 可再定） |
+| 建议 path | full / light / light-auto（各 feature 可再定；无 UI 小需求可用 light-auto） |
 
 ## 背景与目标
 

@@ -675,6 +675,21 @@ document.getElementById("go").addEventListener("click", function () {
         write_yaml(self.change / "spec.yaml", valid_spec())
         self.assertEqual(self.codes("G2"), set())
 
+    def test_light_auto_path_skips_missing_ux(self) -> None:
+        self.put_state(path="light-auto")
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        self.assertEqual(self.codes("G2"), set())
+
+    def test_light_auto_requires_ui_false(self) -> None:
+        self.put_state(path="light-auto")
+        write_yaml(
+            self.change / "spec.yaml",
+            valid_spec().replace("uiRequired: false", "uiRequired: true"),
+        )
+        write_spec_prd(self.change / "prd.md")
+        write_interactive_html(self.change / "prototype" / "index.html")
+        self.assertIn("LIGHT_AUTO_UI", self.codes("G1"))
+
     def test_g2t_requires_every_acceptance(self) -> None:
         self.put_state()
         write_yaml(self.change / "spec.yaml", valid_spec())

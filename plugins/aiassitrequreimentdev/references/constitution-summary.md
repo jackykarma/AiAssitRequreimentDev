@@ -2,7 +2,7 @@
 
 对话编排 + 规格门禁。角色技能与检查器服从下列规则。本仓全文见 `constitution.md`；装到业务仓时以本摘要为最小集。
 
-1. 先选人角色（产品 / 架构师SE / 开发 / 测试 / 部署），再确认路径 `full` 或 `light`，写入 `actorRole` 与已确认的 `path` 后派技能。工件与 CLI 由主控代跑。
+1. 主控在对话内弹选项选角色、确认路径 `full` / `light` / `light-auto`，写入 `actorRole` 与 `path` 后派技能；HTML picker 仅备用。工件与 CLI 由主控代跑。`light-auto` 仅无 UI 小需求：G1 seal 后连跑至 G4，部署仍打断。
 2. 产物共仓于 `features/<id>/`，索引为 `BOARD.md`。**角色只写自己的文件**，其余只读。一条需求可对应 1..N 个 feature。
 3. 产品交付：`prd.md`（**章节标题须与 `templates/feature/prd.md` 完全对齐**）、可交互 `prototype/index.html`（无 UI 则 `uiRequired=false` + `uiNoneReason`）、`spec.yaml`。输入不完整先 brainstorm/grill。prd 与 spec 同源同口径。禁止用对话草稿或自创精简版代替模板。
 4. 一个 feature 只有一份机器规格 `spec.yaml`（`UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*`）。其他角色按编号引用，不改写规格正文。

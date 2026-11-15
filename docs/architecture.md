@@ -42,15 +42,15 @@ features/<FEAT-id>/        # 交付切片
 
 ## 状态与门禁
 
-`path`：`full` | `light`（须 `pathConfirmed`）。`stage`：`intake` → `clarify` → `ux` → `tech` → `plan` → `implement` → `review` → `verify` → `release` → `done`。
+`path`：`full` | `light` | `light-auto`（须 `pathConfirmed`）。`stage`：`intake` → `clarify` → `ux` → `tech` → `plan` → `implement` → `review` → `verify` → `release` → `done`。`light-auto`：无 UI 小需求，G1 seal 后连跑至 G4。
 
 | 门禁 | 条件 |
 | --- | --- |
-| G0 | path 合法；light 的 affected 一项 |
-| G1 | spec 含 UJ/FR/NFR/E/A（S 可选）且形状合法、openQuestions 空；prd 章节对齐模板；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；已接受则哈希一致 |
-| G2 | ux：有 UI 须 `interactionRules` + `visual.baseline`（ui-kit\|custom）+ 可交互 `prototype/ux/`（ui-kit 须引 kit；custom 须 notes）并覆盖验收；或 `skip`；light 可无 ux 文件 |
+| G0 | path 合法；轻量族（light / light-auto）的 affected 一项 |
+| G1 | spec 含 UJ/FR/NFR/E/A（S 可选）且形状合法、openQuestions 空；prd 章节对齐模板；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；light-auto 另须 `uiRequired=false`；已接受则哈希一致 |
+| G2 | ux：有 UI 须 `interactionRules` + `visual.baseline`（ui-kit\|custom）+ 可交互 `prototype/ux/`（ui-kit 须引 kit；custom 须 notes）并覆盖验收；或 `skip`；轻量族可无 ux 文件 |
 | G2T | tech.md + tech.yaml；含 aiConstraints/keyDesigns/interfaces/diagrams（架构 L0+L1 或 gaps；同类型可多图+scope）；变更/选型/风险/快稳省/数据/埋点；acceptance 全覆盖 |
-| G3 | 任务无环、写集不交；light 仅一任务 |
+| G3 | 任务无环、写集不交；轻量族仅一任务 |
 | GR | 无未关闭 blocking；无未裁决 dispute |
 | G4 | evidence 全覆盖且 exitCode 0 |
 | GD | deploy 含 environment/commands/rollback |

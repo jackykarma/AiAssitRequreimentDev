@@ -4,7 +4,7 @@
 
 | 门禁 | 主要条件 |
 | --- | --- |
-| G0 | `path` 为 full/light；light 的 affected 恰好一项 |
+| G0 | `path` 为 full/light/light-auto；轻量族的 affected 恰好一项 |
 | G1 | UJ/FR/NFR/S/E/A 齐备（NFR/E 可声明无）、openQuestions 空；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+`uiNoneReason`；已接受则哈希一致 |
 | G2 | ux 覆盖需 UI 的验收 + 可交互 `prototype/ux/`，或 `skip: true`；light 可无 ux 文件视为 skip |
 | G2T | tech.md；tech.yaml 含 summary、aiConstraints、keyDesigns（或 noneReason）、interfaces、diagrams；architecture 须 layer 0+1 或 architectureLayerGaps；图可多张且须 scope；变更/选型/风险/快稳省/数据/埋点；acceptance 全覆盖 |

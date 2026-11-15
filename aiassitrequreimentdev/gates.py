@@ -27,6 +27,7 @@
  ** limao2@Apps.Gallery 2026/11/15 1.12 product SSOT；G1 的 S* 改为可选
  ** limao2@Apps.Gallery 2026/11/15 1.13 G2 interactionRules + ui-kit visual baseline
  ** limao2@Apps.Gallery 2026/11/15 1.14 G2 visual.baseline 人选；custom 免强制 ui-kit
+ ** limao2@Apps.Gallery 2026/11/15 1.15 light-auto 路径（无 UI 小需求）
  *********************************************************************************/
 """
 
@@ -42,6 +43,7 @@ from pathlib import Path
 
 import yaml
 
+from aiassitrequreimentdev.paths import is_light_path
 from aiassitrequreimentdev.template_headings import (
     SPEC_PRD_H2,
     TECH_MD_H2,
@@ -62,7 +64,7 @@ REQUIREMENT_ID_HINT = (
 )
 
 GATES = ("G0", "G1", "G2", "G2T", "G3", "GR", "G4", "GD")
-PATHS = ("full", "light")
+PATHS = ("full", "light", "light-auto")
 REVIEW_SEVERITIES = ("nit", "dispute", "blocking")
 DIAGRAM_TYPES = (
     "architecture",
@@ -324,9 +326,11 @@ def _check_change_log(feature_dir: Path, violations: list[Violation]) -> None:
 def _check_g0(state: dict, spec: dict | None, violations: list[Violation]) -> None:
     path = state.get("path")
     if path not in PATHS:
-        violations.append(Violation("G0", "STATE_PATH", "path 只能是 full 或 light"))
+        violations.append(
+            Violation("G0", "STATE_PATH", "path 只能是 full、light 或 light-auto")
+        )
         return
-    if path == "light" and spec is not None:
+    if is_light_path(path) and spec is not None:
         affected = spec.get("affected")
         if not isinstance(affected, list) or len(affected) != 1:
             violations.append(
@@ -455,6 +459,14 @@ def _check_g1(change_dir: Path, state: dict, spec: dict, violations: list[Violat
         _check_acceptance_items(acceptance, violations)
 
     _check_product_html_prototype(change_dir, spec, violations)
+    if state.get("path") == "light-auto" and spec.get("uiRequired") is not False:
+        violations.append(
+            Violation(
+                "G1",
+                "LIGHT_AUTO_UI",
+                "light-auto 路径要求 uiRequired=false（无 UX/UI 才可 seal 后连跑）",
+            )
+        )
     _check_template_headings(
         change_dir / "prd.md",
         SPEC_PRD_H2,
@@ -630,7 +642,7 @@ def _check_hash(change_dir: Path, state: dict, violations: list[Violation]) -> N
 
 def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:
     ux_path = change_dir / "ux.yaml"
-    if state.get("path") == "light" and not ux_path.is_file():
+    if is_light_path(state.get("path")) and not ux_path.is_file():
         return
     ux = _read_yaml(ux_path, "G2", "UX_MISSING", "缺少 ux.yaml", violations)
     if ux is None:
@@ -1625,7 +1637,7 @@ def _check_g3(change_dir: Path, state: dict, spec: dict, violations: list[Violat
     if not isinstance(tasks, list) or not tasks:
         violations.append(Violation("G3", "TASK_MISSING", "tasks.yaml 至少要有一个任务"))
         return
-    if state.get("path") == "light" and len(tasks) != 1:
+    if is_light_path(state.get("path")) and len(tasks) != 1:
         violations.append(Violation("G3", "TASK_LIGHT_COUNT", "轻路径只能有一个任务"))
     known = {item.get("id") for item in tasks if isinstance(item, dict)}
     acceptance_ids = _acceptance_ids(spec)

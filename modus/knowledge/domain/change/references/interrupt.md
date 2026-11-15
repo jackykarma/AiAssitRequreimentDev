@@ -4,8 +4,8 @@
 
 | 码 | 条件 |
 | --- | --- |
-| I_ROLE_SELECT | 启动或换会话时 `state.actorRole` 为空；必须先选产品经理/架构师SE/开发/测试/部署 |
-| I_PATH_SELECT | `pathConfirmed` 不为 true；须先根据需求推荐并确认全量（full）或轻量（light） |
+| I_ROLE_SELECT | 启动或换会话时 `state.actorRole` 为空；主控须在**本会话内**弹选项（AskQuestion 或编号菜单）选角色，再 `adopt`；禁止要求用户先打开 HTML |
+| I_PATH_SELECT | `pathConfirmed` 不为 true；主控须在**本会话内**展示推荐并弹选项确认 full / light / light-auto，再 `path`；HTML picker 仅备用 |
 | I_FEATURE_SPLIT | 需求级 `split.yaml` 为 `multi` 且尚未 `confirmedByHuman`；或拆分方案与 PRD 对不上 |
 | I_PRODUCT_OPEN | `spec.openQuestions` 非空，或产品 grill 无法闭合 |
 | I_UX_CHOICE | 需要人选视觉方案/风格，或用户要贴 Figma/图片 |

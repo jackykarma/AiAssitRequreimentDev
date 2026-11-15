@@ -7,15 +7,16 @@
 | `state.json` | 主控 | `stage`、`path`、`pathConfirmed`、`actorRole`、`requirementId`、`dependsOnFeatures`、`gates`、`specHash` |
 | `BOARD.md` | 主控（`board`） | 共仓索引 |
 | `usage.yaml` | 主控（`usage record`） | 各角色阶段 token 用量 |
-| `prd.md` | 产品 | 给人读：旅程、功能、非功能、主流程、异常边界、验收；与 spec 同口径 |
+| `prd.md` | 产品 | 人读：严格按 `templates/feature/prd.md`（需求级 `templates/requirement/prd.md`）；与 spec 同口径 |
 | `prototype/index.html` | 产品 | 可交互产品原型（G1）；无 UI 时不交，改 `uiRequired=false` + `uiNoneReason` |
 | `prototype/shared/ui-kit/` | 共享（模板） | 产品/UX 共用手机组件 CSS + `showcase.html`（ColorOS/相册风） |
 | `spec.yaml` | 产品 | 机器合同与 G1/`seal`：`UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*`、`uiRequired` |
-| `ux.yaml` | 交互视觉 | 覆盖需 UI 的验收 + `htmlPrototype`；或 `skip: true` + `reason` |
+| `ux.yaml` | 交互视觉 | 覆盖需 UI 的验收 + `htmlPrototype`；或 `skip: true` + `reason`（不写 ux-design.md） |
 | `prototype/ux/` | 交互视觉 | 可交互 UX HTML（G2；入口默认 `index.html`，须引 ui-kit） |
-| `tech.md` | 架构师 | 给人读：一页纸、L0/L1、关键设计 |
+| `tech.md` / `tech-spec.md` / KD·NFR·接口·库表·埋点 | 架构师 | 人读：严格按 `templates/feature/tech.md` 等；展开件 `templates/design/` |
 | `tech.yaml` | 架构师 | 给 AI/门禁：`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams[]` |
-| `diagrams/*` | 架构师 | Archify，仅 `.html` + `.svg` |
+| `tasks.md` | 主控/架构 | 人读拆解：按 `templates/feature/tasks.md`；机器件仍为 `tasks.yaml` |
+| `diagrams/*` | 架构师 | [Archify](https://github.com/tt-a1i/archify) `finalize` 真出：`.html` + `.svg`（HTML 须含 generator/archify 溯源）；**并在 `tech.md` 用 `![](…svg)` 内嵌预览** |
 | `tasks.yaml` | 主控 | G2T 之后的任务图：依赖、写集、验收、验证命令 |
 | `review.yaml` | Review | `findings[]`：`blocking` / `dispute` / `nit` |
 | `evidence.yaml` | 测试 | 每条验收的 command 与 `exitCode` |

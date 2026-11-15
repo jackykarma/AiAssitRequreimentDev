@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | `tech.md` | 人 | 一页纸、L0/L1、关键设计判定与正文、多图说明 |
 | `tech.yaml` | AI + G2T | `aiConstraints`、`keyDesigns`、`diagrams`、接口与验收 |
-| `diagrams/*.{html,svg}` | 人 | Archify 图 |
+| `diagrams/*.{html,svg}` | 人 | Archify `finalize` 真出图（架构/流程/时序/类图）；禁手写冒充 |
 
 ## 关键设计
 

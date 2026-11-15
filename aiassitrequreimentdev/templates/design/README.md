@@ -1,13 +1,13 @@
-# 设计展开模板（本仓自有）
+# 设计展开模板
 
-与 `templates/feature/tech.md` / `tech.yaml` 配套。Feature 技术方案可在 `tech.md` 写摘要，细节按需展开为同目录或 `features/<id>/` 下独立文件；机器字段仍以 `tech.yaml` 为准，G2T 校验 yaml。
+与 `templates/feature/tech.md`、`tech.yaml` 配套。Feature 内按需复制到 `features/<id>/` 展开；机器字段仍以 `tech.yaml` 为准。
 
 | 模板 | 用途 | 对应 tech.yaml |
 | --- | --- | --- |
-| [key-design-kd.md](key-design-kd.md) | 单条关键设计（KD）详述 | `keyDesigns[]` |
-| [nfr.md](nfr.md) | 快稳省及内存/安全/兼容/包体/算法量化 | `nfr` |
-| [interface.md](interface.md) | 对外提供 / 依赖外部接口详述 | `interfaces[]` |
-| [database.md](database.md) | 库表字段、索引、迁移 | `dataDesign` |
-| [analytics-tracking.md](analytics-tracking.md) | 产品/技术埋点字段规约 | `tracking` |
+| [key-design-kd.md](key-design-kd.md) | 单条关键设计（KD） | `keyDesigns[]` |
+| [nfr.md](nfr.md) | 快稳省等量化 | `nfr` |
+| [interface.md](interface.md) | 接口详述 | `interfaces[]` |
+| [database.md](database.md) | 库表 / 迁移 | `dataDesign` |
+| [analytics-tracking.md](analytics-tracking.md) | 埋点 | `tracking` |
 
-绘图一律 [Archify](https://github.com/tt-a1i/archify)，只保留 `.html` + `.svg`。见 `modus/knowledge/domain/change/references/diagrams.md`。
+人读主文档模板在 `templates/feature/`（`prd.md` / `tech.md` / `tech-spec.md` / `tasks.md`）与 `templates/requirement/prd.md`。章节标题须与这些文件完全对齐（门禁校验）。绘图启用技能 `aiassitrequreimentdev-archify`（[Archify](https://github.com/tt-a1i/archify)）。

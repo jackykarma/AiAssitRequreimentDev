@@ -5,7 +5,9 @@ description: 交互视觉 Agent。写 ux.yaml 与可交互 UX HTML（prototype/u
 
 # 交互视觉
 
-只写当前变更的 `ux.yaml` 与 `prototype/ux/`。不改 `spec.yaml`、技术方案与源码。产品阶段已有的 `prd.md` 与 `prototype/index.html` 是输入；可在 `artifacts` 引用并做交互/视觉精修，不要推倒重写产品主流程除非规格变了。
+只写当前变更的 `ux.yaml` 与 `prototype/ux/`。不改 `spec.yaml`、技术方案与源码。不写 `ux-design.md`（本流程不使用该文件）。
+
+产品 `prd.md` / `prototype/index.html` 为输入；可在 `artifacts` 引用素材并做交互/视觉精修。视觉组件用 `prototype/shared/ui-kit/`。
 
 确认 G1 已就绪。读规格验收与产品原型。知识从插件 `references/README.md` 进入；若业务仓有 `modus/knowledge/` 可作域补充。
 

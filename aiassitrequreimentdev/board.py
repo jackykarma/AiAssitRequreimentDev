@@ -29,13 +29,15 @@ from aiassitrequreimentdev.usage import board_usage_section
 
 
 ARTIFACTS = (
-    ("prd.md", "产品 PRD（给人）"),
+    ("prd.md", "产品 PRD（specify/spec-template）"),
     ("prototype/index.html", "产品可交互 HTML 原型（给人）"),
     ("spec.yaml", "结构化规格（给 Agent/门禁）"),
     ("ux.yaml", "交互视觉合同"),
     ("prototype/ux/index.html", "UX 可交互 HTML 原型（给人）"),
-    ("tech.md", "技术方案文档（给人）"),
+    ("tech-spec.md", "技术规约（specify/tech-spec-template）"),
+    ("tech.md", "设计说明书（specify/epic-design-doc）"),
     ("tech.yaml", "技术方案合同（给门禁）"),
+    ("tasks.md", "任务拆解人读（specify/tasks-template）"),
     ("tasks.yaml", "任务图"),
     ("review.yaml", "代码评审"),
     ("evidence.yaml", "测试证据"),

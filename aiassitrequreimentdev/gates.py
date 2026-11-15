@@ -20,6 +20,10 @@
  ** limao2@Apps.Gallery 2026/11/14 1.5 nfr/iface/data/tracking + design templates
  ** limao2@Apps.Gallery 2026/11/14 1.6 interactive HTML prototype G1/G2
  ** limao2@Apps.Gallery 2026/11/14 1.7 requirement id = REQ-seq-name-YYYYMMDD
+ ** limao2@Apps.Gallery 2026/11/15 1.8 tech.md 内嵌 SVG 预览 + sequence 图质量
+ ** limao2@Apps.Gallery 2026/11/15 1.9 full 路径强制 workflow/sequence/class 图
+ ** limao2@Apps.Gallery 2026/11/15 1.10 Archify HTML 溯源（generator + reader-contract）
+ ** limao2@Apps.Gallery 2026/11/15 1.11 specify 模板章节标题强制对齐
  *********************************************************************************/
 """
 
@@ -34,6 +38,15 @@ from datetime import date, datetime
 from pathlib import Path
 
 import yaml
+
+from aiassitrequreimentdev.template_headings import (
+    SPEC_PRD_H2,
+    TECH_MD_H2,
+    TECH_MD_H3_REQUIRED,
+    TECH_SPEC_H2,
+    extract_markdown_headings,
+    missing_headings,
+)
 
 # REQ-001-move-album-20220305
 REQUIREMENT_ID_RE = re.compile(
@@ -393,6 +406,16 @@ def _check_g1(change_dir: Path, state: dict, spec: dict, violations: list[Violat
         _check_acceptance_items(acceptance, violations)
 
     _check_product_html_prototype(change_dir, spec, violations)
+    _check_template_headings(
+        change_dir / "prd.md",
+        SPEC_PRD_H2,
+        level=2,
+        gate="G1",
+        code="PRD_TEMPLATE",
+        label="prd.md（须对齐 templates/feature/prd.md 章节）",
+        violations=violations,
+        must_exist=True,
+    )
 
     if state.get("gates", {}).get("G1") == "accepted":
         _check_hash(change_dir, state, violations)
@@ -411,6 +434,44 @@ def _looks_interactive_html(path: Path) -> bool:
         "data-screen=",
     )
     return any(marker in text for marker in markers)
+
+
+def _check_template_headings(
+    path: Path,
+    required_titles: tuple[str, ...],
+    *,
+    level: int,
+    gate: str,
+    code: str,
+    label: str,
+    violations: list[Violation],
+    must_exist: bool,
+) -> None:
+    """人读 Markdown 必须保留 specify 模板的完整章节标题，禁止删减/改名/合并。"""
+    if not path.is_file():
+        if must_exist:
+            violations.append(
+                Violation(
+                    gate,
+                    code,
+                    f"缺少 {label}；须从对应 specify 模板拷贝后按章节填写，不得自创精简版",
+                )
+            )
+        return
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    headings = extract_markdown_headings(text).get(level, [])
+    miss = missing_headings(headings, required_titles)
+    if miss:
+        preview = "；".join(miss[:6])
+        more = f" 等共 {len(miss)} 处" if len(miss) > 6 else ""
+        violations.append(
+            Violation(
+                gate,
+                code,
+                f"{label} 章节与模板不对齐，缺少：{preview}{more}。"
+                "须保留模板全部对应级标题原文，禁止删减、改名或合并章节",
+            )
+        )
 
 
 def _check_product_html_prototype(
@@ -594,10 +655,41 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
 
 def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:
     # light 仍要求 tech，保证验收有技术落点
-    del state
+    path_mode = state.get("path")
     tech_md = change_dir / "tech.md"
     if not tech_md.is_file() or tech_md.stat().st_size == 0:
         violations.append(Violation("G2T", "TECH_DOC_MISSING", "缺少 tech.md 技术方案文档"))
+    else:
+        _check_template_headings(
+            tech_md,
+            TECH_MD_H2,
+            level=2,
+            gate="G2T",
+            code="TECH_MD_TEMPLATE",
+            label="tech.md（须对齐 templates/feature/tech.md 章节）",
+            violations=violations,
+            must_exist=True,
+        )
+        _check_template_headings(
+            tech_md,
+            TECH_MD_H3_REQUIRED,
+            level=3,
+            gate="G2T",
+            code="TECH_MD_TEMPLATE",
+            label="tech.md 强制三级标题",
+            violations=violations,
+            must_exist=True,
+        )
+    _check_template_headings(
+        change_dir / "tech-spec.md",
+        TECH_SPEC_H2,
+        level=2,
+        gate="G2T",
+        code="TECH_SPEC_TEMPLATE",
+        label="tech-spec.md（须对齐 templates/feature/tech-spec.md 章节）",
+        violations=violations,
+        must_exist=True,
+    )
     tech = _read_yaml(
         change_dir / "tech.yaml",
         "G2T",
@@ -607,7 +699,8 @@ def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Viola
     )
     if tech is None:
         return
-    _check_tech_doc_sections(tech, violations, change_dir)
+    _check_tech_doc_sections(tech, violations, change_dir, path_mode=path_mode)
+    _check_tech_md_diagram_embeds(change_dir, tech, violations)
     expected = _acceptance_ids(spec)
     mapped = tech.get("acceptance")
     if not isinstance(mapped, list):
@@ -638,6 +731,121 @@ def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Viola
     if missing:
         violations.append(
             Violation("G2T", "TECH_UNMAPPED", "技术未覆盖: " + ", ".join(sorted(missing)))
+        )
+
+
+def _check_tech_md_diagram_embeds(
+    change_dir: Path, tech: dict, violations: list[Violation]
+) -> None:
+    """tech.md 须用 Markdown 图片语法内嵌每张 svg，禁止仅表格/文字链接。"""
+    diagrams = tech.get("diagrams")
+    if not isinstance(diagrams, list) or not diagrams:
+        return
+    tech_md = change_dir / "tech.md"
+    if not tech_md.is_file():
+        return
+    text = tech_md.read_text(encoding="utf-8")
+    for index, item in enumerate(diagrams):
+        if not isinstance(item, dict):
+            continue
+        svg = item.get("svg")
+        if not isinstance(svg, str) or not svg.strip():
+            continue
+        svg_norm = svg.strip().replace("\\", "/")
+        # ![任意说明](diagrams/xxx.svg) 或带 ./ 前缀
+        pattern = rf"!\[[^\]]*\]\((?:\./)?{re.escape(svg_norm)}\)"
+        if re.search(pattern, text) is None:
+            violations.append(
+                Violation(
+                    "G2T",
+                    "TECH_MD_EMBED",
+                    f"tech.md 须直接内嵌预览 diagrams[{index}]："
+                    f"![]({svg_norm})（禁止仅表格或文字链接）",
+                )
+            )
+
+
+def _check_diagram_archify_html(
+    change_dir: Path | None,
+    item: dict,
+    index: int,
+    violations: list[Violation],
+) -> None:
+    """要求 HTML 为 Archify finalize 产物（禁止手写/Mermaid 冒充）。"""
+    if change_dir is None:
+        return
+    html_rel = item.get("html")
+    if not isinstance(html_rel, str) or not html_rel.strip():
+        return
+    path = (change_dir / html_rel.strip()).resolve()
+    try:
+        path.relative_to(change_dir.resolve())
+    except ValueError:
+        return
+    if not path.is_file():
+        return
+    raw = path.read_text(encoding="utf-8", errors="ignore")
+    lower = raw.lower()
+    has_generator = bool(
+        re.search(r'<meta\s+name=["\']generator["\']\s+content=["\']archify\b', lower)
+    )
+    has_contract = "archify-reader-contract" in lower
+    has_fonts = 'id="archify-fonts"' in lower or "id='archify-fonts'" in lower
+    if not (has_generator and has_contract and has_fonts):
+        violations.append(
+            Violation(
+                "G2T",
+                "TECH_DIAGRAM_ARCHIFY",
+                f"diagrams[{index}].html 须为 Archify 正式产物（含 meta generator=archify、"
+                "archify-reader-contract、style#archify-fonts）。禁止手写 HTML/Mermaid/随便画 SVG "
+                "冒充；须按 archify 技能对 architecture/workflow/sequence/class 执行 finalize。"
+                "工具：https://github.com/tt-a1i/archify",
+            )
+        )
+
+
+def _check_diagram_svg_quality(
+    change_dir: Path | None,
+    item: dict,
+    index: int,
+    violations: list[Violation],
+) -> None:
+    """拒绝空壳 SVG；时序图须含生命线（虚线）与箭头标记。"""
+    if change_dir is None:
+        return
+    svg_rel = item.get("svg")
+    if not isinstance(svg_rel, str) or not svg_rel.strip():
+        return
+    path = (change_dir / svg_rel.strip()).resolve()
+    try:
+        path.relative_to(change_dir.resolve())
+    except ValueError:
+        return
+    if not path.is_file():
+        return
+    raw = path.read_text(encoding="utf-8", errors="ignore")
+    compact = re.sub(r"\s+", "", raw)
+    if len(compact) < 400:
+        violations.append(
+            Violation(
+                "G2T",
+                "TECH_DIAGRAM_QUALITY",
+                f"diagrams[{index}].svg 过简（有效内容过少），须为可审阅图形而非占位",
+            )
+        )
+        return
+    if item.get("type") != "sequence":
+        return
+    has_lifeline = "stroke-dasharray" in raw
+    has_arrow = "marker-end" in raw or 'id="arrow"' in raw or "markerWidth" in raw
+    if not has_lifeline or not has_arrow:
+        violations.append(
+            Violation(
+                "G2T",
+                "TECH_DIAGRAM_QUALITY",
+                f"diagrams[{index}] 时序图须含生命线虚线（stroke-dasharray）与箭头（marker），"
+                "不得用简化折线冒充时序图",
+            )
         )
 
 
@@ -690,7 +898,11 @@ def _check_diagram_artifact_path(
 
 
 def _check_tech_doc_sections(
-    tech: dict, violations: list[Violation], change_dir: Path | None = None
+    tech: dict,
+    violations: list[Violation],
+    change_dir: Path | None = None,
+    *,
+    path_mode: object = None,
 ) -> None:
     """技术方案：AI 约束 + 接口 + 图示 + 变更/选型/风险/快稳省/数据/埋点。"""
     summary = tech.get("summary")
@@ -953,6 +1165,8 @@ def _check_tech_doc_sections(
             _check_diagram_artifact_path(
                 change_dir, item.get("svg"), "svg", index, violations, suffix=".svg"
             )
+            _check_diagram_archify_html(change_dir, item, index, violations)
+            _check_diagram_svg_quality(change_dir, item, index, violations)
         if architecture_layers and architecture_layers != {0, 1}:
             gaps = tech.get("architectureLayerGaps")
             if not isinstance(gaps, str) or not gaps.strip():
@@ -965,6 +1179,23 @@ def _check_tech_doc_sections(
                         f"（缺少 layer {missing}）",
                     )
                 )
+        # full 路径有图时：流程 / 时序 / 类图三类都要有（与架构 L0/L1 并列）
+        if path_mode == "full" and diagrams:
+            present_types = {
+                item.get("type")
+                for item in diagrams
+                if isinstance(item, dict) and isinstance(item.get("type"), str)
+            }
+            for required in ("workflow", "sequence", "class"):
+                if required not in present_types:
+                    violations.append(
+                        Violation(
+                            "G2T",
+                            "TECH_DIAGRAM_TYPE",
+                            f"full 路径须提供 {required} 图（diagrams[].type={required}），"
+                            "并在 tech.md 内嵌对应 SVG；勿只交架构图",
+                        )
+                    )
 
     changed = tech.get("changedFiles")
     if not isinstance(changed, list) or not changed:

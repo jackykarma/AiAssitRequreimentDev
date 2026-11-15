@@ -5,9 +5,39 @@ description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门
 
 # 技术方案
 
-只写当前 feature 的 `tech.md`、`tech.yaml`，以及 `diagrams/` 下 Archify 的 `.html`/`.svg`。不改规格、视觉与业务源码，不新增验收编号。
+只写当前 feature 的技术方案人读件与 `tech.yaml`，以及 `diagrams/` 下 Archify 的 `.html`/`.svg`。不改规格、视觉与业务源码，不新增验收编号。
+
+**人读模板（必须与 `templates/feature/` / `templates/design/` 章节完全对齐）**：
+
+1. 底稿：`templates/feature/tech.md`、`tech-spec.md`；展开件：`templates/design/`（KD / NFR / 接口 / 库表 / 埋点）。
+2. **保留模板全部 `##` / 强制 `###` 标题原文**，只填正文；禁止删减、改名、合并、重排或自创精简版。
+3. G2T 门禁：`TECH_MD_TEMPLATE` / `TECH_SPEC_TEMPLATE` 校验标题；缺一节即失败。
 
 确认 `state.actorRole` 为 `architect`。先读 `BOARD.md`、`prd.md`、`prototype/`、`spec.yaml`；有 `requirementId` 时再读需求级 PRD / `architecture/` 与同需求其它 tech。G1 就绪且 G2 通过或 skip 后再写。
+
+## 绘图工具（强制 Archify）
+
+工具唯一：[Archify](https://github.com/tt-a1i/archify)。类型映射：
+
+| 图 | Archify type |
+| --- | --- |
+| 架构图 L0/L1 | `architecture` |
+| 流程图 | `workflow` |
+| 时序图 | `sequence` |
+| 类图 | `class` |
+
+**必须真正用 Archify 绘制**，禁止手写 HTML/SVG、Mermaid 直出、或随便画图冒充：
+
+1. **启用**本仓技能 `aiassitrequreimentdev-archify`（封装入口；底层遵循 `.agents/skills/archify/SKILL.md`）。
+2. 按 type 写 `candidate.json` 并 `finalize`（详见 archify 技能）：
+
+```bash
+node .agents/skills/archify/bin/archify.mjs finalize <type> <candidate.json> <diagrams/xxx.html> --quality showcase --json
+```
+
+3. 自 HTML 导出/另存配套 `.svg`；`tech.yaml` → `diagrams[].tool` 必须为 `archify`。
+4. 模板中的图位已是 Archify 占位（非 Mermaid）；替换 `diagrams/PLACEHOLDER.*` 为真实产物。
+5. G2T 检查 HTML 溯源：`generator=archify`、`archify-reader-contract`、`#archify-fonts`。缺一则 `TECH_DIAGRAM_ARCHIFY` 失败。
 
 ## 双受众
 
@@ -25,7 +55,25 @@ description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门
 | 成对 | 有 architecture 图时须同时有 layer 0 与 1，或写 `architectureLayerGaps` |
 | 多张 | 同一 `type` 可多条；每条必填 `scope`，feature 大时按子系统/场景拆分 |
 
-流程 / 时序 / 类图同理：必要时多张，禁止一张塞满。
+## 流程 / 时序 / 类图（full 路径强制）
+
+`path: full` 且 `diagrams[]` 非空时，**除 L0/L1 架构图外**，还必须各至少一张：
+
+| type | 中文 | 要求 |
+| --- | --- | --- |
+| `workflow` | 流程图 | 主路径 + 分支/失败出口（菱形判断、起止） |
+| `sequence` | 时序图 | UML：参与者、生命线虚线、激活条、调用/返回箭头、可选 alt |
+| `class` | 类图 | 关键类型/接口与依赖方向（框 + 关系线） |
+
+同类型可多张，禁止一张塞满。light 或 `diagramsNoneReason` 说明无新图时可跳过。
+
+## tech.md 内嵌图（强制）
+
+- `tech.md` 对 `tech.yaml` → `diagrams[].svg` **每一张**必须用 Markdown 图片语法直接内嵌，例如：`![流程图](diagrams/xxx.workflow.svg)`。
+- **禁止**仅用表格列出 html/svg 路径、禁止「见某某文件 / 点击链接」代替预览。
+- 章节上须能直接看到：**流程图、时序图、类图**（以及 L0/L1），不要写「见上文」敷衍。
+- 时序图门禁检查 SVG 含 `stroke-dasharray` 与箭头 `marker`。
+- `diagrams/*.html` 可保留；人审以 `tech.md` 内嵌 SVG 为准。
 
 ## 关键设计
 

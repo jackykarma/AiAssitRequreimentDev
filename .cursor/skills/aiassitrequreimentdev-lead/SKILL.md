@@ -56,8 +56,8 @@ python <本插件>/scripts/aad.py init FEAT-002 --requirement REQ-001-move-album
 
 | 角色 | 技能 | 写出 |
 | --- | --- | --- |
-| 产品经理 | product | 需求级 prd/split；或 feature 的 prd / 可交互 prototype / spec |
-| 架构师SE | tech | 需求级 `architecture/` 草图（可选）；feature 的 tech.md + tech.yaml + Archify 图（可建议拆分，不拍板） |
+| 产品经理 | product | 需求级/切片 prd 严格按 `templates/requirement|feature/prd.md`；prototype + `spec.yaml` |
+| 架构师SE | tech | 人读严格按 `templates/feature/tech.md` 等 + `tech.yaml`；绘图用 `aiassitrequreimentdev-archify` |
 | 开发 | dev | 写集内源码 |
 | 测试 | test | evidence.yaml |
 | 部署 | deploy | deploy.yaml |

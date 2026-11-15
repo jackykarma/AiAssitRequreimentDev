@@ -56,7 +56,7 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 
 | 文件 | 给谁 | 用途 |
 | --- | --- | --- |
-| `prd.md` | 人 | 本切片可读 PRD：**核心用户旅程**、功能、非功能、主流程、异常边界、验收 |
+| `prd.md` | 人 | **必须**以 `templates/feature/prd.md` 为底稿：**保留全部章节标题原文**，只替换占位。需求级以 `templates/requirement/prd.md` 为准。G1 校验 `##` 标题齐全 |
 | `prototype/index.html` | 人 | **可交互** HTML 产品原型（多页用按钮/导航切换；无 UI 见下） |
 | `spec.yaml` | Agent + G1 | 机器合同，与 PRD 同口径 |
 

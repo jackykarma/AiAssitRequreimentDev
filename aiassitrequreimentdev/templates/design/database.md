@@ -1,12 +1,16 @@
-# 数据库设计：FEAT-xxx / REQ-xxx
+# 数据库设计：EPIC-[编号] - [EPIC 名称]
 
-> **定位**：表结构、字段、索引、查询与迁移的完整设计，供人审；约束摘要进 `tech.yaml` → `dataDesign`。  
-> **适用**：Room/SQLite、云端库、键值存储等；无则 N/A。  
-> **落盘**：`features/<id>/database.md`（或需求级汇总）；ER 图用 Archify `erd`（html+svg）。
+> **定位**：本文件对应 `epic-design.md` **§十**，面向方案评审，完整描述本 EPIC 涉及的所有数据库表结构设计，与 EPIC 根 `tech-spec.md` 第二部分各 Feature · 四「数据、NFR 与安全硬约束」对齐。`tech-spec.md` 只声明 SoR、生命周期、规模和迁移红线，本文件负责表结构、字段、索引、查询与迁移设计。
+>
+> **互指**：`epic-design.md` §十仅保留定位说明、可选摘要与指向本文件的链接；**正文以本文件为准**。
+>
+> **与 tech-spec.md 的关系**：`tech-spec.md` 第二部分各 Feature · 四定义数据存储的**约束边界**（SoR、生命周期、规模、迁移/回滚红线），不定义字段类型、约束、索引等详细结构；本文件从 EPIC 维度汇总与评审关键数据表，以整体视角描述数据模型。
+>
+> **适用场景**：本 EPIC 涉及本地数据库（Room/SQLite）、云端数据库、键值存储等持久化数据结构设计。若无数据库设计标注 N/A。
 
-**Feature / Requirement**：FEAT-xxx / REQ-xxx  
-**关联**：`tech.md` §10 | `tech.yaml` → `dataDesign`  
-**创建/更新日期**：YYYY-MM-DD
+**Epic**：EPIC-[编号] - [名称]
+**关联文件**：`epic-design.md` | EPIC 根 `tech-spec.md`（第二部分各 Feature · 四）
+**创建/更新日期**：[YYYY-MM-DD]
 
 ---
 
@@ -17,15 +21,19 @@
 
 | 存储ID   | 存储名称       | 存储类型                                   | 所属 Feature | 表/集合数量 | 规约位置                   |
 | ------ | ---------- | -------------------------------------- | ---------- | ------ | ---------------------- |
-| DB-001 | [数据库/存储名称] | [Room/SQLite/SharedPrefs/DataStore/云端] | FEAT-xxx   | [N 张表] | tech.yaml dataDesign |
+| DB-001 | [数据库/存储名称] | [Room/SQLite/SharedPrefs/DataStore/云端] | FEAT-xxx   | [N 张表] | tech-spec.md FEAT-xxx · 四 |
 
 
 #### 10.1.2 数据库 ER 图（推荐）
 
-> 用 Archify `erd` 展示关键表关系；可多张，只保留 `.html` + `.svg`，并在 `tech.yaml` → `diagrams[]` 登记。
+> 用 ER 图展示关键数据表之间的关系，便于评审者理解整体数据模型。
 
-- 链接：`diagrams/….erd.html` / `.svg`
-- 说明：表关系与本切片变更范围
+> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`erd`。写 candidate → `finalize` → 产出 html+svg；**禁止**用 Mermaid 作正式图。
+>
+> 建议路径：`diagrams/PLACEHOLDER.1.erd.html` + `diagrams/PLACEHOLDER.1.erd.svg`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
+
+![Archify erd 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.1.erd.svg)
+
 
 
 
@@ -65,7 +73,7 @@
 | v2  | [新增字段/修改字段] | [ALTER TABLE / 数据迁移脚本] |
 
 
-- **约束来源**：→ `tech.yaml` → `dataDesign` / `aiConstraints`
+- **约束来源**：→ `tech-spec.md FEAT-xxx · 四`
 
 #### 10.2.2 [表名 / TABLE_B]
 
@@ -83,8 +91,8 @@
 
 ### 10.4 数据库设计一致性自检
 
-- 所有表均可追溯到 `tech.yaml` → `dataDesign`
-- ER 图与模块/领域叙述一致
-- 外键已在字段约束中标注
-- 迁移策略已在 `nfr` 兼容性评估中覆盖（如适用）
-- 敏感字段已在 `nfr.security` 标注加密/脱敏
+- 所有数据表均可追溯到对应 Feature 的 `tech-spec.md` §四数据硬约束
+- §10.1 ER 图中的表关系与 `epic-design.md` §三 领域模型概念一致
+- 所有外键关联已在字段约束中明确标注
+- 数据库版本迁移策略已在 `nfr.md` §8.6 兼容性评估中覆盖
+- 敏感字段已在 `nfr.md` §8.5 安全评估中标注加密/脱敏要求

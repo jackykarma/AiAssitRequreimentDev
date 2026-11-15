@@ -4,10 +4,10 @@
 
 1. 先选人角色（产品 / 架构师SE / 开发 / 测试 / 部署），再确认路径 `full` 或 `light`，写入 `actorRole` 与已确认的 `path` 后派技能。工件与 CLI 由主控代跑。
 2. 产物共仓于 `features/<id>/`，索引为 `BOARD.md`。**角色只写自己的文件**，其余只读。一条需求可对应 1..N 个 feature。
-3. 产品交付：`prd.md`、可交互 `prototype/index.html`（无 UI 则 `uiRequired=false` + `uiNoneReason`）、`spec.yaml`。输入不完整先 brainstorm/grill。须覆盖旅程、功能、非功能、主流程、异常边界、验收；prd 与 spec 同源同口径。禁止用对话草稿代替。
+3. 产品交付：`prd.md`（**章节标题须与 `templates/feature/prd.md` 完全对齐**）、可交互 `prototype/index.html`（无 UI 则 `uiRequired=false` + `uiNoneReason`）、`spec.yaml`。输入不完整先 brainstorm/grill。prd 与 spec 同源同口径。禁止用对话草稿或自创精简版代替模板。
 4. 一个 feature 只有一份机器规格 `spec.yaml`（`UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*`）。其他角色按编号引用，不改写规格正文。
 5. **G1 冻结后改 `spec.yaml` 必须先把 `gates.G1` 改回 `pending` 并重新 `seal`。** 检查器用 `specHash` 发现未经退回的修改。改规格须同步 PRD 及受影响原型。不要手改 `gates.*.accepted`。
-6. 交互视觉写 `ux.yaml` + 可交互 `prototype/ux/`（或 `skip`）。技术方案写 `tech.md` + `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。绘图用 Archify，只留 html/svg。
+6. 交互视觉写 `ux.yaml` + 可交互 `prototype/ux/`（或 `skip`）。技术方案写 `tech.md` + `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。架构/流程/时序/类图须用 [Archify](https://github.com/tt-a1i/archify) `finalize` 真出图（禁止手写/Mermaid 冒充），只留 html/svg。
 7. 验收必须能被一条命令判断。`given` / `when` / `then` / `verify` 都要有内容。**通过与否看命令退出码**（记入 `evidence.yaml` 的 `exitCode`）。
 8. `nonGoals` 里的事项开发不得实现。主控直接拒绝。
 9. 知识与源码冲突时以当前源码为准。规格与技术方案只保存链接。长期事实在业务仓 `modus/knowledge/`（可选）；插件内以本目录为准。

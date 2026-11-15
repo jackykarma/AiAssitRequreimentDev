@@ -13,6 +13,7 @@
  ** <author> <date> <version> <desc>
  ** ------------------------------------------------------------------------------
  ** limao2@Apps.Gallery 2026/11/15 1.0 INIT
+ ** limao2@Apps.Gallery 2026/11/15 1.1 需求级 change.yaml + C4 回退多 feature
  *********************************************************************************/
 """
 
@@ -39,18 +40,35 @@ CHANGE_ROLES = (
 )
 
 
-def change_path(feature_dir: Path) -> Path:
-    return feature_dir / "change.yaml"
+def change_path(target_dir: Path) -> Path:
+    return target_dir / "change.yaml"
+
+
+def is_requirement_dir(target_dir: Path) -> bool:
+    """需求目录：含 split.yaml，或位于 requirements/ 下。"""
+    path = target_dir.resolve()
+    if (path / "split.yaml").is_file():
+        return True
+    return path.parent.name == "requirements"
+
+
+def repo_root_for(target_dir: Path) -> Path:
+    path = target_dir.resolve()
+    if path.parent.name in ("features", "requirements"):
+        return path.parent.parent
+    return path.parent
 
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
 
 
-def load_change_doc(feature_dir: Path) -> dict:
-    path = change_path(feature_dir)
+def load_change_doc(target_dir: Path) -> dict:
+    path = change_path(target_dir)
     if not path.is_file():
-        return {"featureId": feature_dir.name, "changes": []}
+        if is_requirement_dir(target_dir):
+            return {"requirementId": target_dir.name, "changes": []}
+        return {"featureId": target_dir.name, "changes": []}
     doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     if not isinstance(doc, dict):
         raise ValueError("change.yaml 必须是映射")
@@ -59,13 +77,54 @@ def load_change_doc(feature_dir: Path) -> dict:
     return doc
 
 
-def save_change_doc(feature_dir: Path, doc: dict) -> Path:
-    path = change_path(feature_dir)
+def save_change_doc(target_dir: Path, doc: dict) -> Path:
+    path = change_path(target_dir)
     path.write_text(
         yaml.safe_dump(doc, allow_unicode=True, sort_keys=False),
         encoding="utf-8",
     )
     return path
+
+
+def feature_ids_from_split(requirement_dir: Path) -> list[str]:
+    split_path = requirement_dir / "split.yaml"
+    if not split_path.is_file():
+        return []
+    doc = yaml.safe_load(split_path.read_text(encoding="utf-8")) or {}
+    features = doc.get("features") if isinstance(doc, dict) else None
+    if not isinstance(features, list):
+        return []
+    ids: list[str] = []
+    for item in features:
+        if isinstance(item, dict) and isinstance(item.get("id"), str) and item["id"].strip():
+            ids.append(item["id"].strip())
+    return ids
+
+
+def resolve_rollback_feature_dirs(
+    target_dir: Path,
+    feature_ids: list[str],
+) -> list[Path]:
+    """解析应回退门禁的 feature 目录列表。"""
+    target_dir = target_dir.resolve()
+    root = repo_root_for(target_dir)
+    if is_requirement_dir(target_dir):
+        ids = list(feature_ids)
+        if not ids:
+            ids = feature_ids_from_split(target_dir)
+        dirs: list[Path] = []
+        for fid in ids:
+            feat = root / "features" / fid
+            if feat.is_dir():
+                dirs.append(feat)
+        return dirs
+    # feature 目录：自身 + impacts.features 中已存在的兄弟
+    dirs = [target_dir]
+    for fid in feature_ids:
+        feat = root / "features" / fid
+        if feat.is_dir() and feat.resolve() != target_dir:
+            dirs.append(feat)
+    return dirs
 
 
 def _next_change_id(changes: list) -> str:
@@ -118,8 +177,9 @@ def validate_change_entry(item: dict) -> list[str]:
             errors.append(f"{identifier}: impacts.artifacts 须为列表")
         if not isinstance(gates, list):
             errors.append(f"{identifier}: impacts.gatesRollback 须为列表")
-        elif level in ("C1", "C2", "C3", "C4") and not gates:
+        elif level in ("C1", "C2", "C3") and not gates:
             errors.append(f"{identifier}: {level} 须填写 impacts.gatesRollback")
+        # C4：仅新增空 feature 时可无回退门禁；改/删既有切片仍应填 gatesRollback
     status = item.get("status")
     if status not in CHANGE_STATUSES:
         errors.append(f"{identifier}: status 非法")
@@ -131,7 +191,7 @@ def validate_change_entry(item: dict) -> list[str]:
 
 
 def record_change(
-    feature_dir: Path,
+    target_dir: Path,
     *,
     initiated_by: str,
     reason: str,
@@ -147,7 +207,9 @@ def record_change(
     confirmed_by_role: str = "",
     confirmed_by_name: str = "",
     at: str | None = None,
+    apply_rollback: bool | None = None,
 ) -> dict:
+    """写入 change.yaml。target_dir 可为 feature 或 requirement 目录。"""
     if initiated_by not in CHANGE_ROLES:
         raise ValueError(f"initiated_by 非法: {initiated_by}")
     if level not in CHANGE_LEVELS:
@@ -157,12 +219,30 @@ def record_change(
     if status not in CHANGE_STATUSES:
         raise ValueError(f"status 非法: {status}")
 
-    doc = load_change_doc(feature_dir)
+    target_dir = target_dir.resolve()
+    req_scope = is_requirement_dir(target_dir)
+    if req_scope and level in ("C0", "C1", "C2") and category != "split":
+        raise ValueError(
+            "需求目录台账用于范围/拆分（建议 level=C4、category=split）；"
+            "单 feature 的 C0–C2 请记到 features/<id>/"
+        )
+    if level == "C4" and category not in ("split", "other", "product"):
+        raise ValueError("C4 建议 category=split（或 product/other）")
+
+    doc = load_change_doc(target_dir)
     changes = doc.setdefault("changes", [])
     if not isinstance(changes, list):
         changes = []
         doc["changes"] = changes
-    doc["featureId"] = doc.get("featureId") or feature_dir.name
+    if req_scope:
+        doc["requirementId"] = doc.get("requirementId") or target_dir.name
+        doc.pop("featureId", None)
+    else:
+        doc["featureId"] = doc.get("featureId") or target_dir.name
+
+    feature_list = list(features or [])
+    if req_scope and not feature_list and level == "C4":
+        feature_list = feature_ids_from_split(target_dir)
 
     entry = {
         "id": _next_change_id(changes),
@@ -176,7 +256,7 @@ def record_change(
             "artifacts": list(artifacts or []),
             "gatesRollback": list(gates_rollback or []),
             "acceptanceIds": list(acceptance_ids or []),
-            "features": list(features or []),
+            "features": feature_list,
         },
         "status": status,
     }
@@ -190,15 +270,46 @@ def record_change(
     if errors:
         raise ValueError("; ".join(errors))
     changes.append(entry)
-    save_change_doc(feature_dir, doc)
+    save_change_doc(target_dir, doc)
+
+    # approved/applied 且声明了回退门禁时，默认自动把下游 gates 打回 pending
+    should_rollback = apply_rollback
+    if should_rollback is None:
+        should_rollback = status in ("approved", "applied") and bool(
+            entry["impacts"]["gatesRollback"]
+        )
+    if should_rollback and entry["impacts"]["gatesRollback"]:
+        from aiassitrequreimentdev.progress import apply_gates_rollback
+
+        targets = resolve_rollback_feature_dirs(
+            target_dir, list(entry["impacts"]["features"])
+        )
+        if not targets:
+            raise ValueError(
+                "无法回退门禁：未找到受影响 feature 目录。"
+                "请用 --features FEAT-001,FEAT-002 列出，或先 init 对应 feature。"
+            )
+        applied: list[dict] = []
+        for feat_dir in targets:
+            applied.append(
+                {
+                    "feature": feat_dir.name,
+                    **apply_gates_rollback(
+                        feat_dir, list(entry["impacts"]["gatesRollback"])
+                    ),
+                }
+            )
+        entry["_rollbackApplied"] = applied
     return entry
 
 
-def format_change_report(feature_dir: Path) -> str:
-    doc = load_change_doc(feature_dir)
+def format_change_report(target_dir: Path) -> str:
+    doc = load_change_doc(target_dir)
     changes = doc.get("changes") or []
+    scope = doc.get("requirementId") or doc.get("featureId") or target_dir.name
+    kind = "需求" if doc.get("requirementId") or is_requirement_dir(target_dir) else "Feature"
     lines = [
-        f"变更台账 · {doc.get('featureId') or feature_dir.name}",
+        f"变更台账 · {kind} {scope}",
         f"共 {len(changes)} 条",
         "",
     ]

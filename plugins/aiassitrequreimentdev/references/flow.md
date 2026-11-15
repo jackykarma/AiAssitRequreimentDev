@@ -2,7 +2,7 @@
 
 启动：主控在**对话内**弹选项选角色 → 确认 `full` / `light` / `light-auto`（须 `pathConfirmed`）→ 产品 PRD。HTML picker 仅备用。大需求先写需求级 PRD 与 `split.yaml`，再创建各 feature；小需求直接一个 feature。
 
-`stage`：`intake` → `clarify` → `ux` → `tech` → `plan` → `implement` → `review` → `verify` → `release` → `done`。
+`stage`：`intake` → `clarify` → `ux` → `tech` → `plan` → `implement` → `review` → `verify` → `release` → `done`。门禁 `check --gate … --accept` 通过后自动推进（light / 无 UI 时 G1 后可跳到 `tech`）。
 
 ## 门禁与角色顺序
 
@@ -18,9 +18,11 @@
 | 8 | G4 | verify | 测试写 `evidence.yaml`，命令 `exitCode` 为 0 |
 | 9 | GD | release | 部署写清单与命令；上线前人确认 |
 
-全量角色链：产品（可先 brainstorm → grill）→ 交互视觉 → 架构师 → 主控拆任务 → 开发 → Review → 测试 → 部署。
+全量角色链：产品（可先 brainstorm → grill）→ 交互视觉 → 架构师 → 主控拆任务 → 开发 → Code Review → 测试 → 部署。
 
-交互视觉不是启动五角色之一，需要 UI 精修时加派。轻量族（`light` / `light-auto`）可无 ux 文件，`affected` 恰好一项，且只能一个任务。
+启动菜单含上述角色（含 UX / Review）；无 UI 时可跳过 UX，`light-auto` 连跑时主控按阶段 `adopt`。轻量族（`light` / `light-auto`）可无 ux 文件，`affected` 恰好一项，且只能一个任务。
+
+需求拆分后：`check-req <requirements/REQ-…>` 校验 `split.yaml`；`multi` 须 `confirmedByHuman=true` 再 `init`。
 
 **`light-auto`**：须 `uiRequired=false`；G1 `seal` 后主控 goal 式连跑 tech→单任务→开发→Review→测试至 G4；`I_TECH_RISK` / dispute / 测试卡死 / 部署仍打断。详见 lead 技能。
 

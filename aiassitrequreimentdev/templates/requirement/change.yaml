@@ -1,0 +1,4 @@
+# 需求级变更台账（C4 拆分/范围；字段与 feature/change.yaml 同构）
+# 新增/移除/合并 feature、改 split.yaml / 需求级 PRD → 记于此，再改 split，并回退受影响 feature 门禁。
+requirementId: REQ-000-example-name-20200101
+changes: []

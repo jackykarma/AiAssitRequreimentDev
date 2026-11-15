@@ -10,4 +10,4 @@
 | [database.md](database.md) | 库表 / 迁移 | `dataDesign` |
 | [analytics-tracking.md](analytics-tracking.md) | 埋点 | `tracking` |
 
-人读主文档模板在 `templates/feature/`（`prd.md` / `tech.md` / `tech-spec.md` / `tasks.md`）与 `templates/requirement/prd.md`。章节标题须与这些文件完全对齐（门禁校验）。绘图启用技能 `aiassitrequreimentdev-archify`（[Archify](https://github.com/tt-a1i/archify)）。
+人读主文档模板在 `templates/feature/`（`prd.md` / **feature 级** `tech.md` / `tech-spec.md` / `tasks.md`）与 `templates/requirement/prd.md`。章节标题须与这些文件完全对齐（门禁校验）。本目录是展开件，不是旧 AISDD EPIC/Story 命令产物。绘图启用技能 `aiassitrequreimentdev-archify`（[Archify](https://github.com/tt-a1i/archify)）。

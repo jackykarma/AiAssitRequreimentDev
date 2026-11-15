@@ -1,16 +1,12 @@
-# 数据库设计：EPIC-[编号] - [EPIC 名称]
+# 数据库设计：FEAT-[编号] - [名称]
 
-> **定位**：本文件对应 `epic-design.md` **§十**，面向方案评审，完整描述本 EPIC 涉及的所有数据库表结构设计，与 EPIC 根 `tech-spec.md` 第二部分各 Feature · 四「数据、NFR 与安全硬约束」对齐。`tech-spec.md` 只声明 SoR、生命周期、规模和迁移红线，本文件负责表结构、字段、索引、查询与迁移设计。
->
-> **互指**：`epic-design.md` §十仅保留定位说明、可选摘要与指向本文件的链接；**正文以本文件为准**。
->
-> **与 tech-spec.md 的关系**：`tech-spec.md` 第二部分各 Feature · 四定义数据存储的**约束边界**（SoR、生命周期、规模、迁移/回滚红线），不定义字段类型、约束、索引等详细结构；本文件从 EPIC 维度汇总与评审关键数据表，以整体视角描述数据模型。
->
-> **适用场景**：本 EPIC 涉及本地数据库（Room/SQLite）、云端数据库、键值存储等持久化数据结构设计。若无数据库设计标注 N/A。
+> **定位**：本 feature 数据表/存储展开件；约束边界在 `tech-spec.md` §三，摘要在 `tech.md` §十 / `tech.yaml` → `dataDesign`。  
+> **适用**：Room/SQLite/DataStore/云端等；无则整文 N/A。  
+> **绘图**：Archify `erd` → `diagrams/`，并在 `tech.yaml` diagrams 登记。
 
-**Epic**：EPIC-[编号] - [名称]
-**关联文件**：`epic-design.md` | EPIC 根 `tech-spec.md`（第二部分各 Feature · 四）
-**创建/更新日期**：[YYYY-MM-DD]
+**Feature**：FEAT-[编号] - [名称]  
+**关联**：`tech-spec.md` · `tech.md` §十 · `tech.yaml`  
+**日期**：[YYYY-MM-DD]
 
 ---
 

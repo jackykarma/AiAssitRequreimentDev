@@ -26,11 +26,14 @@ LIGHT_HINTS = (
     "bug",
     "缺陷",
     "修复",
+    "热修",
     "hotfix",
     "小改",
     "文案",
     "样式",
     "日志",
+    "配置开关",
+    "开关",
     "单模块",
     "单文件",
     "回归",
@@ -57,6 +60,10 @@ AUTO_HINTS = (
     "goal",
     "light-auto",
     "轻量自动",
+    "no ui",
+    "no-ui",
+    "noui",
+    "without ui",
 )
 
 FULL_HINTS = (
@@ -205,22 +212,34 @@ def recommend_path(need: str) -> PathRecommendation:
     matched_full = _match_hints(text, lowered, FULL_HINTS)
     matched_auto = _match_hints(text, lowered, AUTO_HINTS)
     light_score = len(matched_light)
-    full_score = len(matched_full) + (1 if light_score == 0 else 0)
     auto_score = len(matched_auto)
+    # 有无 UI / 自动信号时，不因「未命中小改」人为抬高 full，避免「无UI热修」落到全量
+    full_score = len(matched_full) + (
+        1 if light_score == 0 and auto_score == 0 else 0
+    )
+
+    def _light_auto_rec(*, confidence: str) -> PathRecommendation:
+        reasons: list[str] = []
+        if matched_light:
+            reasons.append("命中轻量信号：" + "、".join(matched_light))
+        if matched_auto:
+            reasons.append("命中无 UI / 自动连跑信号：" + "、".join(matched_auto))
+        reasons.append(
+            "建议 light-auto：G1 seal 后连跑至测试；有界面或需逐步确认请改选 light/full。"
+        )
+        return PathRecommendation(
+            path="light-auto",
+            confidence=confidence,
+            reasons=tuple(reasons),
+            matched_light=matched_light,
+            matched_full=matched_full,
+            matched_auto=matched_auto,
+        )
 
     if light_score > full_score:
         if auto_score > 0:
-            return PathRecommendation(
-                path="light-auto",
-                confidence="high" if light_score >= 2 and auto_score >= 1 else "medium",
-                reasons=(
-                    "命中轻量信号：" + "、".join(matched_light),
-                    "命中无 UI / 自动连跑信号：" + "、".join(matched_auto),
-                    "建议 light-auto：G1 seal 后连跑至测试；有界面或需逐步确认请改选 light/full。",
-                ),
-                matched_light=matched_light,
-                matched_full=matched_full,
-                matched_auto=matched_auto,
+            return _light_auto_rec(
+                confidence="high" if light_score >= 2 and auto_score >= 1 else "medium"
             )
         return PathRecommendation(
             path="light",
@@ -232,6 +251,11 @@ def recommend_path(need: str) -> PathRecommendation:
             matched_light=matched_light,
             matched_full=matched_full,
             matched_auto=matched_auto,
+        )
+    # 仅有无 UI 信号、无明确全量信号 → light-auto（中置信）
+    if auto_score > 0 and not matched_full and light_score >= full_score:
+        return _light_auto_rec(
+            confidence="high" if light_score >= 1 else "medium"
         )
     if full_score > light_score:
         reasons = []
@@ -248,6 +272,8 @@ def recommend_path(need: str) -> PathRecommendation:
             matched_full=matched_full,
             matched_auto=matched_auto,
         )
+    if auto_score > 0 and light_score > 0:
+        return _light_auto_rec(confidence="medium")
     return PathRecommendation(
         path="full",
         confidence="low",

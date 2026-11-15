@@ -7,6 +7,8 @@ description: Code Review Agent。只写 review.yaml；blocking 打回开发禁�
 
 只写当前变更的 `review.yaml`。不改业务代码。读规格、tech、任务写集内 diff。知识从插件 `references/` 进入；业务仓有 `modus/` 则可作补充。
 
+开工前主控 `adopt … --role reviewer`（菜单「Code Review」/ 编号 5），确认 `state.actorRole` 为 `reviewer`。
+
 ## findings
 
 每条必须有：

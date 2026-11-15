@@ -42,10 +42,9 @@ USAGE_STAGES = (
     "done",
 )
 
+# 不在 adopt 菜单内、但可记 token 的扩展角色
 EXTENDED_ROLES = {
     "lead": "主控",
-    "ux": "交互视觉",
-    "reviewer": "Code Review",
 }
 
 
@@ -130,7 +129,7 @@ def resolve_usage_role(token: str) -> tuple[str, str] | None:
 def default_stage_for_role(role_id: str) -> str:
     if role_id in ROLE_BY_ID:
         return ROLE_BY_ID[role_id].stage_hint
-    defaults = {"lead": "plan", "ux": "ux", "reviewer": "review"}
+    defaults = {"lead": "plan"}
     return defaults.get(role_id, "clarify")
 
 
@@ -308,7 +307,7 @@ def board_usage_section(change_dir: Path) -> list[str]:
                 "尚无记录。角色结束本阶段时由主控代跑：",
                 "",
                 "```bash",
-                "python -m aiassitrequreimentdev usage <feature目录> record --role <角色> "
+                "python -m aiassitrequreimentdev usage record <feature目录> --role <角色> "
                 "--stage <阶段> --input <N> --output <N>",
                 "```",
                 "",

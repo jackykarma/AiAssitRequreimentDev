@@ -1,66 +1,78 @@
 # 变更控制（Change Control）
 
-产品 / UX / 技术方案 / 任务图变更是常态。本流程要求：**先记账，再改合同，再回退门禁**。
+产品 / UX / 技术方案 / 任务图 / **拆分范围**变更是常态。要求：**先记账，再改合同，再回退门禁**。
 
-落盘：`features/<id>/change.yaml`（主控维护；各角色提议，主控代记）。  
-需求级变更可另记在 `requirements/<REQ>/change.yaml`（可选，字段同构）。
+## 两层台账
+
+| 范围 | 落盘 | 典型级别 | CLI |
+| --- | --- | --- | --- |
+| **单个 feature** | `features/<id>/change.yaml` | C0–C3（实现/UX/tech/产品合同） | `change record features/FEAT-001 …` |
+| **整条需求（拆分）** | `requirements/<REQ>/change.yaml` | **C4**（增删改 feature、改 split） | `change record requirements/REQ-… …` |
+
+字段同构。`impacts.features` 列出受影响的 feature id；需求级回退时会对这些目录（或 `split.yaml` 里全部已存在 feature）执行门禁回退。
 
 ## 必填字段（每条变更）
 
 | 字段 | 说明 |
 | --- | --- |
-| `id` | `CHG-*`，本 feature 内唯一 |
-| `at` | ISO8601 时间（含时区），变更发起/入账时间 |
-| `initiatedBy.role` | 发起角色：`product` / `ux` / `architect` / `developer` / `tester` / `deployer` / `lead` / `human` |
-| `initiatedBy.name` | 人名或账号（可空，私人项目可填自己） |
-| `reason` | 变更原因（为何改，禁止空话） |
-| `level` | `C0`～`C4`（见下） |
+| `id` | `CHG-*`，本目录内唯一 |
+| `at` | ISO8601 时间（含时区） |
+| `initiatedBy.role` / `.name` | 发起角色 / 可选人名 |
+| `reason` / `summary` | 原因与一句话摘要 |
+| `level` | `C0`～`C4` |
 | `category` | `product` / `ux` / `tech` / `tasks` / `split` / `other` |
-| `summary` | 一句话变更摘要 |
-| `impacts.artifacts` | 将改动的文件列表 |
-| `impacts.gatesRollback` | 须重过的门禁 |
-| `status` | `proposed` →（C3/C4 须）`approved` → `applied` |
-
-建议字段：`impacts.acceptanceIds`、`impacts.features`、`confirmedBy`（role/name/at）。
+| `impacts.artifacts` | 将改动的文件 |
+| `impacts.gatesRollback` | 须重过的门禁（C1–C3 必填；C4 仅新增空切片时可空） |
+| `impacts.features` | 受影响 feature id 列表（**C4 强烈建议**） |
+| `status` | `proposed` →（C3/C4）`approved` → `applied` |
 
 ## 分级与回退
 
-| 级别 | 含义 | 典型 | 回退 | 是否须人确认 |
+| 级别 | 含义 | 典型 | 回退 | 人确认 |
 | --- | --- | --- | --- | --- |
-| **C0** | 局部实现，不改合同 | 写集内实现细节 | 不回退门禁 | 否；仍建议记账 |
-| **C1** | 技术方案合同 | `tech.yaml` 接口/KD/约束 | → **G2T**；重评 **G3** | 对外契约/迁移时打断 |
-| **C2** | 交互视觉 | `ux.yaml` / `prototype/ux`，不改 A* | → **G2** | 风格多选时打断 |
-| **C3** | 产品合同 | FR/NFR/E/A/UJ、产品原型 | → **G1** 重 seal；下游作废重做 | **是** |
-| **C4** | 范围/拆分 | 需求级 PRD、`split.yaml`、新开/合并 feature | 需求级决策 + 相关 feature 门禁 | **是** |
+| **C0** | 局部实现 | 写集细节 | 不回退 | 否 |
+| **C1** | 技术方案 | `tech.yaml` | → G2T，重评 G3 | 契约/迁移时 |
+| **C2** | UX/UI | `ux.yaml` / UX 原型 | → G2 | 风格多选时 |
+| **C3** | 产品合同 | 切片 FR/A*/原型 | → G1 重 seal | **是** |
+| **C4** | 范围/拆分 | 需求级 PRD、`split.yaml`、增删合并 feature | 需求决策 + 相关 feature 门禁 | **是** |
 
-原则：上游合同变 → 下游门禁与证据失效；只改下游不必无故打回产品。
+原则：上游合同变 → 下游失效；只改下游不必无故打回产品。
+
+## C4 场景怎么记（整需求）
+
+| 场景 | 记在哪 | 动作 |
+| --- | --- | --- |
+| **新增** feature | `requirements/<REQ>/change.yaml` · C4 · `category=split` | 改 `split.yaml` → 人确认 → `init FEAT-x --requirement REQ-…` → 新产品切片 PRD/spec |
+| **移除** feature | 同上；`--features` 含被移除 id | 改 split；对该 feature 回退/停做；目录可保留并在 BOARD 标明废弃 |
+| **改某 feature 范围**（仍同一 id） | 需求台账 C4 + 该 feature 上再记 **C3**（若动 A*） | 先改 split/需求级 PRD 边界，再改切片 spec 并回 G1 |
+| **合并 / 拆开** | C4 | 改 split；旧 feature 停做或回退；新 feature `init` |
+
+```bash
+# 需求级：拆出第二刀，并回退仍共享契约的 FEAT-001
+python -m aiassitrequreimentdev change requirements/REQ-001-move-album-20220305 record \
+  --initiated-by product --level C4 --category split \
+  --reason "埋点可独立上线" --summary "拆出 FEAT-002 埋点" \
+  --artifacts split.yaml,prd.md \
+  --features FEAT-001,FEAT-002 \
+  --gates G1 \
+  --status approved --confirmed-by human --confirmed-name "负责人"
+
+python -m aiassitrequreimentdev check-req requirements/REQ-001-move-album-20220305
+python -m aiassitrequreimentdev init FEAT-002 --requirement REQ-001-move-album-20220305
+```
+
+单 feature 内改验收（不改拆分）→ 仍用 **feature 台账 C3**，不必升 C4。
 
 ## 主控操作顺序
 
-1. `change … record` 写入台账（`status=proposed` 或直接 `approved`）  
-2. C3/C4：人确认后把 `status` 改为 `approved`（打断码 `I_CHANGE_CONFIRM`）  
-3. 按 `gatesRollback` 把 `state.gates.*` 退回 `pending`（G1 须清/重 seal）  
-4. 派对应角色改工件  
-5. 改完将条目 `status=applied`，再 `check` 从回退点往下走  
+1. `change … record`（`proposed` 或直接 `approved`）  
+2. C3/C4：人确认（打断码 `I_CHANGE_CONFIRM`）  
+3. **`approved|applied` + `gatesRollback`**：默认回退列出的 feature（需求级可多目录）；含 G1 清 `specHash`。`--no-rollback` / `--rollback` 可覆盖。  
+4. 改工件（需求级：`split` / 需求 PRD；切片：spec/tech/…）  
+5. `status=applied`，再 `check --accept`  
 
-```bash
-python <本插件>/scripts/aad.py change <feature目录> record \
-  --initiated-by product \
-  --name "张三" \
-  --reason "业务确认成功态口径" \
-  --level C3 \
-  --category product \
-  --summary "调整 A1 then" \
-  --artifacts spec.yaml,prd.md,prototype/index.html \
-  --gates G1,G2,G2T,G3 \
-  --acceptance A1 \
-  --status approved
+## 与现有规则
 
-python <本插件>/scripts/aad.py change <feature目录> show
-```
-
-## 与现有规则的关系
-
-- G1 冻结后改 `spec.yaml`：必须先有 **C3** 台账，再退回 G1 并 `seal`（`specHash` 仍生效）。  
-- 开发不得私自改规格/tech 合同；发现契约问题 → 提议变更，主控记账后回退。  
-- Review `blocking` 修复若不动合同，可记 **C0** 或不记；一旦改 A*/接口则升到对应级别。
+- G1 冻结后改切片 `spec.yaml`：先 **C3**（feature 台账），再回 G1。  
+- 增删切片 / 改拆分：先 **C4**（需求台账），再改 `split.yaml`，`check-req`，再 `init` 或停做。  
+- 开发不得私自改合同；发现契约问题 → 提议变更，主控记账后回退。

@@ -33,6 +33,17 @@ class PathTests(unittest.TestCase):
         self.assertEqual(result.path, "light-auto")
         self.assertGreaterEqual(len(result.matched_auto), 1)
 
+    def test_recommend_light_auto_for_chinese_hot_fix(self) -> None:
+        result = recommend_path("无UI热修配置开关")
+        self.assertEqual(result.path, "light-auto")
+        self.assertIn("热修", result.matched_light)
+        self.assertGreaterEqual(len(result.matched_auto), 1)
+
+    def test_recommend_light_auto_for_auto_only_signal(self) -> None:
+        result = recommend_path("纯逻辑无界面回调")
+        self.assertEqual(result.path, "light-auto")
+        self.assertGreaterEqual(len(result.matched_auto), 1)
+
     def test_recommend_full_for_new_capability(self) -> None:
         result = recommend_path("新功能：跨模块订单状态机与对外契约改造")
         self.assertEqual(result.path, "full")

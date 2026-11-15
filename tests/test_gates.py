@@ -33,14 +33,14 @@ def _md_from_titles(h1: str, h2: tuple[str, ...], h3: tuple[str, ...] = ()) -> s
     return "\n".join(lines)
 
 
-def write_tech_doc(path: Path) -> None:
+def write_tech_doc(path: Path, *, with_h3: bool = True) -> None:
     from aiassitrequreimentdev.template_headings import TECH_MD_H2, TECH_MD_H3_REQUIRED
 
     path.write_text(
         _md_from_titles(
-            "EPIC 软件设计说明书：EPIC-000 - test",
+            "技术方案：FEAT-000 - test",
             TECH_MD_H2,
-            TECH_MD_H3_REQUIRED,
+            TECH_MD_H3_REQUIRED if with_h3 else (),
         ),
         encoding="utf-8",
     )
@@ -52,7 +52,7 @@ def write_tech_spec_doc(path: Path) -> None:
     from aiassitrequreimentdev.template_headings import TECH_SPEC_H2
 
     path.write_text(
-        _md_from_titles("EPIC 技术规格书（Tech Spec）：EPIC-000 - test", TECH_SPEC_H2),
+        _md_from_titles("技术约束（Tech Spec）：FEAT-000 - test", TECH_SPEC_H2),
         encoding="utf-8",
     )
 
@@ -169,6 +169,18 @@ affected:
   - modus/knowledge/domain/order/references/modules/callback.md
 openQuestions: []
 """
+
+
+def valid_spec_ui() -> str:
+    """有 UI 的规格：用于强制走 G2 UX 校验（非 skip / 非无界面短路）。"""
+    return (
+        valid_spec()
+        .replace("uiRequired: false", "uiRequired: true")
+        .replace(
+            "uiNoneReason: 本切片为支付回调幂等，无用户界面",
+            'uiNoneReason: ""',
+        )
+    )
 
 
 def valid_ux() -> str:
@@ -402,10 +414,16 @@ notes: []
 """
 
 
-def state(path: str = "full", gates: dict | None = None, spec_hash: str | None = None) -> dict:
+def state(
+    path: str = "full",
+    gates: dict | None = None,
+    spec_hash: str | None = None,
+    path_confirmed: bool = True,
+) -> dict:
     base = {
         "stage": "intake",
         "path": path,
+        "pathConfirmed": path_confirmed,
         "gates": {
             "G0": "pending",
             "G1": "pending",
@@ -522,14 +540,38 @@ class GateTests(unittest.TestCase):
         write_yaml(spec_path, valid_spec())
         seal_spec(self.change)
         sealed = json.loads((self.change / "state.json").read_text(encoding="utf-8"))
-        sealed["gates"]["G1"] = "accepted"
-        (self.change / "state.json").write_text(json.dumps(sealed), encoding="utf-8")
+        self.assertEqual(sealed["gates"]["G1"], "accepted")
+        self.assertTrue(sealed.get("specHash"))
         spec_path.write_text(spec_path.read_text(encoding="utf-8") + "\n", encoding="utf-8")
         self.assertIn("SPEC_HASH_MISMATCH", self.codes("G1"))
 
+    def test_g0_requires_path_confirmed(self) -> None:
+        self.put_state(path_confirmed=False)
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        self.assertIn("G0_PATH_UNCONFIRMED", self.codes("G0"))
+
+    def test_g2_skips_template_ux_when_ui_not_required(self) -> None:
+        """init 模板 ux.yaml（skip:false）不得挡住 uiRequired=false / light-auto。"""
+        self.put_state(path="light-auto")
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(
+            self.change / "ux.yaml",
+            """
+skip: false
+reason: ""
+interactionRules: []
+visual:
+  baseline: ui-kit
+htmlPrototype:
+  entry: prototype/ux/index.html
+acceptance: []
+""",
+        )
+        self.assertEqual(self.codes("G2"), set())
+
     def test_g2_requires_every_acceptance(self) -> None:
         self.put_state()
-        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
         write_yaml(
             self.change / "ux.yaml",
             """
@@ -549,7 +591,7 @@ acceptance:
 
     def test_g2_requires_interaction_rules(self) -> None:
         self.put_state()
-        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
         write_yaml(
             self.change / "ux.yaml",
             valid_ux().replace(
@@ -579,14 +621,14 @@ artifacts: []
 
     def test_g2_accepts_complete_map(self) -> None:
         self.put_state()
-        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
         write_yaml(self.change / "ux.yaml", valid_ux())
         write_interactive_html(self.change / "prototype" / "ux" / "index.html")
         self.assertEqual(self.codes("G2"), set())
 
     def test_g2_requires_interactive_ux_prototype(self) -> None:
         self.put_state()
-        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
         write_yaml(self.change / "ux.yaml", valid_ux())
         self.assertIn("UX_PROTO_MISSING", self.codes("G2"))
         write_interactive_html(self.change / "prototype" / "ux" / "index.html")
@@ -594,7 +636,7 @@ artifacts: []
 
     def test_g2_requires_uikit_when_baseline_ui_kit(self) -> None:
         self.put_state()
-        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
         write_yaml(self.change / "ux.yaml", valid_ux())
         path = self.change / "prototype" / "ux" / "index.html"
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -619,7 +661,7 @@ document.getElementById("go").addEventListener("click", function () {
 
     def test_g2_custom_baseline_skips_uikit_and_requires_notes(self) -> None:
         self.put_state()
-        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
         custom_ux = valid_ux().replace(
             "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
             "visual:\n  baseline: custom\n  notes: \"探索独立视觉，不用 Music ui-kit\"\n",
@@ -650,7 +692,7 @@ document.getElementById("go").addEventListener("click", function () {
 
     def test_g2_custom_baseline_requires_notes(self) -> None:
         self.put_state()
-        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
         bad = valid_ux().replace(
             "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
             "visual:\n  baseline: custom\n  notes: \"\"\n",
@@ -661,7 +703,7 @@ document.getElementById("go").addEventListener("click", function () {
 
     def test_g2_requires_visual_baseline(self) -> None:
         self.put_state()
-        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
         no_visual = valid_ux().replace(
             "visual:\n  baseline: ui-kit\n  notes: \"\"\n  motion: []\n",
             "",
@@ -689,6 +731,14 @@ document.getElementById("go").addEventListener("click", function () {
         write_spec_prd(self.change / "prd.md")
         write_interactive_html(self.change / "prototype" / "index.html")
         self.assertIn("LIGHT_AUTO_UI", self.codes("G1"))
+
+    def test_g2t_light_skips_architecture_h3(self) -> None:
+        self.put_state(path="light")
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        # 轻量：只要 ## 齐全，不必 4.2/5.1/5.3
+        write_tech_doc(self.change / "tech.md", with_h3=False)
+        write_yaml(self.change / "tech.yaml", valid_tech())
+        self.assertNotIn("TECH_MD_TEMPLATE", self.codes("G2T"))
 
     def test_g2t_requires_every_acceptance(self) -> None:
         self.put_state()
@@ -1226,6 +1276,7 @@ rollback: ""
         destination = init_requirement(root, req_id)
         self.assertTrue((destination / "prd.md").is_file())
         self.assertTrue((destination / "split.yaml").is_file())
+        self.assertTrue((destination / "change.yaml").is_file())
         self.assertTrue(str(destination).endswith(str(Path("requirements") / req_id)))
         split_doc = (destination / "split.yaml").read_text(encoding="utf-8")
         self.assertIn(req_id, split_doc)

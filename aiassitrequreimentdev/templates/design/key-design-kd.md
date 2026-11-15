@@ -1,25 +1,19 @@
 # KD-001：[设计点名称]
 
-> **EPIC 内文件路径**（示例）：`key-func-design/KD_001_<short_slug>.md`
-> **命名规则**：`KD_${三位序号}_${精炼slug}.md`（序号与 `epic-design.md` §7.1 中 **KD-001** 对齐；slug 建议英文/拼音，仅字母、数字、下划线）。
->
-> **回链**：[`epic-design.md`](../epic-design.md) §七（关键设计清单与引用以该节为准；**不**使用 EPIC 根目录 `key-func-design.md`）。
->
-> **KD 与 Feature 关系**：KD 是围绕关键技术方案、疑难点或方案亮点组织的设计单元，**不要求与 Feature 一一对应**；一个 KD 可支撑多个 Feature，一个 Feature 也可拆出多个 KD。
->
-> **定位（必读）**：KD 的核心目的是**提前验证 EPIC 中关键疑难点的技术 / 算法可行性链路，并锁定关键设计**——把核心技术方案与实现思路讲明白即可，不追求章节完整。
->
-> **图表规范**：正式图须用 [Archify](https://github.com/tt-a1i/archify) `finalize`；须用 Archify finalize 出图。每张时序图 **紧下方**须有「未读图也能理解分支差异」的协作者与过程说明。
+> **落盘**：复制到 `features/<FEAT-id>/` 下按需命名，如 `KD_001_<slug>.md`。  
+> **回链**：本 feature 的 `tech.md` §七 / `tech.yaml` → `keyDesigns`。  
+> **定位**：验证本切片关键疑难点/亮点的技术可行性并锁定设计；与 `keyDesigns.mustFollow` / `pitfalls` 一致。  
+> **绘图**：Archify `finalize`（architecture / sequence / class）；时序图下方须有文字说明。
 
-**Epic**：EPIC-[编号] - [名称]
-**KD 编号**：KD-001
-**创建/更新日期**：[YYYY-MM-DD]
+**Feature**：FEAT-[编号] - [名称]  
+**KD 编号**：KD-001  
+**日期**：[YYYY-MM-DD]
 
 ---
 
 ## 依赖的其他 KD
 
-> 若无前置依赖，表格填 `—`，并写明「无前置依赖」。多个前置用多行；**须与 `epic-design.md` §7.1 中「前置 KD / 依赖」列一致**。
+> 若无前置依赖，表格填 `—`。
 
 | 前置 KD | 对应文件（相对本目录） | 本 KD 如何建立在其上 |
 | ------- | ---------------------- | -------------------- |

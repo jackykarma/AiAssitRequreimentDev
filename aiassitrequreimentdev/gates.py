@@ -28,6 +28,8 @@
  ** limao2@Apps.Gallery 2026/11/15 1.13 G2 interactionRules + ui-kit visual baseline
  ** limao2@Apps.Gallery 2026/11/15 1.14 G2 visual.baseline 人选；custom 免强制 ui-kit
  ** limao2@Apps.Gallery 2026/11/15 1.15 light-auto 路径（无 UI 小需求）
+ ** limao2@Apps.Gallery 2026/11/15 1.16 G2 无 UI 跳过模板 ux；seal 写 G1 accepted；G0 pathConfirmed
+ ** limao2@Apps.Gallery 2026/11/15 1.17 feature 级 tech 标题；light 免强制 H3 架构小节
  *********************************************************************************/
 """
 
@@ -226,10 +228,19 @@ def init_change(root: Path, change_id: str) -> Path:
 
 
 def seal_spec(feature_dir: Path) -> str:
+    """写入 specHash，并将 gates.G1 标为 accepted（冻结规格）。
+
+    主控应先 `check --gate G1` 通过再 seal；本函数不再要求手改 state.gates。
+    """
     digest = hashlib.sha256((feature_dir / "spec.yaml").read_bytes()).hexdigest()
     state_path = feature_dir / "state.json"
     state = json.loads(state_path.read_text(encoding="utf-8"))
     state["specHash"] = digest
+    gates = state.setdefault("gates", {})
+    if not isinstance(gates, dict):
+        gates = {}
+        state["gates"] = gates
+    gates["G1"] = "accepted"
     state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return digest
 
@@ -330,6 +341,14 @@ def _check_g0(state: dict, spec: dict | None, violations: list[Violation]) -> No
             Violation("G0", "STATE_PATH", "path 只能是 full、light 或 light-auto")
         )
         return
+    if state.get("pathConfirmed") is not True:
+        violations.append(
+            Violation(
+                "G0",
+                "G0_PATH_UNCONFIRMED",
+                "须先确认研发路径（path 命令写入 pathConfirmed=true）",
+            )
+        )
     if is_light_path(path) and spec is not None:
         affected = spec.get("affected")
         if not isinstance(affected, list) or len(affected) != 1:
@@ -642,6 +661,17 @@ def _check_hash(change_dir: Path, state: dict, violations: list[Violation]) -> N
 
 def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:
     ux_path = change_dir / "ux.yaml"
+    # 无 UI：不强制 UX；init 模板 ux.yaml（skip:false）不得挡 light-auto / 无界面切片
+    if spec.get("uiRequired") is False:
+        if ux_path.is_file():
+            ux = _read_yaml(ux_path, "G2", "UX_MISSING", "缺少 ux.yaml", violations)
+            if ux is not None and ux.get("skip") is True:
+                reason = ux.get("reason")
+                if not isinstance(reason, str) or not reason.strip():
+                    violations.append(
+                        Violation("G2", "UX_SKIP_REASON", "ux.skip 为 true 时必须写 reason")
+                    )
+        return
     if is_light_path(state.get("path")) and not ux_path.is_file():
         return
     ux = _read_yaml(ux_path, "G2", "UX_MISSING", "缺少 ux.yaml", violations)
@@ -826,7 +856,7 @@ def _check_ux_visual(ux: dict, violations: list[Violation]) -> None:
 
 
 def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:
-    # light 仍要求 tech，保证验收有技术落点
+    # light 仍要求 tech，保证验收有技术落点；full 另强制 L0/L1 三级标题
     path_mode = state.get("path")
     tech_md = change_dir / "tech.md"
     if not tech_md.is_file() or tech_md.stat().st_size == 0:
@@ -842,16 +872,17 @@ def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Viola
             violations=violations,
             must_exist=True,
         )
-        _check_template_headings(
-            tech_md,
-            TECH_MD_H3_REQUIRED,
-            level=3,
-            gate="G2T",
-            code="TECH_MD_TEMPLATE",
-            label="tech.md 强制三级标题",
-            violations=violations,
-            must_exist=True,
-        )
+        if path_mode == "full":
+            _check_template_headings(
+                tech_md,
+                TECH_MD_H3_REQUIRED,
+                level=3,
+                gate="G2T",
+                code="TECH_MD_TEMPLATE",
+                label="tech.md 强制三级标题（full 路径）",
+                violations=violations,
+                must_exist=True,
+            )
     _check_template_headings(
         change_dir / "tech-spec.md",
         TECH_SPEC_H2,

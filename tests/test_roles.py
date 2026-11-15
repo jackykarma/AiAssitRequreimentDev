@@ -16,10 +16,21 @@ class RoleTests(unittest.TestCase):
         self.assertEqual(resolve_menu_choice("交互视觉").id, "ux")
         self.assertEqual(resolve_menu_choice("tester").id, "tester")
 
-    def test_menu_lists_six_roles(self) -> None:
+    def test_menu_lists_seven_roles(self) -> None:
         text = menu_text()
-        for label in ("产品经理", "交互视觉", "架构师SE", "开发", "测试", "部署"):
+        for label in (
+            "产品经理",
+            "交互视觉",
+            "架构师SE",
+            "开发",
+            "Code Review",
+            "测试",
+            "部署",
+        ):
             self.assertIn(label, text)
+        self.assertEqual(resolve_menu_choice("5").id, "reviewer")
+        self.assertEqual(resolve_menu_choice("6").id, "tester")
+        self.assertEqual(resolve_menu_choice("评审").id, "reviewer")
 
     def test_adopt_writes_state_and_board(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

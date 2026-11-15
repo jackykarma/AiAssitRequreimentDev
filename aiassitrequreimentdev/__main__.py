@@ -42,6 +42,11 @@ from aiassitrequreimentdev.gates import (
     resolve_requirement_id,
     seal_spec,
 )
+from aiassitrequreimentdev.split import (
+    evaluate_requirement,
+    feature_listed_in_split,
+    load_split,
+)
 from aiassitrequreimentdev.paths import menu_text as path_menu_text
 from aiassitrequreimentdev.paths import recommend_path, resolve_path
 from aiassitrequreimentdev.roles import menu_text, resolve_menu_choice
@@ -61,8 +66,29 @@ def _configure_stdio() -> None:
             reconfigure(encoding="utf-8")
 
 
+def _normalize_argv(argv: list[str]) -> list[str]:
+    """兼容 `usage|change|tasks <dir> <sub>` 与 `<cmd> <sub> <dir>` 两种顺序。"""
+    if len(argv) < 3:
+        return argv
+    head = argv[0]
+    sub_by_cmd = {
+        "usage": ("record", "show"),
+        "change": ("record", "show"),
+        "tasks": ("scaffold",),
+    }
+    if head not in sub_by_cmd:
+        return argv
+    subcommands = sub_by_cmd[head]
+    if argv[1] in subcommands:
+        return argv
+    if argv[2] in subcommands:
+        return [head, argv[2], argv[1], *argv[3:]]
+    return argv
+
+
 def main(argv: list[str] | None = None) -> int:
     _configure_stdio()
+    argv = _normalize_argv(list(sys.argv[1:] if argv is None else argv))
     parser = argparse.ArgumentParser(prog="aiassitrequreimentdev", description="规格门禁与 feature 入口")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -89,6 +115,16 @@ def main(argv: list[str] | None = None) -> int:
     check_parser = sub.add_parser("check", help="检查一个 feature 目录的门禁")
     check_parser.add_argument("feature_dir")
     check_parser.add_argument("--gate", choices=GATES, help="只判断这一道门禁")
+    check_parser.add_argument(
+        "--accept",
+        action="store_true",
+        help="门禁通过时写入 gates.*.accepted 并推进 stage（须同时指定 --gate；G1 会 seal）",
+    )
+
+    check_req_parser = sub.add_parser(
+        "check-req", help="检查需求目录 split.yaml（及目录名与 requirementId）"
+    )
+    check_req_parser.add_argument("requirement_dir")
 
     seal_parser = sub.add_parser("seal", help="把 spec.yaml 的哈希写入 state.json")
     seal_parser.add_argument("feature_dir")
@@ -105,7 +141,13 @@ def main(argv: list[str] | None = None) -> int:
     recommend_parser = sub.add_parser(
         "recommend", help="根据需求描述推荐 full/light/light-auto"
     )
-    recommend_parser.add_argument("--text", required=True, help="用户需求原文")
+    recommend_parser.add_argument(
+        "--text",
+        "--need",
+        dest="text",
+        required=True,
+        help="用户需求原文（--need 与 --text 等价）",
+    )
     recommend_parser.add_argument("--json", action="store_true", help="输出 JSON")
 
     path_parser = sub.add_parser(
@@ -120,7 +162,12 @@ def main(argv: list[str] | None = None) -> int:
     path_parser.add_argument("--recommended", help="系统推荐值，写入 state.pathRecommended")
 
     paths_parser = sub.add_parser("paths", help="打印路径菜单，可附带推荐")
-    paths_parser.add_argument("--text", help="需求原文，用于生成推荐")
+    paths_parser.add_argument(
+        "--text",
+        "--need",
+        dest="text",
+        help="需求原文，用于生成推荐（--need 与 --text 等价）",
+    )
 
     start_parser = sub.add_parser("start", help="初始化或复用 feature，并打印角色/路径选择提示")
     start_parser.add_argument("feature_id")
@@ -150,10 +197,35 @@ def main(argv: list[str] | None = None) -> int:
     usage_show.add_argument("feature_dir")
     usage_show.add_argument("--json", action="store_true", help="输出 JSON")
 
-    change_parser = sub.add_parser("change", help="记录或查看需求/设计变更台账")
+    tasks_parser = sub.add_parser("tasks", help="任务图：按验收生成 tasks.yaml 骨架")
+    tasks_sub = tasks_parser.add_subparsers(dest="tasks_command", required=True)
+    tasks_scaffold = tasks_sub.add_parser(
+        "scaffold", help="按 spec.acceptance 生成 tasks.yaml（轻量族单任务）"
+    )
+    tasks_scaffold.add_argument("feature_dir")
+    tasks_scaffold.add_argument(
+        "--mode",
+        choices=("auto", "single", "per-acceptance"),
+        default="auto",
+        help="auto=轻量/单 A* 合并；per-acceptance=每条 A* 一任务",
+    )
+    tasks_scaffold.add_argument(
+        "--force", action="store_true", help="覆盖已有非空 tasks.yaml"
+    )
+
+    change_parser = sub.add_parser(
+        "change",
+        help="记录或查看变更台账（feature 或 requirement 目录）",
+    )
     change_sub = change_parser.add_subparsers(dest="change_command", required=True)
-    change_record = change_sub.add_parser("record", help="追加一条变更（先记账再回退门禁）")
-    change_record.add_argument("feature_dir")
+    change_record = change_sub.add_parser(
+        "record",
+        help="追加一条变更；目录可以是 features/<id> 或 requirements/<REQ>",
+    )
+    change_record.add_argument(
+        "feature_dir",
+        help="feature 目录或需求目录（requirements/REQ-…）",
+    )
     change_record.add_argument(
         "--initiated-by",
         required=True,
@@ -189,6 +261,16 @@ def main(argv: list[str] | None = None) -> int:
     )
     change_record.add_argument("--confirmed-by", default="", help="确认人角色（C3/C4 建议）")
     change_record.add_argument("--confirmed-name", default="", help="确认人姓名")
+    change_record.add_argument(
+        "--rollback",
+        action="store_true",
+        help="强制按 gatesRollback 回退门禁（含 proposed）",
+    )
+    change_record.add_argument(
+        "--no-rollback",
+        action="store_true",
+        help="禁止自动回退（approved/applied 默认会回退）",
+    )
     change_show = change_sub.add_parser("show", help="打印变更台账")
     change_show.add_argument("feature_dir")
     change_show.add_argument("--json", action="store_true", help="输出 JSON")
@@ -218,7 +300,29 @@ def main(argv: list[str] | None = None) -> int:
         )
         refresh_board(destination)
         print(destination)
+        if args.requirement:
+            req_dir = Path(args.root) / "requirements" / args.requirement
+            split_doc = load_split(req_dir / "split.yaml")
+            if split_doc is None:
+                print(
+                    f"警告：未找到 {req_dir / 'split.yaml'}，请先写 split 再批量建 feature。",
+                    file=sys.stderr,
+                )
+            elif not feature_listed_in_split(split_doc, args.feature_id):
+                print(
+                    f"警告：{args.feature_id} 未出现在 split.yaml features[] 中，请核对拆分表。",
+                    file=sys.stderr,
+                )
         return 0
+
+    if args.command == "check-req":
+        violations = evaluate_requirement(Path(args.requirement_dir))
+        if not violations:
+            print("REQ ready")
+            return 0
+        for item in violations:
+            print(f"{item.gate} {item.code} {item.message}")
+        return 1
 
     if args.command == "seal":
         print(seal_spec(Path(args.feature_dir)))
@@ -378,11 +482,40 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         return 2
 
+    if args.command == "tasks":
+        feature_dir = Path(args.feature_dir)
+        if args.tasks_command == "scaffold":
+            from aiassitrequreimentdev.tasks_scaffold import scaffold_tasks
+
+            try:
+                path = scaffold_tasks(
+                    feature_dir, mode=args.mode, force=args.force
+                )
+            except (FileExistsError, FileNotFoundError, ValueError) as exc:
+                print(str(exc), file=sys.stderr)
+                return 2
+            refresh_board(feature_dir)
+            print(path)
+            print(
+                "已生成 tasks.yaml 骨架：请改 writeScopes 为真实写集，"
+                "确认 verify 与 A* 同源后 check --gate G3。"
+            )
+            return 0
+        return 2
+
     if args.command == "change":
         feature_dir = Path(args.feature_dir)
         if args.change_command == "record":
             def _split(raw: str) -> list[str]:
                 return [part.strip() for part in raw.split(",") if part.strip()]
+
+            apply_rollback: bool | None
+            if args.no_rollback:
+                apply_rollback = False
+            elif args.rollback:
+                apply_rollback = True
+            else:
+                apply_rollback = None
 
             try:
                 entry = record_change(
@@ -400,13 +533,26 @@ def main(argv: list[str] | None = None) -> int:
                     status=args.status,
                     confirmed_by_role=args.confirmed_by,
                     confirmed_by_name=args.confirmed_name,
+                    apply_rollback=apply_rollback,
                 )
             except ValueError as exc:
                 print(str(exc), file=sys.stderr)
                 return 2
-            refresh_board(feature_dir)
+            # feature 目录才刷新 BOARD；需求目录无 BOARD
+            if (feature_dir / "state.json").is_file():
+                refresh_board(feature_dir)
             print(json.dumps(entry, ensure_ascii=False, indent=2))
-            print("下一步：按 impacts.gatesRollback 退回门禁，派角色改工件，完成后将 status 改为 applied。")
+            if entry.get("_rollbackApplied"):
+                print(
+                    "已按 gatesRollback 回退受影响 feature 门禁（含下游）；"
+                    "含 G1 已清 specHash。改 split/PRD 与切片后 check --accept，"
+                    "最后将 status 改为 applied。"
+                )
+            else:
+                print(
+                    "下一步：C4 改 split.yaml / 需求级 PRD；C3/C4 人确认后用 approved；"
+                    "受影响 feature 用 --features 列出以便回退门禁。"
+                )
             return 0
         if args.change_command == "show":
             if args.json:
@@ -418,16 +564,44 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         return 2
 
-    report = evaluate(Path(args.feature_dir))
-    selected = report.violations
-    if args.gate:
-        selected = [item for item in selected if item.gate == args.gate]
-    if not selected:
+    if args.command == "check":
+        feature_dir = Path(args.feature_dir)
+        report = evaluate(feature_dir)
+        selected = report.violations
+        if args.gate:
+            selected = [item for item in selected if item.gate == args.gate]
+        if selected:
+            for item in selected:
+                print(f"{item.gate} {item.code} {item.message}")
+            return 1
+
         print(f"{args.gate or 'ALL'} ready")
+        if args.accept:
+            if not args.gate:
+                print("--accept 须同时指定 --gate", file=sys.stderr)
+                return 2
+            from aiassitrequreimentdev.progress import accept_gate
+
+            try:
+                state = accept_gate(feature_dir, args.gate)
+            except ValueError as exc:
+                print(str(exc), file=sys.stderr)
+                return 2
+            refresh_board(feature_dir)
+            print(
+                json.dumps(
+                    {
+                        "accepted": args.gate,
+                        "stage": state.get("stage"),
+                        "gates": state.get("gates"),
+                        "specHash": state.get("specHash"),
+                    },
+                    ensure_ascii=False,
+                )
+            )
         return 0
-    for item in selected:
-        print(f"{item.gate} {item.code} {item.message}")
-    return 1
+
+    return 2
 
 
 if __name__ == "__main__":

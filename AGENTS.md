@@ -8,7 +8,7 @@
 
 **需求 ≠ feature**：一条需求 → 1..N 个 feature。feature 须对本切片 `A*` 可独立交付（可 G4），不是半成品，也不等于整需求零依赖大包；可有 `dependsOnFeatures`。大需求：产品先写需求级 PRD，再在 `split.yaml` 决定拆几个；主控建目录。小需求可直开单个 feature。feature 内的 `tasks.yaml` 更晚才拆。
 
-主控代跑 `start` / `init` / `check` / `seal` / `board` / `usage` / `recommend` / `path`。角色结束阶段后记 token：`usage record --role … --stage … --input … --output …`。
+主控代跑 `start` / `init` / `init-req` / `check`（可 `--accept`）/ `check-req` / `tasks scaffold` / `seal` / `board` / `usage` / `change`（approved 默认可回退门禁）/ `recommend` / `path`。角色结束阶段后记 token：`usage record --role … --stage … --input … --output …`。
 
 先读 `docs/architecture.md` 和 `constitution.md`。知识从 `modus/knowledge/architecture-overview.md` 进入。
 

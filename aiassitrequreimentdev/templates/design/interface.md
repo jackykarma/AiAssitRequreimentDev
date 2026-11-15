@@ -1,14 +1,11 @@
-# 接口设计：EPIC-[编号] - [EPIC 名称]
+# 接口设计：FEAT-[编号] - [名称]
 
-> **定位**：本文件对应 `epic-design.md` **§九**，面向方案评审，完整描述本 EPIC 对外提供的接口与依赖的外部接口，与 EPIC 根 `tech-spec.md` 第二部分各 Feature · 三「能力边界与外部依赖」对齐。`tech-spec.md` 只声明能力级边界，本文件负责方法签名、字段、错误码等详细接口设计。
->
-> **互指**：`epic-design.md` §九仅保留定位说明、可选摘要与指向本文件的链接；**正文以本文件为准**。
->
-> **与 tech-spec.md 的关系**：`tech-spec.md` 第二部分各 Feature · 三声明了**能力边界与外部依赖**（对外提供什么能力、依赖什么外部能力、约束规则），本文件在此基础上完成**具体接口设计**（方法签名、参数、返回值、错误码等）。
+> **定位**：本 feature 接口展开件；摘要在 `tech.md` §九 / `tech.yaml` → `interfaces`；工程边界在 `tech-spec.md`。  
+> **内容**：方法签名、字段、错误码；无对外/外部接口则 N/A。
 
-**Epic**：EPIC-[编号] - [名称]
-**关联文件**：`epic-design.md` | EPIC 根 `tech-spec.md`（第二部分各 Feature · 三）
-**创建/更新日期**：[YYYY-MM-DD]
+**Feature**：FEAT-[编号] - [名称]  
+**关联**：`tech.md` §九 · `tech.yaml` · `tech-spec.md`  
+**日期**：[YYYY-MM-DD]
 
 ---
 

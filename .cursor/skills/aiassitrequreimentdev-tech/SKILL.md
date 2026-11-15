@@ -7,11 +7,12 @@ description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门
 
 只写当前 feature 的技术方案人读件与 `tech.yaml`，以及 `diagrams/` 下 Archify 的 `.html`/`.svg`。不改规格、视觉与业务源码，不新增验收编号。
 
-**人读模板（必须与 `templates/feature/` / `templates/design/` 章节完全对齐）**：
+**人读模板（必须与 `templates/feature/` 章节完全对齐；按需展开 `templates/design/`）**：
 
-1. 底稿：`templates/feature/tech.md`、`tech-spec.md`；展开件：`templates/design/`（KD / NFR / 接口 / 库表 / 埋点）。
-2. **保留模板全部 `##` / 强制 `###` 标题原文**，只填正文；禁止删减、改名、合并、重排或自创精简版。
-3. G2T 门禁：`TECH_MD_TEMPLATE` / `TECH_SPEC_TEMPLATE` 校验标题；缺一节即失败。
+1. 底稿：`templates/feature/tech.md`（本切片方案）、`tech-spec.md`（工程/边界约束）；展开件：`templates/design/`（KD / NFR / 接口 / 库表 / 埋点）。
+2. **保留模板全部 `##` 标题原文**；`full` 路径还须保留强制 `###`（4.2 / 5.1 / 5.3）。禁止删减、改名、合并、重排或自创精简版。
+3. G2T：`TECH_MD_TEMPLATE` / `TECH_SPEC_TEMPLATE` 校验标题；`light` / `light-auto` 不强制 L0/L1 三级标题，但仍须 `##` 齐全 + `tech.yaml`。
+4. 本文是 **feature 切片** 合同，不是旧 AISDD EPIC/Story 大包；勿引用 `epic.md` / `/aisdd.*`。
 
 确认 `state.actorRole` 为 `architect`。先读 `BOARD.md`、`prd.md`、`prototype/`、`spec.yaml`；有 `requirementId` 时再读需求级 PRD / `architecture/` 与同需求其它 tech。G1 就绪且 G2 通过或 skip 后再写。
 

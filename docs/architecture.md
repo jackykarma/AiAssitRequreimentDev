@@ -46,10 +46,10 @@ features/<FEAT-id>/        # 交付切片
 
 | 门禁 | 条件 |
 | --- | --- |
-| G0 | path 合法；轻量族（light / light-auto）的 affected 一项 |
-| G1 | spec 含 UJ/FR/NFR/E/A（S 可选）且形状合法、openQuestions 空；prd 章节对齐模板；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；light-auto 另须 `uiRequired=false`；已接受则哈希一致 |
-| G2 | ux：有 UI 须 `interactionRules` + `visual.baseline`（ui-kit\|custom）+ 可交互 `prototype/ux/`（ui-kit 须引 kit；custom 须 notes）并覆盖验收；或 `skip`；轻量族可无 ux 文件 |
-| G2T | tech.md + tech.yaml；含 aiConstraints/keyDesigns/interfaces/diagrams（架构 L0+L1 或 gaps；同类型可多图+scope）；变更/选型/风险/快稳省/数据/埋点；acceptance 全覆盖 |
+| G0 | path 合法且 `pathConfirmed`；轻量族（light / light-auto）的 affected 一项 |
+| G1 | spec 含 UJ/FR/NFR/E/A（S 可选）且形状合法、openQuestions 空；prd 章节对齐模板；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；light-auto 另须 `uiRequired=false`；`seal` 写哈希并 `G1=accepted` |
+| G2 | `uiRequired=false` 跳过 UX；有 UI 须 `interactionRules` + `visual.baseline`（ui-kit\|custom）+ 可交互 `prototype/ux/`（或 `skip`）；轻量族可无 ux 文件 |
+| G2T | tech.md + tech-spec.md + tech.yaml（feature 级模板）；aiConstraints/keyDesigns/interfaces/diagrams；full 强制 L0/L1 三级标题与 workflow/sequence/class；acceptance 全覆盖 |
 | G3 | 任务无环、写集不交；轻量族仅一任务 |
 | GR | 无未关闭 blocking；无未裁决 dispute |
 | G4 | evidence 全覆盖且 exitCode 0 |
@@ -74,5 +74,10 @@ features/<FEAT-id>/        # 交付切片
 python -m pip install -e .
 python -m aiassitrequreimentdev init FEAT-001
 python -m aiassitrequreimentdev check features/FEAT-001 --gate G1
-python -m unittest tests.test_gates tests.test_roles tests.test_paths
+python -m aiassitrequreimentdev check features/FEAT-001 --gate G1 --accept
+python -m aiassitrequreimentdev tasks scaffold features/FEAT-001
+python -m unittest discover -s tests
 ```
+
+
+

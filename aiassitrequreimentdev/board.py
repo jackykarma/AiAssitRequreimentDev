@@ -34,10 +34,10 @@ ARTIFACTS = (
     ("spec.yaml", "结构化规格（给 Agent/门禁）"),
     ("ux.yaml", "交互视觉合同"),
     ("prototype/ux/index.html", "UX 可交互 HTML 原型（给人）"),
-    ("tech-spec.md", "技术规约（specify/tech-spec-template）"),
-    ("tech.md", "设计说明书（specify/epic-design-doc）"),
-    ("tech.yaml", "技术方案合同（给门禁）"),
-    ("tasks.md", "任务拆解人读（specify/tasks-template）"),
+    ("tech-spec.md", "技术约束（人读 · 工程/边界）"),
+    ("tech.md", "技术方案说明书（人读 · L0/L1/关键设计）"),
+    ("tech.yaml", "技术方案合同（给门禁 / AI）"),
+    ("tasks.md", "任务拆解人读（可选）"),
     ("tasks.yaml", "任务图"),
     ("change.yaml", "变更台账（发起人/原因/影响/时间）"),
     ("review.yaml", "代码评审"),
@@ -89,7 +89,23 @@ def refresh_board(change_dir: Path) -> Path:
         "",
         "各角色只写自己的工件，其余文件只读共享。一条需求可对应多个 feature。切换角色前先刷新本看板。",
         "",
+        "## 进度",
+        "",
+        f"- stage：`{state.get('stage') or '—'}`",
+        f"- requirementId：`{state.get('requirementId') or '—'}`",
+        "",
     ]
+    gates = state.get("gates") if isinstance(state.get("gates"), dict) else {}
+    if gates:
+        lines.extend(
+            [
+                "| 门禁 | 状态 |",
+                "| --- | --- |",
+            ]
+        )
+        for gate_id in ("G0", "G1", "G2", "G2T", "G3", "GR", "G4", "GD"):
+            lines.append(f"| `{gate_id}` | {gates.get(gate_id, '—')} |")
+        lines.append("")
     if path:
         confirmed = "已确认" if state.get("pathConfirmed") else "未确认（模板默认）"
         recommended = state.get("pathRecommended")
@@ -122,7 +138,7 @@ def refresh_board(change_dir: Path) -> Path:
             [
                 "## 当前角色",
                 "",
-                "尚未选择。启动时请先选定：产品经理 / 架构师SE / 开发 / 测试 / 部署。",
+                "尚未选择。启动时请先选定：产品 / UX / 架构 / 开发 / Review / 测试 / 部署。",
                 "",
             ]
         )

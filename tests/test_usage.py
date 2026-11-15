@@ -80,6 +80,49 @@ class UsageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             record_usage(self.feature, role="nobody", total_tokens=1)
 
+    def test_cli_accepts_both_arg_orders(self) -> None:
+        from aiassitrequreimentdev.__main__ import main
+
+        feat = str(self.feature)
+        self.assertEqual(
+            main(
+                [
+                    "usage",
+                    feat,
+                    "record",
+                    "--role",
+                    "lead",
+                    "--stage",
+                    "clarify",
+                    "--input",
+                    "1",
+                    "--output",
+                    "1",
+                ]
+            ),
+            0,
+        )
+        self.assertEqual(
+            main(
+                [
+                    "usage",
+                    "record",
+                    feat,
+                    "--role",
+                    "tester",
+                    "--stage",
+                    "verify",
+                    "--input",
+                    "2",
+                    "--output",
+                    "2",
+                ]
+            ),
+            0,
+        )
+        doc = load_usage(self.feature)
+        self.assertEqual(len(doc["entries"]), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

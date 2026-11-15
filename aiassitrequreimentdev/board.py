@@ -39,6 +39,7 @@ ARTIFACTS = (
     ("tech.yaml", "技术方案合同（给门禁）"),
     ("tasks.md", "任务拆解人读（specify/tasks-template）"),
     ("tasks.yaml", "任务图"),
+    ("change.yaml", "变更台账（发起人/原因/影响/时间）"),
     ("review.yaml", "代码评审"),
     ("evidence.yaml", "测试证据"),
     ("deploy.yaml", "部署清单"),

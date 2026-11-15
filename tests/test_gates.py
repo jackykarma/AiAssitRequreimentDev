@@ -592,6 +592,84 @@ artifacts: []
         write_interactive_html(self.change / "prototype" / "ux" / "index.html")
         self.assertEqual(self.codes("G2"), set())
 
+    def test_g2_requires_uikit_when_baseline_ui_kit(self) -> None:
+        self.put_state()
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        write_yaml(self.change / "ux.yaml", valid_ux())
+        path = self.change / "prototype" / "ux" / "index.html"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><title>custom look</title></head>
+<body>
+<button type="button" id="go">切换</button>
+<section id="a">A</section>
+<section id="b" hidden>B</section>
+<script>
+document.getElementById("go").addEventListener("click", function () {
+  document.getElementById("a").hidden = !document.getElementById("a").hidden;
+  document.getElementById("b").hidden = !document.getElementById("b").hidden;
+});
+</script>
+</body></html>
+""",
+            encoding="utf-8",
+        )
+        self.assertIn("UX_PROTO_UIKIT", self.codes("G2"))
+
+    def test_g2_custom_baseline_skips_uikit_and_requires_notes(self) -> None:
+        self.put_state()
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        custom_ux = valid_ux().replace(
+            "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
+            "visual:\n  baseline: custom\n  notes: \"探索独立视觉，不用 Music ui-kit\"\n",
+        )
+        write_yaml(self.change / "ux.yaml", custom_ux)
+        path = self.change / "prototype" / "ux" / "index.html"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><title>free ui</title>
+<style>:root{--accent:#0a7}body{font-family:system-ui}</style>
+</head>
+<body>
+<button type="button" id="go">切换</button>
+<section id="a">A</section>
+<section id="b" hidden>B</section>
+<script>
+document.getElementById("go").addEventListener("click", function () {
+  document.getElementById("a").hidden = !document.getElementById("a").hidden;
+  document.getElementById("b").hidden = !document.getElementById("b").hidden;
+});
+</script>
+</body></html>
+""",
+            encoding="utf-8",
+        )
+        self.assertEqual(self.codes("G2"), set())
+
+    def test_g2_custom_baseline_requires_notes(self) -> None:
+        self.put_state()
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        bad = valid_ux().replace(
+            "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
+            "visual:\n  baseline: custom\n  notes: \"\"\n",
+        )
+        write_yaml(self.change / "ux.yaml", bad)
+        write_interactive_html(self.change / "prototype" / "ux" / "index.html")
+        self.assertIn("UX_VISUAL", self.codes("G2"))
+
+    def test_g2_requires_visual_baseline(self) -> None:
+        self.put_state()
+        write_yaml(self.change / "spec.yaml", valid_spec())
+        no_visual = valid_ux().replace(
+            "visual:\n  baseline: ui-kit\n  notes: \"\"\n  motion: []\n",
+            "",
+        )
+        write_yaml(self.change / "ux.yaml", no_visual)
+        write_interactive_html(self.change / "prototype" / "ux" / "index.html")
+        self.assertIn("UX_VISUAL", self.codes("G2"))
+
     def test_light_path_skips_missing_ux(self) -> None:
         self.put_state(path="light")
         write_yaml(self.change / "spec.yaml", valid_spec())

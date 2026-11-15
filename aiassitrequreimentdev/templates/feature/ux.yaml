@@ -1,11 +1,12 @@
 # 交互视觉合同（G2）· 私人项目默认无专职设计师。
 # 分工：产品 prototype/index.html = 业务可点通；本文件 + prototype/ux/ = 交互规则精修 + 视觉落点。
-# 视觉基线：prototype/shared/ui-kit/（uk-*）。Pencil/Figma 仅探索，必须回流 HTML，链接进 artifacts。
+# 视觉路径须人选：ui-kit（默认，引 uk-*）| custom（自由发挥，须 notes；可读插件 references/visual-explore.md）。
+# Pencil/Figma 仅探索，必须回流 HTML，链接进 artifacts。
 # 无 UI：skip=true 并写 reason。
 skip: false
 reason: ""
 uiKit:
-  baseline: shared/ui-kit
+  baseline: shared/ui-kit   # custom 路径可删本块或忽略
   showcase: prototype/shared/ui-kit/showcase.html
 interactionRules:
   # - id: IR1
@@ -16,9 +17,9 @@ interactionRules:
   #   coversAcceptance: [A1]
   []
 visual:
-  baseline: ui-kit   # ui-kit（默认 Music 亮/暗）| custom（须说明为何不用 kit）
-  theme: dark        # dark | light；须与 html data-uk-theme 一致；关键屏建议两套都可切
-  notes: ""          # 补充说明；规范见 prototype/shared/ui-kit/THEME.md
+  baseline: ui-kit   # 人选后写入：ui-kit | custom（custom 须填 notes）
+  theme: dark        # dark | light；ui-kit 路径须与 html data-uk-theme 一致
+  notes: ""          # custom 必填为何不用 kit；ui-kit 可空
   motion: []         # 可选动效规则
   # - id: M1
   #   trigger: 主操作成功

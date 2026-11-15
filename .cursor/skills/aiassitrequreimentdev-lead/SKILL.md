@@ -57,7 +57,7 @@ python <本插件>/scripts/aad.py init FEAT-002 --requirement REQ-001-move-album
 | 角色 | 技能 | 写出 |
 | --- | --- | --- |
 | 产品经理 | product | 需求级/切片 prd 严格按 `templates/requirement|feature/prd.md`；prototype + `spec.yaml` |
-| 交互视觉 | ux | `ux.yaml`（`IR*` 规则 + 可选视觉/动效）+ `prototype/ux/`；默认 ui-kit |
+| 交互视觉 | ux | `ux.yaml`（`IR*` + 人选 `visual.baseline` ui-kit\|custom）+ `prototype/ux/`；默认 ui-kit |
 | 架构师SE | tech | 人读严格按 `templates/feature/tech.md` 等 + `tech.yaml`；绘图用 `aiassitrequreimentdev-archify` |
 | 开发 | dev | 写集内源码 |
 | 测试 | test | evidence.yaml |
@@ -65,8 +65,31 @@ python <本插件>/scripts/aad.py init FEAT-002 --requirement REQ-001-move-album
 
 ## 推进门禁
 
-`check` → 结构通过再往下；G1 后 `seal`；交付后 `board`。  
-改验收回 G1；范围外新目标回到需求级 PRD/`split.yaml` 或新开 feature。
+`check` → 结构通过再往下；G1 后 `seal`；交付后 `board`。
+
+## 变更控制（必记台账）
+
+产品 / UX / 技术方案 / 任务图变更：**先记账，再回退门禁，再改工件**。规范：`references/change-control.md`。
+
+每条须含：发起人（角色+可选姓名）、原因、级别 C0–C4、影响文件与回退门禁、时间、状态。落盘 `change.yaml`。
+
+```bash
+python <本插件>/scripts/aad.py change <feature目录> record \
+  --initiated-by product --name "…" --reason "…" --level C3 --category product \
+  --summary "…" --artifacts spec.yaml,prd.md --gates G1,G2,G2T \
+  --status approved --confirmed-by human --confirmed-name "…"
+python <本插件>/scripts/aad.py change <feature目录> show
+```
+
+| 级别 | 回退 |
+| --- | --- |
+| C0 实现细节 | 可不回退门禁，建议仍记账 |
+| C1 技术方案 | → G2T，重评 G3 |
+| C2 UX/UI | → G2 |
+| C3 产品合同 | → G1 重 seal；下游重做 |
+| C4 范围/拆分 | 需求级 PRD/`split.yaml` + 人确认 |
+
+C3/C4 打断码：`I_CHANGE_CONFIRM`。
 
 ## Token 用量（各角色阶段）
 

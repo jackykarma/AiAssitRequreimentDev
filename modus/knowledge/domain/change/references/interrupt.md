@@ -13,5 +13,8 @@
 | I_REVIEW_DISPUTE | `review.yaml` 存在 `severity=dispute` 且未 `resolved` |
 | I_TEST_STUCK | 测试失败且超过约定重试仍无法在写集内修复 |
 | I_DEPLOY_CONFIRM | 部署清单已齐，上线前确认环境/窗口/回滚 |
+| I_CHANGE_CONFIRM | 变更级别为 C3/C4（产品合同或范围拆分），或 C1 触及对外契约/迁移；须人确认后再 `approved` 并回退门禁；台账见 `change.yaml` |
 
 `blocking` Review 项：**不**走打断码；主控直接退回 `implement` 派修并复审。
+
+变更台账：`change.yaml` / `references/change-control.md`。

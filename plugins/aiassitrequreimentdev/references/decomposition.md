@@ -39,11 +39,14 @@
 
 ## 过程中变更
 
+**先 `change.yaml` 记账（发起人/原因/影响/时间），再回退门禁。** 见 `change-control.md`（C0–C4）。
+
 | 变更 | 动作 |
 | --- | --- |
 | 尚未拆分 | 继续改需求级 PRD |
-| 改某 feature 的验收 | 回该 feature 的 G1，重新 seal |
-| 应多拆或应合并 | 更新 `split.yaml`；多拆则新开 feature；合并须人确认 |
-| 范围外新目标 | 先改需求级 PRD，再并入现 feature 或新开 feature（可挂同一 requirementId） |
+| 改验收 / 产品合同 | **C3** → 回 G1 重 seal |
+| UX/UI（不改 A*） | **C2** → 回 G2 |
+| 技术方案合同 | **C1** → 回 G2T，重评 G3 |
+| 应多拆或应合并 / 范围外 | **C4** → `split.yaml` / 需求级 PRD；人确认 |
 
 规格变化则门禁回退。feature 变大时回到需求级 PRD 与 `split.yaml` 重决策，不要在同一 feature 上无限追加 `A*`。

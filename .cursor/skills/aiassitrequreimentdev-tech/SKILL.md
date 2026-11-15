@@ -91,6 +91,10 @@ node .agents/skills/archify/bin/archify.mjs finalize <type> <candidate.json> <di
 
 `summary`、`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams`、`nfr`、变更/选型/风险、数据/埋点、`acceptance` 全覆盖 `A*`。
 
+## 变更（G2T 通过后）
+
+改 `tech.yaml` / `tech.md` 合同（接口、KD、约束等）：请主控记 **C1**（发起人、原因、影响、时间），回退 G2T 并重评 G3。牵动 A* 则升 **C3**。见 `references/change-control.md`。
+
 ```bash
 python <本插件>/scripts/aad.py check <feature 目录> --gate G2T
 ```

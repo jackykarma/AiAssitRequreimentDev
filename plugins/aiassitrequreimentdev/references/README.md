@@ -9,5 +9,6 @@
 | [gates.md](gates.md) | 门禁表（含原型 G1/G2） |
 | [artifacts.md](artifacts.md) | `features/<id>/` 产物表 |
 | [decomposition.md](decomposition.md) | 需求 ≠ feature；`tasks.yaml` 在 G2T 之后 |
+| [visual-explore.md](visual-explore.md) | 仅 `visual.baseline: custom`：自由发挥视觉检查单 |
 
 CLI 优先 `python <本插件>/scripts/aad.py …`（或 PATH 上的 `aad`），等价 `python -m aiassitrequreimentdev`。不要手改 `gates.*.accepted`。

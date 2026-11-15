@@ -97,6 +97,10 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 3. 大需求：需求级 PRD → split → 各切片合同。小需求：直接三件套。
 4. 源码与知识冲突时以源码为准。
 
+## 变更（G1 冻结后）
+
+改 `spec.yaml` / PRD / 产品原型前：**先请主控记 C3 到 `change.yaml`**（发起人、原因、影响、时间），人确认后再退回 G1 并重 seal。不得私自改已冻结合同。见 `references/change-control.md`。
+
 ## 结束（feature 级 G1）
 
 ```bash

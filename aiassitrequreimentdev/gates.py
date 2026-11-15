@@ -26,6 +26,7 @@
  ** limao2@Apps.Gallery 2026/11/15 1.11 specify 模板章节标题强制对齐
  ** limao2@Apps.Gallery 2026/11/15 1.12 product SSOT；G1 的 S* 改为可选
  ** limao2@Apps.Gallery 2026/11/15 1.13 G2 interactionRules + ui-kit visual baseline
+ ** limao2@Apps.Gallery 2026/11/15 1.14 G2 visual.baseline 人选；custom 免强制 ui-kit
  *********************************************************************************/
 """
 
@@ -194,6 +195,17 @@ def init_feature(root: Path, feature_id: str, *, requirement_id: str | None = No
         yaml.safe_dump(spec, allow_unicode=True, sort_keys=False),
         encoding="utf-8",
     )
+    change_path = destination / "change.yaml"
+    if change_path.is_file():
+        change_doc = yaml.safe_load(change_path.read_text(encoding="utf-8")) or {}
+        if isinstance(change_doc, dict):
+            change_doc["featureId"] = feature_id
+            if not isinstance(change_doc.get("changes"), list):
+                change_doc["changes"] = []
+            change_path.write_text(
+                yaml.safe_dump(change_doc, allow_unicode=True, sort_keys=False),
+                encoding="utf-8",
+            )
     if requirement_id:
         requirement_id = validate_requirement_id(requirement_id)
         state_path = destination / "state.json"
@@ -225,6 +237,7 @@ def evaluate(feature_dir: Path) -> Report:
     state = _read_state(feature_dir, violations)
     if state is None:
         return Report(violations)
+    _check_change_log(feature_dir, violations)
     spec = _read_yaml(feature_dir / "spec.yaml", "G1", "SPEC_MISSING", "缺少 spec.yaml", violations)
     _check_g0(state, spec, violations)
     if spec is not None:
@@ -275,6 +288,37 @@ def _read_yaml(
         violations.append(Violation(gate, code, f"{path.name} 必须是映射"))
         return None
     return loaded
+
+
+def _check_change_log(feature_dir: Path, violations: list[Violation]) -> None:
+    """有 change.yaml 时校验台账条目形状；缺失不挡（旧 feature），init 会带模板。"""
+    path = feature_dir / "change.yaml"
+    if not path.is_file():
+        return
+    try:
+        from aiassitrequreimentdev.change_log import validate_change_entry
+
+        doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except Exception as exc:  # noqa: BLE001
+        violations.append(
+            Violation("G0", "CHANGE_LOG", f"change.yaml 无法解析: {exc}")
+        )
+        return
+    if not isinstance(doc, dict):
+        violations.append(Violation("G0", "CHANGE_LOG", "change.yaml 必须是映射"))
+        return
+    changes = doc.get("changes")
+    if changes is None:
+        return
+    if not isinstance(changes, list):
+        violations.append(Violation("G0", "CHANGE_LOG", "changes 必须是列表"))
+        return
+    for item in changes:
+        if not isinstance(item, dict):
+            violations.append(Violation("G0", "CHANGE_LOG", "变更条目必须是映射"))
+            continue
+        for message in validate_change_entry(item):
+            violations.append(Violation("G0", "CHANGE_LOG", message))
 
 
 def _check_g0(state: dict, spec: dict | None, violations: list[Violation]) -> None:
@@ -659,15 +703,20 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
             )
         )
         return
-    proto_text = entry.read_text(encoding="utf-8", errors="ignore").lower()
-    if "ui-kit" not in proto_text and "uk-" not in proto_text:
-        violations.append(
-            Violation(
-                "G2",
-                "UX_PROTO_UIKIT",
-                "UX 原型须引用 shared/ui-kit（tokens/components/phone 或 uk-* 类名）",
+    visual = ux.get("visual") if isinstance(ux.get("visual"), dict) else {}
+    baseline = visual.get("baseline")
+    # custom：人选自由发挥，不强制 ui-kit；ui-kit / 未写 baseline 仍须引用 kit
+    if baseline != "custom":
+        proto_text = entry.read_text(encoding="utf-8", errors="ignore").lower()
+        if "ui-kit" not in proto_text and "uk-" not in proto_text:
+            violations.append(
+                Violation(
+                    "G2",
+                    "UX_PROTO_UIKIT",
+                    "visual.baseline=ui-kit（默认）时 UX 原型须引用 shared/ui-kit"
+                    "（tokens/components/phone 或 uk-* 类名）；自由发挥请设 baseline=custom 并写 notes",
+                )
             )
-        )
 
 
 def _check_ux_interaction_rules(ux: dict, violations: list[Violation]) -> None:
@@ -706,14 +755,25 @@ def _check_ux_interaction_rules(ux: dict, violations: list[Violation]) -> None:
 def _check_ux_visual(ux: dict, violations: list[Violation]) -> None:
     visual = ux.get("visual")
     if visual is None:
+        violations.append(
+            Violation(
+                "G2",
+                "UX_VISUAL",
+                "有 UI 时须填写 visual.baseline（ui-kit|custom；人选后写入）",
+            )
+        )
         return
     if not isinstance(visual, dict):
-        violations.append(Violation("G2", "UX_VISUAL", "visual 必须是映射（可省略整块）"))
+        violations.append(Violation("G2", "UX_VISUAL", "visual 必须是映射"))
         return
     baseline = visual.get("baseline")
-    if baseline is not None and baseline not in ("ui-kit", "custom"):
+    if baseline not in ("ui-kit", "custom"):
         violations.append(
-            Violation("G2", "UX_VISUAL", "visual.baseline 须为 ui-kit 或 custom")
+            Violation(
+                "G2",
+                "UX_VISUAL",
+                "visual.baseline 须为 ui-kit 或 custom（人选后写入，不可省略）",
+            )
         )
     if baseline == "custom":
         notes = visual.get("notes")

@@ -26,6 +26,14 @@ from pathlib import Path
 from urllib.parse import quote
 
 from aiassitrequreimentdev.board import adopt_role, refresh_board, set_path
+from aiassitrequreimentdev.change_log import (
+    CHANGE_CATEGORIES,
+    CHANGE_LEVELS,
+    CHANGE_ROLES,
+    CHANGE_STATUSES,
+    format_change_report,
+    record_change,
+)
 from aiassitrequreimentdev.gates import (
     GATES,
     evaluate,
@@ -131,6 +139,49 @@ def main(argv: list[str] | None = None) -> int:
     usage_show = usage_sub.add_parser("show", help="打印用量汇总")
     usage_show.add_argument("feature_dir")
     usage_show.add_argument("--json", action="store_true", help="输出 JSON")
+
+    change_parser = sub.add_parser("change", help="记录或查看需求/设计变更台账")
+    change_sub = change_parser.add_subparsers(dest="change_command", required=True)
+    change_record = change_sub.add_parser("record", help="追加一条变更（先记账再回退门禁）")
+    change_record.add_argument("feature_dir")
+    change_record.add_argument(
+        "--initiated-by",
+        required=True,
+        help="发起角色: " + "|".join(CHANGE_ROLES),
+    )
+    change_record.add_argument("--name", default="", help="发起人姓名/账号")
+    change_record.add_argument("--reason", required=True, help="变更原因")
+    change_record.add_argument("--level", required=True, choices=CHANGE_LEVELS, help="C0..C4")
+    change_record.add_argument(
+        "--category",
+        required=True,
+        choices=CHANGE_CATEGORIES,
+        help="product|ux|tech|tasks|split|other",
+    )
+    change_record.add_argument("--summary", required=True, help="一句话摘要")
+    change_record.add_argument(
+        "--artifacts",
+        default="",
+        help="影响文件，逗号分隔，如 spec.yaml,prd.md",
+    )
+    change_record.add_argument(
+        "--gates",
+        default="",
+        help="须回退门禁，逗号分隔，如 G1,G2,G2T",
+    )
+    change_record.add_argument("--acceptance", default="", help="相关 A*，逗号分隔")
+    change_record.add_argument("--features", default="", help="相关 feature id，逗号分隔")
+    change_record.add_argument(
+        "--status",
+        default="proposed",
+        choices=CHANGE_STATUSES,
+        help="proposed|approved|applied",
+    )
+    change_record.add_argument("--confirmed-by", default="", help="确认人角色（C3/C4 建议）")
+    change_record.add_argument("--confirmed-name", default="", help="确认人姓名")
+    change_show = change_sub.add_parser("show", help="打印变更台账")
+    change_show.add_argument("feature_dir")
+    change_show.add_argument("--json", action="store_true", help="输出 JSON")
 
     args = parser.parse_args(argv)
 
@@ -314,6 +365,46 @@ def main(argv: list[str] | None = None) -> int:
                 )
             else:
                 print(format_usage_report(feature_dir))
+            return 0
+        return 2
+
+    if args.command == "change":
+        feature_dir = Path(args.feature_dir)
+        if args.change_command == "record":
+            def _split(raw: str) -> list[str]:
+                return [part.strip() for part in raw.split(",") if part.strip()]
+
+            try:
+                entry = record_change(
+                    feature_dir,
+                    initiated_by=args.initiated_by,
+                    name=args.name,
+                    reason=args.reason,
+                    level=args.level,
+                    category=args.category,
+                    summary=args.summary,
+                    artifacts=_split(args.artifacts),
+                    gates_rollback=_split(args.gates),
+                    acceptance_ids=_split(args.acceptance),
+                    features=_split(args.features),
+                    status=args.status,
+                    confirmed_by_role=args.confirmed_by,
+                    confirmed_by_name=args.confirmed_name,
+                )
+            except ValueError as exc:
+                print(str(exc), file=sys.stderr)
+                return 2
+            refresh_board(feature_dir)
+            print(json.dumps(entry, ensure_ascii=False, indent=2))
+            print("下一步：按 impacts.gatesRollback 退回门禁，派角色改工件，完成后将 status 改为 applied。")
+            return 0
+        if args.change_command == "show":
+            if args.json:
+                from aiassitrequreimentdev.change_log import load_change_doc
+
+                print(json.dumps(load_change_doc(feature_dir), ensure_ascii=False, indent=2))
+            else:
+                print(format_change_report(feature_dir))
             return 0
         return 2
 

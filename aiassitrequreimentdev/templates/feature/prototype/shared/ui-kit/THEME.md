@@ -164,7 +164,6 @@
 
 ## 9. 产品 / UX 约定
 
-- `visual.baseline: ui-kit`；`visual.theme: dark|light`
-- 关键屏建议可切换亮暗，或各截一帧
-- 禁止页面内另起色板；例外 `custom` + notes
-- 引用：`tokens.css` + `materials.css` + `components.css` + `phone.css`
+- 有 UI 时须人选并写入 `visual.baseline: ui-kit|custom`
+- **ui-kit（默认）**：`visual.theme: dark|light`；禁止页面内另起色板；引用 `tokens.css` + `materials.css` + `components.css` + `phone.css`；关键屏建议可切换亮暗
+- **custom**：不强制本 kit；`notes` 说明原因；可读插件 `references/visual-explore.md`

@@ -82,11 +82,15 @@ feature 已创建且该 feature 的 spec 冻结后，主控才写 `tasks.yaml`�
 
 ## 过程中变更
 
+**先写入 `change.yaml`（发起人/原因/影响/时间），再回退门禁。** 细则：`plugins/.../references/change-control.md`（C0–C4）。
+
 | 变更类型 | 动作 |
 | --- | --- |
-| 需求级 PRD 未拆分 | 继续改 `requirements/.../prd.md` |
-| 已拆分，改某 feature 验收 | 回该 feature 的 G1 重 seal |
-| 发现应多拆 / 应合并 | 更新 `split.yaml`；多拆则新开 feature；合并则迁移验收并废弃空 feature（人确认） |
-| 范围外新目标 | 更新需求级 PRD，再决定并入现 feature 或新开 feature |
+| 需求级 PRD 未拆分 | 继续改 `requirements/.../prd.md`（建议记 C4/split 台账） |
+| 已拆分，改某 feature 验收 | 记 **C3** → 回 G1 重 seal |
+| UX/交互规则变更（不改 A*） | 记 **C2** → 回 G2 |
+| 技术方案合同变更 | 记 **C1** → 回 G2T，重评 G3 |
+| 发现应多拆 / 应合并 | 记 **C4** → 更新 `split.yaml`；人确认 |
+| 范围外新目标 | 记 **C4** → 更新需求级 PRD，并入或新开 feature |
 
 规格变 → 门禁回退。feature 变大 → 回到需求级 PRD 与 `split.yaml` 重决策，不要无限追加 `A*`。

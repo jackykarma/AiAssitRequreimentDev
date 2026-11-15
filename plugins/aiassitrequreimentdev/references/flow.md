@@ -22,6 +22,6 @@
 
 交互视觉不是启动五角色之一，需要 UI 精修时加派。轻量路径可无 ux 文件，`affected` 恰好一项，且只能一个任务。
 
-主控代跑 CLI，优先 `python <本插件>/scripts/aad.py`（或 PATH 上的 `aad`）：`start` / `adopt` / `path` / `init` / `init-req` / `check` / `seal` / `board` / `usage`。与 `python -m aiassitrequreimentdev` 语义相同。
+主控代跑 CLI，优先 `python <本插件>/scripts/aad.py`（或 PATH 上的 `aad`）：`start` / `adopt` / `path` / `init` / `init-req` / `check` / `seal` / `board` / `usage` / `change`。与 `python -m aiassitrequreimentdev` 语义相同。变更控制见 `change-control.md`。
 
 改某 feature 验收：回该 feature 的 G1 重 seal。范围外新目标：回到需求级 PRD 与 `split.yaml`，或新开 feature。

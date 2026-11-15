@@ -52,7 +52,7 @@ ROLES: tuple[Role, ...] = (
         reads=("BOARD.md", "prd.md", "prototype/", "spec.yaml", "modus/knowledge/"),
         stage_hint="ux",
         gate_hint="G2",
-        note="交互规则 + ui-kit 视觉落点；Pencil 仅探索须回流 HTML。无 UI 可 skip。",
+        note="交互规则 + 视觉路径人选（ui-kit|custom）；Pencil 仅探索须回流 HTML。无 UI 可 skip。",
     ),
     Role(
         id="architect",

@@ -12,6 +12,7 @@
 | `ux.yaml` | 交互视觉 | 模板 |
 | `tech.yaml` | 技术方案 | 模板 |
 | `tasks.yaml` | 任务图 | 模板 |
+| `change.yaml` | 变更台账 | 模板 |
 | `review.yaml` | 代码评审 | 模板 |
 | `evidence.yaml` | 测试证据 | 模板 |
 | `deploy.yaml` | 部署清单 | 模板 |

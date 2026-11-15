@@ -1,0 +1,24 @@
+# 变更台账（全流程必记）。规范见插件 references/change-control.md
+# 每次产品/UX/技术/任务图变更：先 append 一条，再回退门禁并改工件。
+# 主控代跑：python -m aiassitrequreimentdev change <feature目录> record ...
+featureId: FEAT-000
+changes: []
+# - id: CHG-001
+#   at: "2026-11-15T20:54:00+08:00"
+#   initiatedBy:
+#     role: product          # product|ux|architect|developer|tester|deployer|lead|human
+#     name: ""               # 人名或账号，可空
+#   reason: "验收口径与业务确认不一致"
+#   level: C3                # C0|C1|C2|C3|C4
+#   category: product        # product|ux|tech|tasks|split|other
+#   summary: "A1 成功态改为必须写入目标图集"
+#   impacts:
+#     artifacts: [spec.yaml, prd.md, prototype/index.html]
+#     gatesRollback: [G1, G2, G2T, G3]
+#     acceptanceIds: [A1]
+#     features: []           # C4 跨 feature 时填
+#   confirmedBy:
+#     role: human
+#     name: ""
+#     at: "2026-11-15T20:55:00+08:00"
+#   status: applied          # proposed|approved|applied

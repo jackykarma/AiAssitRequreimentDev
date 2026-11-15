@@ -1,0 +1,158 @@
+/*********************************************************************************
+ ** Copyright (C), 2019-2029, OPLUS Mobile Comm Corp., Ltd
+ ** All rights reserved.
+ **
+ ** File: - materials.css
+ ** Description: HIG-like materials (blur/vibrancy approx) + ambient + elevation
+ ** Version: 1.0
+ ** Date: 2026/11/15
+ ** Author: limao2@Apps.Gallery
+ **
+ ** ------------------------------- Revision History: ----------------------------
+ ** <author> <date> <version> <desc>
+ ** ------------------------------------------------------------------------------
+ ** limao2@Apps.Gallery 2026/11/15 1.0 INIT Music materials
+ *********************************************************************************/
+
+.uk-material-ultraThin,
+.uk-material-thin,
+.uk-material-regular,
+.uk-material-thick {
+  -webkit-backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-regular));
+  backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-regular));
+}
+
+.uk-material-ultraThin {
+  background: var(--uk-mat-ultra-tint);
+  -webkit-backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-ultra));
+  backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-ultra));
+}
+
+.uk-material-thin {
+  background: var(--uk-mat-thin-tint);
+  -webkit-backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-thin));
+  backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-thin));
+}
+
+.uk-material-regular {
+  background: var(--uk-mat-regular-tint);
+  -webkit-backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-regular));
+  backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-regular));
+}
+
+.uk-material-thick {
+  background: var(--uk-mat-thick-tint);
+  -webkit-backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-thick));
+  backdrop-filter: saturate(var(--uk-saturate-material)) blur(var(--uk-blur-thick));
+}
+
+.uk-scrim {
+  background: var(--uk-scrim);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+/**
+ * Now Playing / 全屏氛围：放大模糊「封面」+ 压暗。
+ * 用法：.uk-ambient 内放 img.uk-ambient__img，或设 --uk-ambient-image
+ */
+.uk-ambient {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background: var(--uk-bg);
+}
+
+.uk-ambient__img,
+.uk-ambient > img {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 140%;
+  height: 140%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  filter: blur(48px) saturate(1.35) brightness(0.85);
+  opacity: 0.95;
+}
+
+.uk-ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.45) 55%,
+    var(--uk-bg) 100%
+  );
+}
+
+[data-uk-theme="light"] .uk-ambient::after,
+.uk-theme-light .uk-ambient::after {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    var(--uk-bg) 100%
+  );
+}
+
+.uk-elev-1 { box-shadow: var(--uk-shadow-1); }
+.uk-elev-2 { box-shadow: var(--uk-shadow-2); }
+.uk-elev-3 { box-shadow: var(--uk-shadow-3); }
+.uk-elev-4 { box-shadow: var(--uk-shadow-4); }
+.uk-elev-art { box-shadow: var(--uk-shadow-4); }
+
+.uk-type-large-title {
+  font-size: var(--uk-fs-display);
+  font-weight: var(--uk-fw-bold);
+  letter-spacing: 0.37px;
+  line-height: 1.1;
+  color: var(--uk-ink);
+}
+
+.uk-type-title2 {
+  font-size: var(--uk-fs-xl);
+  font-weight: var(--uk-fw-bold);
+  letter-spacing: -0.26px;
+  line-height: 1.2;
+  color: var(--uk-ink);
+}
+
+.uk-type-title3 {
+  font-size: var(--uk-fs-title3);
+  font-weight: var(--uk-fw-semibold);
+  letter-spacing: -0.15px;
+  color: var(--uk-ink);
+}
+
+.uk-type-headline {
+  font-size: var(--uk-fs-lg);
+  font-weight: var(--uk-fw-semibold);
+  color: var(--uk-ink);
+}
+
+.uk-type-body {
+  font-size: var(--uk-fs-lg);
+  font-weight: var(--uk-fw-regular);
+  color: var(--uk-ink);
+}
+
+.uk-type-subhead {
+  font-size: var(--uk-fs-md);
+  font-weight: var(--uk-fw-regular);
+  color: var(--uk-ink-secondary);
+}
+
+.uk-type-footnote {
+  font-size: var(--uk-fs-sm);
+  color: var(--uk-ink-secondary);
+}
+
+.uk-type-caption {
+  font-size: var(--uk-fs-xs);
+  color: var(--uk-muted);
+}

@@ -1,54 +1,170 @@
-# UI Kit 主题规范 · Apple Music–inspired
+# UI Kit 主题规范 · Apple Music–inspired（完善版）
 
-两套**对等标准**：`light` 与 `dark`。结构令牌（字号/间距/圆角/动效）共用；色彩令牌分主题。
+参考来源（归纳用于 HTML 原型，非官方 SDK 还原）：
 
-强调色（共用）：`#FF2D55`（`--uk-accent`），主按钮字色 `--uk-on-accent: #fff`。
+- [Apple HIG · Materials](https://developer.apple.com/design/human-interface-guidelines/materials)（ultraThin / thin / regular / thick + vibrancy）
+- 业界拆解：[Apple Music iOS Design System Inspiration](https://www.uiskillbook.com/design-md/apple-music.md)
+- Now Playing 专辑色氛围 / blur 实践（Mesh 渐变 + 高斯模糊）
 
-## 切换方式
+本 kit 用 CSS 近似：**亮/暗两套对等标准** + **材质模糊** + **媒体组件**。真机 Liquid Glass / Metal shader 无法 1:1，以观感与可验收为准。
+
+---
+
+## 1. 气质原则
+
+| 原则 | 做法 |
+| --- | --- |
+| 封面为王 | 大图、方封面、Now Playing 氛围来自专辑色 |
+| 真黑 / 真白画布 | Dark `#000`；Light 主画布 `#FFF`（分组区 `#F2F2F7`） |
+| 品牌红点缀 | `#FA2D48`（播放、进度、喜欢、选中） |
+| 材质透叠 | 底栏 / 迷你播放器 / 顶栏用 material，不是实色一块 |
+| 暗色靠色阶抬升 | Dark **少阴影**；Light 卡片可轻阴影 |
+| SF 体系字体 | `-apple-system` / SF Pro；大标题 Display 气质 |
+
+---
+
+## 2. 主题切换
 
 ```html
-<html data-uk-theme="dark">   <!-- 或 light -->
+<html data-uk-theme="dark">  <!-- 或 light -->
 ```
 
-也可在容器上加 `.uk-theme-dark` / `.uk-theme-light`。  
-未写 `data-uk-theme`：默认 **dark**；若系统 `prefers-color-scheme: light` 则用 light。
+未指定：默认 dark；`prefers-color-scheme: light` 时跟系统。  
+橱窗 `showcase.html` 可切换。原型建议显式写死。
 
-橱窗：`showcase.html` 顶部可切换。原型页建议显式写死主题，避免评审时随系统跳变。
+---
 
-## Light 标准
+## 3. 色彩标准
 
-| 令牌 | 值 | 用途 |
-| --- | --- | --- |
-| `--uk-bg` | `#F2F2F7` | 页面底 |
-| `--uk-surface` | `#FFFFFF` | 顶栏/卡片/列表底 |
-| `--uk-surface-muted` | `#F9F9FB` | 次级面、分段轨 |
-| `--uk-ink` | `#1C1C1E` | 主文字 |
-| `--uk-ink-secondary` | `#3A3A3C` | 次文字 |
-| `--uk-muted` | `#8E8E93` | 辅助/未选中 |
-| `--uk-line` | `rgba(60,60,67,.12)` | 分隔 |
-| `--uk-accent` | `#FF2D55` | 强调/选中/主按钮 |
-| `--uk-dock-bg` | 白半透明 | 底栏 |
-
-气质：浅色系统列表、大标题、品红点缀，少描边靠层次。
-
-## Dark 标准
+### 共用
 
 | 令牌 | 值 | 用途 |
 | --- | --- | --- |
-| `--uk-bg` | `#000000` | 页面底（Music 近黑） |
-| `--uk-surface` | `#1C1C1E` | 顶栏/卡片 |
-| `--uk-surface-muted` | `#2C2C2E` | 次级面 |
-| `--uk-ink` | `#F5F5F7` | 主文字 |
-| `--uk-ink-secondary` | `#D1D1D6` | 次文字 |
-| `--uk-muted` | `#8E8E93` | 辅助 |
-| `--uk-line` | `rgba(84,84,88,.65)` | 分隔 |
-| `--uk-accent` | `#FF2D55` | 同 light |
-| `--uk-dock-bg` | 深色半透明 | 底栏 |
+| `--uk-accent` | `#FA2D48` | 播放、进度、喜欢、Tab 选中 |
+| `--uk-accent-press` | `#D4213B` | 按下 |
+| `--uk-on-accent` | `#FFFFFF` | 红底上的字/图标 |
+| `--uk-link` | `#007AFF` | 系统蓝链接 |
+| `--uk-atmos` | `#D4A857` | Atmos 金标 |
+| `--uk-radius-art` | `12px` | 专辑/歌单封面圆角（Music 签名） |
+| `--uk-radius-art-sm` | `8px` | 列表缩略图 |
 
-气质：近黑底、大白字、品红强调；可叠专辑色氛围（页面自行加背景模糊，不进公共令牌）。
+### Light
 
-## 产品 / UX 约定
+| 令牌 | 值 |
+| --- | --- |
+| `--uk-bg` | `#FFFFFF` 主画布 |
+| `--uk-bg-grouped` | `#F2F2F7` 分组列表底 |
+| `--uk-surface` | `#FFFFFF` |
+| `--uk-surface-muted` | `#F2F2F7` |
+| `--uk-surface-elevated` | `#E5E5EA` |
+| `--uk-ink` | `#000000` |
+| `--uk-ink-secondary` | `rgba(60,60,67,.60)` |
+| `--uk-muted` | `rgba(60,60,67,.30)` |
+| `--uk-line` | `rgba(60,60,67,.29)` |
 
-- 默认视觉基线仍是本 ui-kit；`ux.yaml` → `visual.baseline: ui-kit`。
-- 交付原型须可切换或标明主题；关键验收屏建议 **亮暗各一帧**（或工具栏一键切）。
-- 禁止页面内另起色板；例外用 `visual.baseline: custom` + notes。
+### Dark
+
+| 令牌 | 值 |
+| --- | --- |
+| `--uk-bg` | `#000000` |
+| `--uk-bg-grouped` | `#000000` |
+| `--uk-surface` | `#1C1C1E` |
+| `--uk-surface-muted` | `#2C2C2E` |
+| `--uk-surface-elevated` | `#3A3A3C` |
+| `--uk-ink` | `#FFFFFF` |
+| `--uk-ink-secondary` | `rgba(235,235,245,.60)` |
+| `--uk-muted` | `rgba(235,235,245,.30)` |
+| `--uk-line` | `#38383A` |
+
+---
+
+## 4. 材质与模糊（HIG Materials 近似）
+
+| 类名 | 对应 | 用途 | CSS 近似 |
+| --- | --- | --- | --- |
+| `.uk-material-ultraThin` | ultraThin | 轻遮罩、保留强背景 | blur ~10px + 低不透明 |
+| `.uk-material-thin` | thin | 轻浮层 | blur ~40–60px |
+| `.uk-material-regular` | regular（默认） | 底栏、迷你播放器、多数浮层 | blur ~20px + 较高 tint |
+| `.uk-material-thick` | thick | 强对比面板、告警感 | blur ~40–60px + 更不透明 |
+
+规则：
+
+- 材质上的字用 `--uk-ink` / `--uk-ink-secondary`（模拟 vibrancy 层级），勿手写灰死色。
+- Dark 迷你播放器 / Dock：`.uk-material-regular`。
+- 全屏遮罩：`.uk-scrim`（约 40% 黑）。
+- Now Playing 氛围：`.uk-ambient`（放大模糊封面 + 渐变压暗），不是 solid 色块。
+
+---
+
+## 5. 层级 / 阴影
+
+| 级别 | Light | Dark |
+| --- | --- | --- |
+| 0 列表行 | 无影 | 无影 |
+| 1 小卡片/封面 | `0 2px 8px rgba(0,0,0,.05)` | 无影，靠 surface 台阶 |
+| 2 标准封面 | `0 4px 16px rgba(0,0,0,.08)` | 无影 |
+| 3 Hero / 大封面 | `0 8px 24px rgba(0,0,0,.10)` | 可选极弱 |
+| 4 Now Playing 主封面 | `0 20px 40px rgba(0,0,0,.30)` | 同左（封面浮空） |
+| Sheet | `0 -12px 32px rgba(0,0,0,.25)` | 更深 scrim |
+
+工具类：`.uk-elev-1` … `.uk-elev-4`、`.uk-elev-art`。
+
+---
+
+## 6. 字体阶梯（SF Pro 近似）
+
+| 角色 | 大小 | 字重 | 类名 |
+| --- | --- | --- | --- |
+| Large Title | 34 | 700 | `.uk-type-large-title` |
+| Title 2 | 22 | 700 | `.uk-type-title2` |
+| Title 3 / 区头 | 20 | 600 | `.uk-type-title3` |
+| Headline（曲名列表） | 17 | 600 | `.uk-type-headline` |
+| Body | 17 | 400 | `.uk-type-body` |
+| Subhead（艺人） | 15 | 400 | `.uk-type-subhead` |
+| Footnote | 13 | 400 | `.uk-type-footnote` |
+| Caption | 11–12 | 400 | `.uk-type-caption` |
+| Tab | 10 | 500 | Dock 标签 |
+
+---
+
+## 7. 组件清单（须用类名，勿另起皮）
+
+| 组件 | 类名 | 要点 |
+| --- | --- | --- |
+| 顶栏 | `.uk-topbar` / `.uk-topbar--material` | 可毛玻璃 |
+| 大标题页 | `.uk-large-title` | 34pt |
+| 列表行 | `.uk-cell` / `.uk-track` | 曲目行含封面 |
+| 封面 | `.uk-art` / `.uk-art--sm` / `.uk-art--hero` | 12px / 8px 圆角 |
+| 横滑货架 | `.uk-shelf` | 封面+双行字 |
+| Hero 卡 | `.uk-hero` | 大图+文案压底 |
+| 圆播放钮 | `.uk-play` | 44 / 64 圆形红底 |
+| 胶囊 CTA | `.uk-btn--primary` | 圆角约 8–12，非一味 pill |
+| 进度条 | `.uk-scrubber` | 红填充 |
+| 迷你播放器 | `.uk-mini-player` | material + 封面 + 播放 |
+| 底栏 | `.uk-dock` + material | 选中用 accent |
+| 半屏 | `.uk-sheet` | 圆角顶 + grab |
+| 氛围底 | `.uk-ambient` | 模糊封面背景 |
+| 徽章 | `.uk-badge` / `--atmos` / `--new` | Atmos 金 / NEW |
+
+---
+
+## 8. 动效（原型级）
+
+| 令牌/类 | 值 | 用途 |
+| --- | --- | --- |
+| `--uk-duration` | 280ms | 默认 |
+| `--uk-duration-fast` | 180ms | 按压缩放 |
+| `--uk-ease` | `cubic-bezier(0.22,1,0.36,1)` | 标准 |
+| 按下 | `scale(0.96–0.98)` | 封面/按钮 |
+| Toast | 上浮淡入 | `.uk-toast.is-show` |
+
+复杂 Mesh 专辑渐变：原型用 `.uk-ambient` 静态模糊即可；真机 Metal 不在本 kit 范围。
+
+---
+
+## 9. 产品 / UX 约定
+
+- `visual.baseline: ui-kit`；`visual.theme: dark|light`
+- 关键屏建议可切换亮暗，或各截一帧
+- 禁止页面内另起色板；例外 `custom` + notes
+- 引用：`tokens.css` + `materials.css` + `components.css` + `phone.css`

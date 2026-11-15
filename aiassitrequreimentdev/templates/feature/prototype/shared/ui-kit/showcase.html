@@ -3,214 +3,225 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>UI Kit 橱窗 · Music light/dark</title>
+  <title>UI Kit 橱窗 · Music materials</title>
   <link rel="stylesheet" href="./tokens.css" />
+  <link rel="stylesheet" href="./materials.css" />
   <link rel="stylesheet" href="./components.css" />
   <link rel="stylesheet" href="./phone.css" />
   <style>
     .theme-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      padding: 0 20px 8px;
-      max-width: 1200px;
-      margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 0 20px 8px; max-width: 1280px; margin: 0 auto;
     }
     .theme-bar button {
-      border: 1px solid var(--uk-line);
-      background: var(--uk-surface);
-      color: var(--uk-ink);
-      border-radius: 999px;
-      padding: 8px 14px;
-      font: inherit;
-      font-size: 13px;
-      cursor: pointer;
+      border: 1px solid var(--uk-line); background: var(--uk-surface);
+      color: var(--uk-ink); border-radius: 999px; padding: 8px 14px;
+      font: inherit; font-size: 13px; cursor: pointer;
     }
     .theme-bar button[aria-pressed="true"] {
-      background: var(--uk-accent);
-      color: var(--uk-on-accent);
-      border-color: transparent;
+      background: var(--uk-accent); color: var(--uk-on-accent); border-color: transparent;
     }
-    .theme-bar .chip {
-      font-size: 12px;
-      color: var(--uk-muted);
-    }
+    .theme-bar .chip { font-size: 12px; color: var(--uk-muted); }
     .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 28px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 20px 48px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px; max-width: 1280px; margin: 0 auto; padding: 16px 20px 48px;
     }
     .gallery-item h2 {
-      margin: 0 0 12px;
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--uk-ink-secondary);
+      margin: 0 0 12px; font-size: 15px; font-weight: 600; color: var(--uk-ink-secondary);
     }
     .gallery .uk-phone { margin: 0 auto; }
-    .swatch-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px 8px;
+    .mat-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      max-width: 1280px; margin: 0 auto 12px; padding: 0 20px;
     }
-    .swatch {
-      width: 72px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--uk-line);
-      background: var(--uk-surface);
-      font-size: 10px;
-      color: var(--uk-muted);
-      text-align: center;
+    .mat-swatch {
+      height: 72px; border-radius: 14px; display: grid; place-items: end start;
+      padding: 8px; font-size: 11px; color: var(--uk-ink); overflow: hidden;
+      border: 1px solid var(--uk-line); position: relative;
     }
-    .swatch i {
-      display: block;
-      height: 36px;
+    .mat-swatch span { position: relative; z-index: 1; font-weight: 600; }
+    .mat-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, #fa2d48, transparent 50%),
+        linear-gradient(225deg, #007aff, #30d158 70%);
+      opacity: 0.85;
     }
-    .swatch span { display: block; padding: 4px; }
   </style>
 </head>
 <body class="uk-studio">
   <header class="uk-studio-header">
     <h1>UI Kit · Apple Music–inspired</h1>
     <p class="uk-hint">
-      亮/暗两套标准见 <code>THEME.md</code>。产品与 UX 用 <code>uk-*</code>；切换
-      <code>data-uk-theme</code>。
+      亮/暗 + 材质模糊 + 媒体组件。规范 <code>THEME.md</code>。CSS：
+      <code>tokens</code> / <code>materials</code> / <code>components</code> / <code>phone</code>。
     </p>
   </header>
 
   <div class="theme-bar" role="group" aria-label="主题">
     <button type="button" data-theme="dark" aria-pressed="true">Dark</button>
     <button type="button" data-theme="light" aria-pressed="false">Light</button>
-    <span class="chip" id="theme-chip">当前：dark</span>
+    <span class="chip" id="theme-chip">当前：dark · accent #FA2D48</span>
   </div>
 
-  <div class="swatch-row" aria-label="色板预览">
-    <div class="swatch"><i style="background:var(--uk-bg)"></i><span>bg</span></div>
-    <div class="swatch"><i style="background:var(--uk-surface)"></i><span>surface</span></div>
-    <div class="swatch"><i style="background:var(--uk-accent)"></i><span>accent</span></div>
-    <div class="swatch"><i style="background:var(--uk-ink)"></i><span>ink</span></div>
-    <div class="swatch"><i style="background:var(--uk-muted)"></i><span>muted</span></div>
+  <div class="mat-row" aria-label="材质预览（底下有彩色以看出模糊）">
+    <div class="mat-swatch"><div class="mat-bg"></div><div class="uk-material-ultraThin" style="position:absolute;inset:0"></div><span>ultraThin</span></div>
+    <div class="mat-swatch"><div class="mat-bg"></div><div class="uk-material-thin" style="position:absolute;inset:0"></div><span>thin</span></div>
+    <div class="mat-swatch"><div class="mat-bg"></div><div class="uk-material-regular" style="position:absolute;inset:0"></div><span>regular</span></div>
+    <div class="mat-swatch"><div class="mat-bg"></div><div class="uk-material-thick" style="position:absolute;inset:0"></div><span>thick</span></div>
   </div>
 
   <div class="gallery">
+    <!-- Listen / shelf -->
     <div class="gallery-item">
-      <h2>列表 · 卡片 · 开关</h2>
-      <div class="uk-phone" aria-label="列表示范">
+      <h2>大标题 · 货架 · 曲目行</h2>
+      <div class="uk-phone">
         <div class="uk-phone-stage">
-          <div class="uk-app">
-            <div class="uk-topbar">
-              <span class="uk-topbar__title">资料库</span>
-              <button type="button" class="uk-topbar__action">编辑</button>
+          <div class="uk-app" style="background:var(--uk-bg)">
+            <div class="uk-topbar uk-topbar--large">
+              <div class="uk-type-large-title">资料库</div>
             </div>
-            <div class="uk-body">
-              <p class="uk-section-label">播放列表</p>
-              <div class="uk-list">
-                <button type="button" class="uk-cell">
-                  <span class="uk-cell__main">
-                    <span class="uk-cell__title">最近播放</span>
-                    <span class="uk-cell__sub">128 首</span>
-                  </span>
-                  <span class="uk-cell__chevron" aria-hidden="true"></span>
+            <div class="uk-body" style="padding-top:0">
+              <p class="uk-section-label">最近播放</p>
+              <div class="uk-shelf">
+                <button type="button" class="uk-shelf__item">
+                  <div class="uk-art uk-elev-2" style="background:linear-gradient(135deg,#5b2cff,#ff6bcb)"></div>
+                  <span class="uk-shelf__title">Neon Nights</span>
+                  <span class="uk-shelf__sub">Playlist</span>
                 </button>
-                <div class="uk-cell" style="cursor:default">
-                  <span class="uk-cell__main">
-                    <span class="uk-cell__title">自动下载</span>
-                  </span>
-                  <label class="uk-switch">
-                    <input type="checkbox" checked />
-                    <span class="uk-switch__track"></span>
-                  </label>
+                <button type="button" class="uk-shelf__item">
+                  <div class="uk-art uk-elev-2" style="background:linear-gradient(135deg,#00c2ff,#0057ff)"></div>
+                  <span class="uk-shelf__title">Deep Focus</span>
+                  <span class="uk-shelf__sub">Apple Music</span>
+                </button>
+                <button type="button" class="uk-shelf__item">
+                  <div class="uk-art uk-elev-2" style="background:linear-gradient(135deg,#ffb347,#ff2d55)"></div>
+                  <span class="uk-shelf__title">Sunset Drive</span>
+                  <span class="uk-shelf__sub">Radio</span>
+                </button>
+              </div>
+              <p class="uk-section-label">歌曲</p>
+              <button type="button" class="uk-track">
+                <div class="uk-art uk-art--sm" style="background:linear-gradient(135deg,#5b2cff,#ff6bcb)"></div>
+                <span class="uk-track__main">
+                  <span class="uk-track__title is-playing">Midnight City</span>
+                  <span class="uk-track__sub">M83 · <span class="uk-badge uk-badge--atmos">Atmos</span></span>
+                </span>
+                <button type="button" class="uk-icon-btn" aria-label="更多">···</button>
+              </button>
+              <button type="button" class="uk-track">
+                <div class="uk-art uk-art--sm" style="background:linear-gradient(135deg,#00c2ff,#0057ff)"></div>
+                <span class="uk-track__main">
+                  <span class="uk-track__title">Intro</span>
+                  <span class="uk-track__sub">The xx</span>
+                </span>
+                <button type="button" class="uk-icon-btn" aria-label="更多">···</button>
+              </button>
+            </div>
+            <div class="uk-mini-player uk-material-regular">
+              <div class="uk-art uk-art--sm" style="background:linear-gradient(135deg,#5b2cff,#ff6bcb)"></div>
+              <div class="uk-mini-player__meta">
+                <span class="uk-mini-player__title">Midnight City</span>
+                <span class="uk-mini-player__sub">M83</span>
+              </div>
+              <div class="uk-mini-player__actions">
+                <button type="button" class="uk-icon-btn is-active" aria-label="播放">❚❚</button>
+                <button type="button" class="uk-icon-btn" aria-label="下一首">▷▷</button>
+              </div>
+            </div>
+            <nav class="uk-dock" aria-label="主导航">
+              <button type="button" class="uk-dock__item">听</button>
+              <button type="button" class="uk-dock__item">浏览</button>
+              <button type="button" class="uk-dock__item is-active">资料库</button>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Now playing -->
+    <div class="gallery-item">
+      <h2>Now Playing · 氛围模糊 · 进度</h2>
+      <div class="uk-phone">
+        <div class="uk-phone-stage">
+          <div class="uk-app" style="background:transparent; padding-top:0">
+            <div class="uk-ambient" aria-hidden="true">
+              <div class="uk-ambient__img" style="background:linear-gradient(135deg,#5b2cff,#ff6bcb,#ff2d55)"></div>
+            </div>
+            <div class="uk-now-playing">
+              <div class="uk-topbar" style="background:transparent;border:0;width:100%">
+                <button type="button" class="uk-icon-btn" aria-label="收起">∨</button>
+                <span class="uk-topbar__title" style="text-align:center;font-size:13px;color:var(--uk-ink-secondary)">正在播放</span>
+                <button type="button" class="uk-icon-btn" aria-label="队列">≡</button>
+              </div>
+              <div class="uk-now-playing__stage">
+                <div class="uk-art uk-art--hero" style="background:linear-gradient(135deg,#5b2cff,#ff6bcb)"></div>
+                <div style="width:100%;text-align:center">
+                  <div class="uk-type-title3">Midnight City</div>
+                  <div class="uk-type-subhead">M83</div>
+                </div>
+                <div class="uk-scrubber" style="width:100%">
+                  <div class="uk-scrubber__track"><div class="uk-scrubber__fill"></div></div>
+                  <div class="uk-scrubber__times"><span>1:24</span><span>-2:31</span></div>
+                </div>
+                <div class="uk-now-playing__controls">
+                  <button type="button" class="uk-icon-btn" aria-label="上一首">◁◁</button>
+                  <button type="button" class="uk-play uk-play--lg" aria-label="暂停">❚❚</button>
+                  <button type="button" class="uk-icon-btn" aria-label="下一首">▷▷</button>
+                </div>
+                <div style="display:flex;gap:20px">
+                  <button type="button" class="uk-icon-btn is-active" aria-label="喜欢">♥</button>
+                  <button type="button" class="uk-icon-btn" aria-label="歌词">文</button>
+                  <button type="button" class="uk-icon-btn" aria-label="分享">↗</button>
                 </div>
               </div>
-              <div class="uk-card">
-                <div class="uk-card__title">为你推荐</div>
-                <p class="uk-card__desc">根据口味更新 · <span class="uk-tag">今日</span></p>
-              </div>
-            </div>
-            <div class="uk-footer">
-              <button type="button" class="uk-btn uk-btn--primary uk-btn--block">立即播放</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Hero + sheet -->
     <div class="gallery-item">
-      <h2>半屏 · 分段 · 空态</h2>
-      <div class="uk-phone" aria-label="半屏示范">
+      <h2>Hero · Material 顶栏 · 半屏</h2>
+      <div class="uk-phone">
         <div class="uk-phone-stage">
           <div class="uk-app">
-            <div class="uk-topbar">
-              <button type="button" class="uk-back" aria-label="返回"></button>
-              <span class="uk-topbar__title">浏览</span>
+            <div class="uk-topbar uk-topbar--material">
+              <span class="uk-topbar__title">立即收听</span>
+              <button type="button" class="uk-topbar__action">账户</button>
             </div>
             <div class="uk-body">
-              <div class="uk-seg" role="tablist">
-                <button type="button" class="uk-seg__item is-active">精选</button>
-                <button type="button" class="uk-seg__item">电台</button>
-                <button type="button" class="uk-seg__item">搜索</button>
+              <div class="uk-hero">
+                <div class="uk-hero__media" style="background:linear-gradient(160deg,#1a0533,#fa2d48 80%)"></div>
+                <div class="uk-hero__veil"></div>
+                <div class="uk-hero__body">
+                  <div class="uk-hero__eyebrow">New Release</div>
+                  <div class="uk-type-title2" style="color:#fff">Weekend Anthems</div>
+                  <p class="uk-type-footnote" style="color:rgba(255,255,255,.8);margin:6px 0 12px">为你精选的周末歌单</p>
+                  <button type="button" class="uk-btn uk-btn--primary">播放</button>
+                </div>
               </div>
-              <div class="uk-empty">
-                <div class="uk-empty__icon">♪</div>
-                <span class="uk-empty__title">暂无内容</span>
-                收藏后会出现在这里
+              <div class="uk-list">
+                <button type="button" class="uk-cell">
+                  <span class="uk-cell__main">
+                    <span class="uk-cell__title">广播电台</span>
+                    <span class="uk-cell__sub">实时与点播</span>
+                  </span>
+                  <span class="uk-badge uk-badge--new">New</span>
+                  <span class="uk-cell__chevron"></span>
+                </button>
               </div>
             </div>
-            <div class="uk-sheet is-open" role="dialog" aria-modal="true">
+            <div class="uk-sheet is-open uk-material-thick" role="dialog">
               <div class="uk-sheet__grab"></div>
               <h3 class="uk-sheet__title">添加到资料库</h3>
-              <p class="uk-sheet__desc">已选 12 首，确认后同步到所有设备。</p>
+              <p class="uk-sheet__desc">毛玻璃 thick material · 确认后全设备同步</p>
               <div class="uk-sheet__actions">
                 <button type="button" class="uk-btn uk-btn--ghost">取消</button>
                 <button type="button" class="uk-btn uk-btn--primary">确认</button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="gallery-item">
-      <h2>底栏 · Toast · 标签</h2>
-      <div class="uk-phone" aria-label="底栏示范">
-        <div class="uk-phone-stage">
-          <div class="uk-app">
-            <div class="uk-topbar">
-              <span class="uk-topbar__title">立即收听</span>
-              <button type="button" class="uk-topbar__action">账户</button>
-            </div>
-            <div class="uk-body">
-              <div class="uk-card">
-                <div class="uk-card__title">精选混音</div>
-                <p class="uk-card__desc">
-                  <span class="uk-tag">新品</span>
-                  <span class="uk-tag uk-tag--muted">空间音频</span>
-                  <span class="uk-tag uk-tag--danger">限免将尽</span>
-                </p>
-              </div>
-              <div class="uk-list">
-                <button type="button" class="uk-cell" id="demo-toast-btn">
-                  <span class="uk-cell__main">
-                    <span class="uk-cell__title">点我弹出 Toast</span>
-                  </span>
-                  <span class="uk-cell__meta">演示</span>
-                  <span class="uk-cell__chevron" aria-hidden="true"></span>
-                </button>
-              </div>
-            </div>
-            <nav class="uk-dock" aria-label="主导航">
-              <button type="button" class="uk-dock__item is-active">听</button>
-              <button type="button" class="uk-dock__item">浏览</button>
-              <button type="button" class="uk-dock__item">资料库</button>
-            </nav>
-            <div class="uk-toast" id="demo-toast">已添加到资料库</div>
           </div>
         </div>
       </div>
@@ -228,18 +239,8 @@
           document.querySelectorAll(".theme-bar [data-theme]").forEach(function (b) {
             b.setAttribute("aria-pressed", b === btn ? "true" : "false");
           });
-          chip.textContent = "当前：" + theme;
+          chip.textContent = "当前：" + theme + " · accent #FA2D48";
         });
-      });
-      var toastBtn = document.getElementById("demo-toast-btn");
-      var toast = document.getElementById("demo-toast");
-      var timer;
-      toastBtn.addEventListener("click", function () {
-        toast.classList.add("is-show");
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-          toast.classList.remove("is-show");
-        }, 1800);
       });
     })();
   </script>

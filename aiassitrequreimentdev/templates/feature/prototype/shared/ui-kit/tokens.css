@@ -3,8 +3,8 @@
  ** All rights reserved.
  **
  ** File: - tokens.css
- ** Description: Prototype UI Kit tokens — Apple Music–inspired light + dark
- ** Version: 2.0
+ ** Description: Apple Music–inspired dual-theme tokens (color, type, elev, motion)
+ ** Version: 2.1
  ** Date: 2026/11/15
  ** Author: limao2@Apps.Gallery
  **
@@ -12,25 +12,25 @@
  ** <author> <date> <version> <desc>
  ** ------------------------------------------------------------------------------
  ** limao2@Apps.Gallery 2026/11/14 1.0 ColorOS / Gallery INIT
- ** limao2@Apps.Gallery 2026/11/15 2.0 Apple Music–like dual theme (light/dark)
+ ** limao2@Apps.Gallery 2026/11/15 2.0 dual theme Music
+ ** limao2@Apps.Gallery 2026/11/15 2.1 materials / elev / Music red FA2D48
  *********************************************************************************/
 
 /**
- * 主题：
- * - html[data-uk-theme="light|dark"] 显式指定（推荐）
- * - 未指定：默认 dark；若系统 prefers-color-scheme: light 则用 light
- * 规范见 THEME.md
+ * html[data-uk-theme="light|dark"]；未指定默认 dark，light 跟随系统偏好。
+ * 规范：THEME.md ；材质：materials.css
  */
 
 :root {
-  /* Shared structure */
   --uk-font: -apple-system, "SF Pro Text", "SF Pro Display", "PingFang SC",
     "Helvetica Neue", "Segoe UI", sans-serif;
+
   --uk-fs-xs: 11px;
   --uk-fs-sm: 13px;
   --uk-fs-md: 15px;
   --uk-fs-lg: 17px;
   --uk-fs-xl: 22px;
+  --uk-fs-title3: 20px;
   --uk-fs-display: 34px;
   --uk-lh: 1.35;
   --uk-fw-regular: 400;
@@ -46,10 +46,12 @@
   --uk-space-6: 24px;
   --uk-space-8: 32px;
 
-  --uk-radius-sm: 10px;
-  --uk-radius-md: 12px;
-  --uk-radius-lg: 16px;
-  --uk-radius-xl: 20px;
+  --uk-radius-sm: 8px;
+  --uk-radius-md: 10px;
+  --uk-radius-lg: 12px;
+  --uk-radius-xl: 16px;
+  --uk-radius-art: 12px;
+  --uk-radius-art-sm: 8px;
   --uk-radius-pill: 999px;
 
   --uk-phone-w: 360px;
@@ -58,36 +60,60 @@
 
   --uk-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --uk-duration: 280ms;
+  --uk-duration-fast: 180ms;
 
-  /* Brand accent — shared */
-  --uk-accent: #ff2d55;
-  --uk-accent-press: #e0264b;
+  /* Apple Music Red */
+  --uk-accent: #fa2d48;
+  --uk-accent-press: #d4213b;
   --uk-on-accent: #ffffff;
-  --uk-danger: #ff453a;
+  --uk-link: #007aff;
+  --uk-atmos: #d4a857;
+  --uk-danger: #ff3b30;
   --uk-warning: #ff9f0a;
-  --uk-ok: #30d158;
+  --uk-ok: #34c759;
 
-  /* Default palette = dark (Music) */
+  /* Material blur radii (CSS approx of HIG) */
+  --uk-blur-ultra: 10px;
+  --uk-blur-thin: 48px;
+  --uk-blur-regular: 22px;
+  --uk-blur-thick: 56px;
+  --uk-saturate-material: 1.8;
+
+  /* Default = dark Music */
   color-scheme: dark;
   --uk-bg: #000000;
+  --uk-bg-grouped: #000000;
   --uk-bg-studio: #0b0b0f;
   --uk-surface: #1c1c1e;
   --uk-surface-muted: #2c2c2e;
-  --uk-surface-elevated: #2c2c2e;
-  --uk-scrim: rgba(0, 0, 0, 0.55);
-  --uk-ink: #f5f5f7;
-  --uk-ink-secondary: #d1d1d6;
-  --uk-muted: #8e8e93;
+  --uk-surface-elevated: #3a3a3c;
+  --uk-scrim: rgba(0, 0, 0, 0.45);
+  --uk-ink: #ffffff;
+  --uk-ink-secondary: rgba(235, 235, 245, 0.6);
+  --uk-muted: rgba(235, 235, 245, 0.3);
   --uk-inverse: #000000;
-  --uk-line: rgba(84, 84, 88, 0.65);
+  --uk-line: #38383a;
   --uk-line-strong: rgba(142, 142, 147, 0.45);
-  --uk-accent-soft: rgba(255, 45, 85, 0.22);
-  --uk-danger-soft: rgba(255, 69, 58, 0.22);
-  --uk-shadow-soft: 0 10px 32px rgba(0, 0, 0, 0.45);
-  --uk-shadow-sheet: 0 -12px 40px rgba(0, 0, 0, 0.55);
-  --uk-hotspot: rgba(255, 45, 85, 0.28);
-  --uk-hotspot-border: rgba(255, 45, 85, 0.95);
-  --uk-dock-bg: rgba(28, 28, 30, 0.92);
+  --uk-accent-soft: rgba(250, 45, 72, 0.22);
+  --uk-danger-soft: rgba(255, 59, 48, 0.22);
+  --uk-fill-press: rgba(255, 255, 255, 0.1);
+  --uk-scrubber-track: rgba(255, 255, 255, 0.2);
+
+  --uk-shadow-1: none;
+  --uk-shadow-2: none;
+  --uk-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --uk-shadow-4: 0 20px 40px rgba(0, 0, 0, 0.45);
+  --uk-shadow-sheet: 0 -12px 32px rgba(0, 0, 0, 0.45);
+  --uk-shadow-soft: none;
+
+  --uk-mat-ultra-tint: rgba(0, 0, 0, 0.3);
+  --uk-mat-thin-tint: rgba(40, 40, 40, 0.5);
+  --uk-mat-regular-tint: rgba(22, 22, 23, 0.78);
+  --uk-mat-thick-tint: rgba(45, 45, 45, 0.88);
+
+  --uk-hotspot: rgba(250, 45, 72, 0.28);
+  --uk-hotspot-border: rgba(250, 45, 72, 0.95);
+  --uk-dock-bg: var(--uk-mat-regular-tint);
   --uk-toast-bg: rgba(44, 44, 46, 0.96);
   --uk-toast-ink: #f5f5f7;
 }
@@ -95,25 +121,39 @@
 [data-uk-theme="light"],
 .uk-theme-light {
   color-scheme: light;
-  --uk-bg: #f2f2f7;
+  --uk-bg: #ffffff;
+  --uk-bg-grouped: #f2f2f7;
   --uk-bg-studio: #e8e8ed;
   --uk-surface: #ffffff;
-  --uk-surface-muted: #f9f9fb;
-  --uk-surface-elevated: #ffffff;
+  --uk-surface-muted: #f2f2f7;
+  --uk-surface-elevated: #e5e5ea;
   --uk-scrim: rgba(0, 0, 0, 0.4);
-  --uk-ink: #1c1c1e;
-  --uk-ink-secondary: #3a3a3c;
-  --uk-muted: #8e8e93;
+  --uk-ink: #000000;
+  --uk-ink-secondary: rgba(60, 60, 67, 0.6);
+  --uk-muted: rgba(60, 60, 67, 0.3);
   --uk-inverse: #ffffff;
-  --uk-line: rgba(60, 60, 67, 0.12);
-  --uk-line-strong: rgba(60, 60, 67, 0.29);
-  --uk-accent-soft: rgba(255, 45, 85, 0.12);
-  --uk-danger-soft: rgba(255, 69, 58, 0.12);
-  --uk-shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.08);
-  --uk-shadow-sheet: 0 -10px 36px rgba(0, 0, 0, 0.14);
-  --uk-hotspot: rgba(255, 45, 85, 0.2);
-  --uk-hotspot-border: rgba(255, 45, 85, 0.9);
-  --uk-dock-bg: rgba(255, 255, 255, 0.86);
+  --uk-line: rgba(60, 60, 67, 0.29);
+  --uk-line-strong: rgba(60, 60, 67, 0.45);
+  --uk-accent-soft: rgba(250, 45, 72, 0.12);
+  --uk-danger-soft: rgba(255, 59, 48, 0.12);
+  --uk-fill-press: rgba(0, 0, 0, 0.05);
+  --uk-scrubber-track: rgba(0, 0, 0, 0.1);
+
+  --uk-shadow-1: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --uk-shadow-2: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --uk-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --uk-shadow-4: 0 20px 40px rgba(0, 0, 0, 0.22);
+  --uk-shadow-sheet: 0 -12px 32px rgba(0, 0, 0, 0.25);
+  --uk-shadow-soft: var(--uk-shadow-2);
+
+  --uk-mat-ultra-tint: rgba(255, 255, 255, 0.28);
+  --uk-mat-thin-tint: rgba(246, 246, 246, 0.55);
+  --uk-mat-regular-tint: rgba(250, 250, 252, 0.78);
+  --uk-mat-thick-tint: rgba(255, 255, 255, 0.9);
+
+  --uk-hotspot: rgba(250, 45, 72, 0.2);
+  --uk-hotspot-border: rgba(250, 45, 72, 0.9);
+  --uk-dock-bg: var(--uk-mat-regular-tint);
   --uk-toast-bg: rgba(28, 28, 30, 0.92);
   --uk-toast-ink: #ffffff;
 }
@@ -122,24 +162,35 @@
 .uk-theme-dark {
   color-scheme: dark;
   --uk-bg: #000000;
+  --uk-bg-grouped: #000000;
   --uk-bg-studio: #0b0b0f;
   --uk-surface: #1c1c1e;
   --uk-surface-muted: #2c2c2e;
-  --uk-surface-elevated: #2c2c2e;
-  --uk-scrim: rgba(0, 0, 0, 0.55);
-  --uk-ink: #f5f5f7;
-  --uk-ink-secondary: #d1d1d6;
-  --uk-muted: #8e8e93;
+  --uk-surface-elevated: #3a3a3c;
+  --uk-scrim: rgba(0, 0, 0, 0.45);
+  --uk-ink: #ffffff;
+  --uk-ink-secondary: rgba(235, 235, 245, 0.6);
+  --uk-muted: rgba(235, 235, 245, 0.3);
   --uk-inverse: #000000;
-  --uk-line: rgba(84, 84, 88, 0.65);
+  --uk-line: #38383a;
   --uk-line-strong: rgba(142, 142, 147, 0.45);
-  --uk-accent-soft: rgba(255, 45, 85, 0.22);
-  --uk-danger-soft: rgba(255, 69, 58, 0.22);
-  --uk-shadow-soft: 0 10px 32px rgba(0, 0, 0, 0.45);
-  --uk-shadow-sheet: 0 -12px 40px rgba(0, 0, 0, 0.55);
-  --uk-hotspot: rgba(255, 45, 85, 0.28);
-  --uk-hotspot-border: rgba(255, 45, 85, 0.95);
-  --uk-dock-bg: rgba(28, 28, 30, 0.92);
+  --uk-accent-soft: rgba(250, 45, 72, 0.22);
+  --uk-danger-soft: rgba(255, 59, 48, 0.22);
+  --uk-fill-press: rgba(255, 255, 255, 0.1);
+  --uk-scrubber-track: rgba(255, 255, 255, 0.2);
+  --uk-shadow-1: none;
+  --uk-shadow-2: none;
+  --uk-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --uk-shadow-4: 0 20px 40px rgba(0, 0, 0, 0.45);
+  --uk-shadow-sheet: 0 -12px 32px rgba(0, 0, 0, 0.45);
+  --uk-shadow-soft: none;
+  --uk-mat-ultra-tint: rgba(0, 0, 0, 0.3);
+  --uk-mat-thin-tint: rgba(40, 40, 40, 0.5);
+  --uk-mat-regular-tint: rgba(22, 22, 23, 0.78);
+  --uk-mat-thick-tint: rgba(45, 45, 45, 0.88);
+  --uk-hotspot: rgba(250, 45, 72, 0.28);
+  --uk-hotspot-border: rgba(250, 45, 72, 0.95);
+  --uk-dock-bg: var(--uk-mat-regular-tint);
   --uk-toast-bg: rgba(44, 44, 46, 0.96);
   --uk-toast-ink: #f5f5f7;
 }
@@ -147,25 +198,36 @@
 @media (prefers-color-scheme: light) {
   :root:not([data-uk-theme]) {
     color-scheme: light;
-    --uk-bg: #f2f2f7;
+    --uk-bg: #ffffff;
+    --uk-bg-grouped: #f2f2f7;
     --uk-bg-studio: #e8e8ed;
     --uk-surface: #ffffff;
-    --uk-surface-muted: #f9f9fb;
-    --uk-surface-elevated: #ffffff;
+    --uk-surface-muted: #f2f2f7;
+    --uk-surface-elevated: #e5e5ea;
     --uk-scrim: rgba(0, 0, 0, 0.4);
-    --uk-ink: #1c1c1e;
-    --uk-ink-secondary: #3a3a3c;
-    --uk-muted: #8e8e93;
+    --uk-ink: #000000;
+    --uk-ink-secondary: rgba(60, 60, 67, 0.6);
+    --uk-muted: rgba(60, 60, 67, 0.3);
     --uk-inverse: #ffffff;
-    --uk-line: rgba(60, 60, 67, 0.12);
-    --uk-line-strong: rgba(60, 60, 67, 0.29);
-    --uk-accent-soft: rgba(255, 45, 85, 0.12);
-    --uk-danger-soft: rgba(255, 69, 58, 0.12);
-    --uk-shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.08);
-    --uk-shadow-sheet: 0 -10px 36px rgba(0, 0, 0, 0.14);
-    --uk-hotspot: rgba(255, 45, 85, 0.2);
-    --uk-hotspot-border: rgba(255, 45, 85, 0.9);
-    --uk-dock-bg: rgba(255, 255, 255, 0.86);
+    --uk-line: rgba(60, 60, 67, 0.29);
+    --uk-line-strong: rgba(60, 60, 67, 0.45);
+    --uk-accent-soft: rgba(250, 45, 72, 0.12);
+    --uk-danger-soft: rgba(255, 59, 48, 0.12);
+    --uk-fill-press: rgba(0, 0, 0, 0.05);
+    --uk-scrubber-track: rgba(0, 0, 0, 0.1);
+    --uk-shadow-1: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --uk-shadow-2: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --uk-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --uk-shadow-4: 0 20px 40px rgba(0, 0, 0, 0.22);
+    --uk-shadow-sheet: 0 -12px 32px rgba(0, 0, 0, 0.25);
+    --uk-shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --uk-mat-ultra-tint: rgba(255, 255, 255, 0.28);
+    --uk-mat-thin-tint: rgba(246, 246, 246, 0.55);
+    --uk-mat-regular-tint: rgba(250, 250, 252, 0.78);
+    --uk-mat-thick-tint: rgba(255, 255, 255, 0.9);
+    --uk-hotspot: rgba(250, 45, 72, 0.2);
+    --uk-hotspot-border: rgba(250, 45, 72, 0.9);
+    --uk-dock-bg: rgba(250, 250, 252, 0.78);
     --uk-toast-bg: rgba(28, 28, 30, 0.92);
     --uk-toast-ink: #ffffff;
   }

@@ -1,19 +1,45 @@
-# feature 级机器合同（G1）。给人读的完整 PRD 见 prd.md。
-# 必含：用户旅程 UJ*、功能 FR*、非功能 NFR*（或 nfrNoneReason）、场景 S*、异常边界 E*（或 edgeNoneReason）、验收 A*。
-# 有 UI：须交付可交互 HTML 产品原型 prototype/index.html；无 UI 时 uiRequired=false 并填 uiNoneReason。
+# 机器合同（G1）· 与 prd.md / prototype 一套事实源、同编号。
+# 必填核心：problem、nonGoals、UJ*、FR*、NFR*（或 nfrNoneReason）、E*（或 edgeNoneReason）、A*、uiRequired。
+# 可选：scenarios（S*）——仅当 UJ 不够表达多条并列主流程时填写；勿与 UJ/E 重复。
+# 冻结前 openQuestions 必须为 []。
 id: FEAT-000
 problem: ""
 nonGoals: []
 uiRequired: true
 uiNoneReason: ""
-userJourneys: []
-functionalRequirements: []
-nonFunctionalRequirements: []
+userJourneys:
+  # - id: UJ1
+  #   persona: 相册用户
+  #   entry: 图集页长按
+  #   steps: "1. 选择照片 2. 选择目标图集 3. 确认移动"
+  #   success: 照片出现在目标图集且原图集不再展示
+  []
+functionalRequirements:
+  # - id: FR1
+  #   description: 用户能将已选照片移动到另一图集
+  []
+nonFunctionalRequirements:
+  # - id: NFR1
+  #   category: performance
+  #   requirement: 单次移动 100 张内前台可感知完成
+  #   measure: 成功反馈 ≤ 2s（本地已索引）
+  []
 nfrNoneReason: ""
 scenarios: []
-edgeCases: []
+edgeCases:
+  # - id: E1
+  #   trigger: 目标图集在确认前被删除
+  #   expected: 提示失败且照片仍在原图集
+  []
 edgeNoneReason: ""
-acceptance: []
+acceptance:
+  # - id: A1
+  #   given: 图集 A 有照片且图集 B 存在
+  #   when: 用户将照片从 A 移动到 B 并确认
+  #   then: 照片仅在 B 中可见
+  #   verify: MoveAlbumHappyPath
+  #   covers: [FR1, UJ1]
+  []
 constraints: []
 affected: []
 openQuestions:

@@ -443,6 +443,18 @@ class GateTests(unittest.TestCase):
         write_spec_prd(self.change / "prd.md")
         self.assertEqual(self.codes("G1"), set())
 
+    def test_g1_allows_empty_scenarios(self) -> None:
+        self.put_state()
+        write_yaml(
+            self.change / "spec.yaml",
+            valid_spec().replace(
+                "scenarios:\n  - id: S1\n    trigger: 同一通知到达两次\n    outcome: 订单仍为已支付\n    failure: 写库失败时保持未支付\n",
+                "scenarios: []\n",
+            ),
+        )
+        write_spec_prd(self.change / "prd.md")
+        self.assertEqual(self.codes("G1"), set())
+
     def test_g1_requires_prd_template_headings(self) -> None:
         self.put_state()
         write_yaml(self.change / "spec.yaml", valid_spec())

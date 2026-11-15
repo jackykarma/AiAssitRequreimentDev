@@ -24,6 +24,7 @@
  ** limao2@Apps.Gallery 2026/11/15 1.9 full 路径强制 workflow/sequence/class 图
  ** limao2@Apps.Gallery 2026/11/15 1.10 Archify HTML 溯源（generator + reader-contract）
  ** limao2@Apps.Gallery 2026/11/15 1.11 specify 模板章节标题强制对齐
+ ** limao2@Apps.Gallery 2026/11/15 1.12 product SSOT；G1 的 S* 改为可选
  *********************************************************************************/
 """
 
@@ -363,10 +364,13 @@ def _check_g1(change_dir: Path, state: dict, spec: dict, violations: list[Violat
             violations,
         )
 
+    # S* 可选：主路径由 UJ 覆盖；有条目时仍校验形状，避免半填干扰下游
     scenarios = spec.get("scenarios")
-    if not isinstance(scenarios, list) or not scenarios:
-        violations.append(Violation("G1", "SPEC_SCENARIO", "scenarios 至少一条主流程场景"))
-    else:
+    if scenarios is None:
+        violations.append(Violation("G1", "SPEC_MISSING_FIELD", "spec.yaml 缺少 scenarios"))
+    elif not isinstance(scenarios, list):
+        violations.append(Violation("G1", "SPEC_SCENARIO", "scenarios 必须是列表（可为空）"))
+    elif scenarios:
         _check_unique(scenarios, "S", "G1", "SPEC_DUPLICATE_ID", violations)
         for item in scenarios:
             if not isinstance(item, dict):

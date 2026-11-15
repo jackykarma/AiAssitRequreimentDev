@@ -7,22 +7,22 @@
 | 技能 | 何时 |
 | --- | --- |
 | `aiassitrequreimentdev-brainstorm` | 一句话 / 方向未定：探索意图与方案取舍 |
-| `aiassitrequreimentdev-grill` | 系统追问，闭合旅程与 FR/NFR/S/E/A |
+| `aiassitrequreimentdev-grill` | 系统追问，闭合旅程与 FR/NFR/E/A（S 可选） |
 | （可选）仓库外 `brainstorming` | 习惯对齐；正式产物仍落本仓 PRD/spec |
 
 链：`brainstorm` → `grill` → `product` 出稿。
 
 ## 职责
 
-通过对话澄清后交付：
+通过对话澄清后交付**一套事实源**（全流程角色共用）：
 
-1. `prd.md`：给人评审（**核心用户旅程**、功能、非功能、主流程、异常边界、验收）
-2. `prototype/**/*.html`：可本地打开的点击原型；引 `shared/ui-kit/`。**patch**=截图+热区+叠层；**new**=`uk-*` 拼页；须可交互（无 UI 须在 PRD 声明）
-3. `spec.yaml`：`UJ*` / `FR*` / `NFR*` / `S*` / `E*` / `A*`（G1 / 下游 Agent）
+1. `prd.md`：人审；严格按模板章节；UJ / FR / NFR / E / A 与 spec 同编号
+2. `prototype/**/*.html`：可交互；主路径 + 异常/空态；引 `shared/ui-kit/`
+3. `spec.yaml`：机器合同；必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选
 
-大需求另写需求级 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/prd.md` + `split.yaml`（如 `REQ-001-move-album-20220305`）。
+原则：清晰无歧义、验收可执行、边界尽量全面；不写实现细节。
 
-`prd.md` 与 `spec.yaml` 同源同口径，都要；不要用对话草稿文件代替。
+大需求另写需求级 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/prd.md` + `split.yaml`。
 
 ## 边界
 
@@ -32,4 +32,4 @@
 
 ## 完成
 
-`python -m aiassitrequreimentdev check <feature 目录> --gate G1` 输出 `G1 ready`，且 PRD 与原型约定已齐。
+`python -m aiassitrequreimentdev check <feature 目录> --gate G1` 输出 `G1 ready`。

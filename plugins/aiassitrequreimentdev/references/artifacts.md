@@ -7,10 +7,10 @@
 | `state.json` | 主控 | `stage`、`path`、`pathConfirmed`、`actorRole`、`requirementId`、`dependsOnFeatures`、`gates`、`specHash` |
 | `BOARD.md` | 主控（`board`） | 共仓索引 |
 | `usage.yaml` | 主控（`usage record`） | 各角色阶段 token 用量 |
-| `prd.md` | 产品 | 人读：严格按 `templates/feature/prd.md`（需求级 `templates/requirement/prd.md`）；与 spec 同口径 |
-| `prototype/index.html` | 产品 | 可交互产品原型（G1）；无 UI 时不交，改 `uiRequired=false` + `uiNoneReason` |
+| `prd.md` | 产品 | 人读事实源：严格按 `templates/feature/prd.md`（需求级 `templates/requirement/prd.md`）；与 spec 同编号 |
+| `prototype/index.html` | 产品 | 可交互产品原型（G1；主路径+异常）；无 UI 时 `uiRequired=false` + `uiNoneReason` |
 | `prototype/shared/ui-kit/` | 共享（模板） | 产品/UX 共用手机组件 CSS + `showcase.html`（ColorOS/相册风） |
-| `spec.yaml` | 产品 | 机器合同与 G1/`seal`：`UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*`、`uiRequired` |
+| `spec.yaml` | 产品 | 全流程机器事实源与 G1/`seal`：必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选；`uiRequired` |
 | `ux.yaml` | 交互视觉 | 覆盖需 UI 的验收 + `htmlPrototype`；或 `skip: true` + `reason`（不写 ux-design.md） |
 | `prototype/ux/` | 交互视觉 | 可交互 UX HTML（G2；入口默认 `index.html`，须引 ui-kit） |
 | `tech.md` / `tech-spec.md` / KD·NFR·接口·库表·埋点 | 架构师 | 人读：严格按 `templates/feature/tech.md` 等；展开件 `templates/design/` |
@@ -24,4 +24,4 @@
 
 大需求另有 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`）：需求级 `prd.md`、`split.yaml`，可选 `architecture/`（Archify 草图，不进 G2T）。
 
-`prd.md` 给人读，`spec.yaml` 给 Agent 与门禁，同一套编号。禁止只交其中一份。改规格必须同步 PRD 及受影响原型。
+`prd.md` 给人读，`spec.yaml` 给 Agent 与门禁，**同一套编号、一套事实源**（贯穿 UX/tech/dev/review/test/deploy）。禁止只交其中一份或另起平行口径。改规格必须同步 PRD 及受影响原型。

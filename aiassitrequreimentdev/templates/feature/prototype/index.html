@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>产品原型（patch / new · UI Kit）</title>
+  <title>产品原型 · FEAT-000</title>
   <link rel="stylesheet" href="./shared/ui-kit/tokens.css" />
   <link rel="stylesheet" href="./shared/ui-kit/components.css" />
   <link rel="stylesheet" href="./shared/ui-kit/phone.css" />
@@ -13,24 +13,25 @@
     [data-mode-only] { display: none !important; }
     body[data-mode="patch"] [data-mode-only="patch"],
     body[data-mode="new"] [data-mode-only="new"] { display: flex !important; }
-    body[data-mode="patch"] .uk-side [data-mode-only="patch"],
-    body[data-mode="new"] .uk-side [data-mode-only="new"] { display: block !important; }
   </style>
 </head>
-<body class="uk-studio" data-mode="patch">
+<!--
+  交付约定（与 prd / spec 一套事实源）：
+  1) 只保留本 feature 真实路径：主路径关键屏 + ≥1 异常/空态，对应 UJ*/E*
+  2) patch：assets 截图底图 + uk-hotspot；新增控件用 uk-overlay-widget / uk-sheet
+  3) new：只用 uk-*（橱窗 shared/ui-kit/showcase.html），禁止另起色板
+  4) 删掉与本需求无关的演示文案后再交 G1
+-->
+<body class="uk-studio" data-mode="new">
   <header class="uk-studio-header">
-    <h1>产品原型 · patch / new</h1>
-    <p class="uk-hint">
-      共享 <code>shared/ui-kit/</code>（ColorOS / 相册风）。
-      <strong>patch</strong>：截图底图 + 热区 + 局部叠层；
-      <strong>new</strong>：<code>uk-*</code> 组件拼新页。橱窗：<code>shared/ui-kit/showcase.html</code>
-    </p>
+    <h1>FEAT-000 · [功能短名]</h1>
+    <p class="uk-hint">对应 UJ1 / FR* / E*。模式：<code>?mode=patch|new</code></p>
   </header>
 
   <div class="uk-studio-toolbar" role="toolbar" aria-label="原型控制">
     <div class="uk-mode-group" role="group" aria-label="原型模式">
-      <button type="button" class="uk-tool-btn" data-mode="patch" aria-pressed="true">改页 patch</button>
-      <button type="button" class="uk-tool-btn" data-mode="new" aria-pressed="false">新页 new</button>
+      <button type="button" class="uk-tool-btn" data-mode="patch" aria-pressed="false">改页 patch</button>
+      <button type="button" class="uk-tool-btn" data-mode="new" aria-pressed="true">新页 new</button>
     </div>
     <span data-mode-only="patch" style="display:contents">
       <button type="button" class="uk-tool-btn" role="tab" aria-selected="true" data-screen="patch-before">现状</button>
@@ -39,168 +40,114 @@
       <button type="button" class="uk-tool-btn" id="toggle-hotspots" aria-pressed="false">显示热区</button>
     </span>
     <span data-mode-only="new" style="display:contents">
-      <button type="button" class="uk-tool-btn" role="tab" aria-selected="true" data-screen="new-hub">入口枢纽</button>
-      <button type="button" class="uk-tool-btn" role="tab" aria-selected="false" data-screen="new-page">新页面</button>
+      <button type="button" class="uk-tool-btn" role="tab" aria-selected="true" data-screen="new-main">主路径</button>
       <button type="button" class="uk-tool-btn" role="tab" aria-selected="false" data-screen="new-edge">异常</button>
     </span>
-    <span class="uk-chip" id="route-chip">模式：patch · 现状</span>
+    <span class="uk-chip" id="route-chip">模式：new · 主路径</span>
   </div>
 
   <main class="uk-studio-main">
     <div class="uk-phone" aria-label="手机预览框">
-      <div class="mode-panel is-active" data-panel="patch">
+      <div class="mode-panel" data-panel="patch">
         <div class="uk-phone-stage">
           <section id="patch-before" class="uk-screen is-active" role="tabpanel"
-            style="/* background-image:url(assets/home-before.png); */">
-            <span class="uk-badge">PATCH · BEFORE</span>
-            <div class="uk-shot-hint">放入 <code>assets/home-before.png</code> 并启用 background-image；热区进入「改后」。</div>
+            style="/* background-image:url(assets/before.png); */">
+            <span class="uk-badge">BEFORE</span>
+            <div class="uk-shot-hint">放入现状截图并启用 background-image</div>
             <button type="button" class="uk-hotspot" style="left:8%;top:22%;width:84%;height:14%"
-              data-go="patch-after" aria-label="从现状进入改后"></button>
-            <button type="button" class="uk-hotspot" style="left:78%;top:86%;width:16%;height:8%"
-              data-go="patch-after" aria-label="改动入口"></button>
+              data-go="patch-after" aria-label="进入改后"></button>
           </section>
-
           <section id="patch-after" class="uk-screen" role="tabpanel" hidden
-            style="/* background-image:url(assets/home-after.png); */">
-            <span class="uk-badge">PATCH · AFTER</span>
-            <div class="uk-shot-hint">改后全屏图；新增控件用下方 HTML 叠层。</div>
-            <button type="button" class="uk-overlay-widget" data-open="patch-sheet">
-              ＋ 新增入口（HTML 叠层，可点）
-            </button>
+            style="/* background-image:url(assets/after.png); */">
+            <span class="uk-badge">AFTER</span>
+            <button type="button" class="uk-overlay-widget" data-open="patch-sheet">新增入口</button>
             <button type="button" class="uk-hotspot" style="left:6%;top:6%;width:18%;height:6%"
               data-go="patch-before" aria-label="返回现状"></button>
             <div id="patch-sheet" class="uk-sheet" role="dialog" aria-modal="true" aria-hidden="true">
               <div class="uk-sheet__grab"></div>
-              <h3 class="uk-sheet__title">确认操作</h3>
-              <p class="uk-sheet__desc">半屏可交互；成功或失败可继续跳转。</p>
+              <h3 class="uk-sheet__title">确认</h3>
+              <p class="uk-sheet__desc">替换为本需求确认文案</p>
               <div class="uk-sheet__actions">
                 <button type="button" class="uk-btn uk-btn--ghost" data-close="patch-sheet">取消</button>
                 <button type="button" class="uk-btn uk-btn--danger" data-go="patch-edge" data-close="patch-sheet">失败</button>
-                <button type="button" class="uk-btn uk-btn--primary" id="patch-success" data-close="patch-sheet">成功</button>
+                <button type="button" class="uk-btn uk-btn--primary" data-close="patch-sheet" id="patch-ok">成功</button>
               </div>
             </div>
           </section>
-
-          <section id="patch-edge" class="uk-screen" role="tabpanel" hidden
-            style="/* background-image:url(assets/edge.png); */">
-            <span class="uk-badge">PATCH · EDGE</span>
+          <section id="patch-edge" class="uk-screen" role="tabpanel" hidden>
+            <span class="uk-badge">EDGE · E1</span>
             <div class="uk-app">
-              <div class="uk-topbar">
-                <span class="uk-topbar__title">无法完成</span>
-              </div>
+              <div class="uk-topbar"><span class="uk-topbar__title">无法完成</span></div>
               <div class="uk-body">
                 <div class="uk-empty">
                   <div class="uk-empty__icon">!</div>
-                  <span class="uk-empty__title">操作失败</span>
-                  说明原因与可恢复动作（可换成异常截图底图）。
+                  <span class="uk-empty__title">[异常标题]</span>
+                  [原因与可恢复动作，对齐 E*]
                 </div>
               </div>
               <div class="uk-footer">
                 <button type="button" class="uk-btn uk-btn--primary uk-btn--block" data-go="patch-after">重试</button>
-                <button type="button" class="uk-btn uk-btn--ghost uk-btn--block" data-go="patch-before">回现状</button>
               </div>
             </div>
           </section>
         </div>
       </div>
 
-      <div class="mode-panel" data-panel="new">
+      <div class="mode-panel is-active" data-panel="new">
         <div class="uk-phone-stage">
-          <section id="new-hub" class="uk-screen is-active" role="tabpanel">
-            <span class="uk-badge">NEW · HUB</span>
+          <section id="new-main" class="uk-screen is-active" role="tabpanel">
+            <span class="uk-badge">MAIN · UJ1</span>
             <div class="uk-app">
               <div class="uk-topbar">
-                <span class="uk-topbar__title">现有入口</span>
+                <span class="uk-topbar__title">[主路径页标题]</span>
               </div>
               <div class="uk-body">
                 <div class="uk-card">
-                  <div class="uk-card__title">从旧页进入新页</div>
-                  <p class="uk-card__desc">枢纽可用真机截图替换本屏；下方用组件示意入口。</p>
-                </div>
-                <div class="uk-list">
-                  <button type="button" class="uk-cell" data-go="new-page">
-                    <span class="uk-cell__main">
-                      <span class="uk-cell__title">进入新页面</span>
-                      <span class="uk-cell__sub">本次新增</span>
-                    </span>
-                    <span class="uk-tag">NEW</span>
-                    <span class="uk-cell__chevron" aria-hidden="true"></span>
-                  </button>
-                  <button type="button" class="uk-cell" data-go="new-edge">
-                    <span class="uk-cell__main">
-                      <span class="uk-cell__title">模拟异常入口</span>
-                    </span>
-                    <span class="uk-cell__chevron" aria-hidden="true"></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section id="new-page" class="uk-screen" role="tabpanel" hidden>
-            <span class="uk-badge">NEW · PAGE</span>
-            <div class="uk-app">
-              <div class="uk-topbar">
-                <button type="button" class="uk-back" data-go="new-hub" aria-label="返回"></button>
-                <span class="uk-topbar__title">新页面标题</span>
-              </div>
-              <div class="uk-body">
-                <div class="uk-card">
-                  <div class="uk-card__title">页面说明</div>
-                  <p class="uk-card__desc">用顶栏 / 列表 / 主按钮按规范拼装，替换文案即可。</p>
+                  <div class="uk-card__title">[本步说明]</div>
+                  <p class="uk-card__desc">替换为真实文案；用列表/按钮串完 UJ 步骤。</p>
                 </div>
                 <div class="uk-list">
                   <button type="button" class="uk-cell" data-open="new-sheet">
                     <span class="uk-cell__main">
-                      <span class="uk-cell__title">可点列表项</span>
-                      <span class="uk-cell__sub">打开半屏</span>
+                      <span class="uk-cell__title">[可点主操作]</span>
+                      <span class="uk-cell__sub">打开确认</span>
                     </span>
                     <span class="uk-cell__chevron" aria-hidden="true"></span>
                   </button>
-                  <div class="uk-cell" style="cursor:default">
-                    <span class="uk-cell__main">
-                      <span class="uk-cell__title">次要开关项</span>
-                    </span>
-                    <label class="uk-switch">
-                      <input type="checkbox" />
-                      <span class="uk-switch__track"></span>
-                    </label>
-                  </div>
                 </div>
               </div>
               <div class="uk-footer">
-                <button type="button" class="uk-btn uk-btn--primary uk-btn--block" id="new-success">主操作</button>
+                <button type="button" class="uk-btn uk-btn--ghost uk-btn--block" data-go="new-edge">模拟异常</button>
+                <button type="button" class="uk-btn uk-btn--primary uk-btn--block" id="new-ok">完成</button>
               </div>
               <div id="new-sheet" class="uk-sheet" role="dialog" aria-modal="true" aria-hidden="true">
                 <div class="uk-sheet__grab"></div>
-                <h3 class="uk-sheet__title">新页半屏</h3>
-                <p class="uk-sheet__desc">弹层同样用组件，不要只贴静图。</p>
+                <h3 class="uk-sheet__title">确认</h3>
+                <p class="uk-sheet__desc">对齐 FR/A 的确认语义</p>
                 <div class="uk-sheet__actions">
-                  <button type="button" class="uk-btn uk-btn--ghost" data-close="new-sheet">关闭</button>
-                  <button type="button" class="uk-btn uk-btn--danger" data-go="new-edge" data-close="new-sheet">异常</button>
-                  <button type="button" class="uk-btn uk-btn--primary" data-close="new-sheet" id="new-sheet-ok">完成</button>
+                  <button type="button" class="uk-btn uk-btn--ghost" data-close="new-sheet">取消</button>
+                  <button type="button" class="uk-btn uk-btn--primary" data-close="new-sheet">确定</button>
                 </div>
               </div>
               <div class="uk-toast" id="new-toast">已完成</div>
             </div>
           </section>
-
           <section id="new-edge" class="uk-screen" role="tabpanel" hidden>
-            <span class="uk-badge">NEW · EDGE</span>
+            <span class="uk-badge">EDGE · E1</span>
             <div class="uk-app">
               <div class="uk-topbar">
-                <button type="button" class="uk-back" data-go="new-page" aria-label="返回"></button>
+                <button type="button" class="uk-back" data-go="new-main" aria-label="返回"></button>
                 <span class="uk-topbar__title">异常 / 空态</span>
               </div>
               <div class="uk-body">
                 <div class="uk-empty">
                   <div class="uk-empty__icon">∅</div>
-                  <span class="uk-empty__title">暂无内容</span>
-                  说明失败原因与可恢复动作。
+                  <span class="uk-empty__title">[E* 标题]</span>
+                  [失败原因与可恢复动作]
                 </div>
               </div>
               <div class="uk-footer">
-                <button type="button" class="uk-btn uk-btn--primary uk-btn--block" data-go="new-page">重试</button>
+                <button type="button" class="uk-btn uk-btn--primary uk-btn--block" data-go="new-main">重试</button>
               </div>
             </div>
           </section>
@@ -209,27 +156,13 @@
     </div>
 
     <aside class="uk-side">
-      <div data-mode-only="patch">
-        <span class="uk-tag">mode: patch</span>
-        <h2>改已有页面</h2>
-        <p class="uk-mode-desc">截图保真 + 热区可点；新增控件用局部 HTML 叠层。</p>
-        <ol>
-          <li>截图 → <code>assets/*-before|after.png</code></li>
-          <li>写 <code>background-image</code>，开「显示热区」</li>
-          <li>新按钮用 <code>uk-overlay-widget</code> / <code>uk-sheet</code></li>
-        </ol>
-      </div>
-      <div data-mode-only="new">
-        <span class="uk-tag">mode: new</span>
-        <h2>新增页面</h2>
-        <p class="uk-mode-desc">用共享 UI Kit 拼整页并绑点击；入口可与 patch 混用。</p>
-        <ol>
-          <li>只用 <code>uk-*</code>，勿另起色板</li>
-          <li><code>data-go</code> / <code>data-open</code> 串路径</li>
-          <li>视觉对齐橱窗 <code>showcase.html</code></li>
-        </ol>
-      </div>
-      <p class="uk-status" id="status">已加载 UI Kit。默认 mode=patch。</p>
+      <h2>对照清单</h2>
+      <ul>
+        <li>主路径可点通（UJ*）</li>
+        <li>异常/空态可进入（E*）</li>
+        <li>文案与 prd/spec 一致</li>
+      </ul>
+      <p class="uk-status" id="status">就绪</p>
     </aside>
   </main>
 
@@ -239,11 +172,10 @@
         "patch-before": "现状",
         "patch-after": "改后",
         "patch-edge": "异常",
-        "new-hub": "入口枢纽",
-        "new-page": "新页面",
+        "new-main": "主路径",
         "new-edge": "异常"
       };
-      var defaultScreen = { patch: "patch-before", "new": "new-hub" };
+      var defaultScreen = { patch: "patch-before", "new": "new-main" };
       var statusEl = document.getElementById("status");
       var routeChip = document.getElementById("route-chip");
       var toastTimer;
@@ -256,7 +188,7 @@
       }
 
       function currentMode() {
-        return document.body.getAttribute("data-mode") || "patch";
+        return document.body.getAttribute("data-mode") || "new";
       }
 
       function showToast(id, text) {
@@ -287,7 +219,7 @@
           );
         });
         routeChip.textContent = "模式：" + mode + " · " + (screenLabels[id] || id);
-        statusEl.textContent = "已切换到「" + (screenLabels[id] || id) + "」";
+        statusEl.textContent = "当前：" + (screenLabels[id] || id);
       }
 
       function setMode(mode) {
@@ -310,7 +242,6 @@
           }
         }
         showScreen(defaultScreen[mode]);
-        statusEl.textContent = "已切换模式：" + mode;
       }
 
       document.querySelectorAll("[data-mode].uk-tool-btn").forEach(function (btn) {
@@ -318,13 +249,11 @@
           setMode(btn.getAttribute("data-mode"));
         });
       });
-
       document.querySelectorAll("[data-screen]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           showScreen(btn.getAttribute("data-screen"));
         });
       });
-
       document.querySelectorAll("[data-go]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var closeId = btn.getAttribute("data-close");
@@ -338,7 +267,6 @@
           showScreen(btn.getAttribute("data-go"));
         });
       });
-
       document.querySelectorAll("[data-open]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var sheet = document.getElementById(btn.getAttribute("data-open"));
@@ -347,7 +275,6 @@
           sheet.setAttribute("aria-hidden", "false");
         });
       });
-
       document.querySelectorAll("[data-close]").forEach(function (btn) {
         if (btn.getAttribute("data-go")) return;
         btn.addEventListener("click", function () {
@@ -358,26 +285,18 @@
         });
       });
 
-      var patchSuccess = document.getElementById("patch-success");
-      if (patchSuccess) {
-        patchSuccess.addEventListener("click", function () {
-          statusEl.textContent = "patch：已模拟成功";
+      var newOk = document.getElementById("new-ok");
+      if (newOk) {
+        newOk.addEventListener("click", function () {
+          showToast("new-toast", "主路径完成");
         });
       }
-      var newSuccess = document.getElementById("new-success");
-      if (newSuccess) {
-        newSuccess.addEventListener("click", function () {
-          showToast("new-toast", "主操作成功");
-          statusEl.textContent = "new：主操作成功";
+      var patchOk = document.getElementById("patch-ok");
+      if (patchOk) {
+        patchOk.addEventListener("click", function () {
+          statusEl.textContent = "patch：成功";
         });
       }
-      var newSheetOk = document.getElementById("new-sheet-ok");
-      if (newSheetOk) {
-        newSheetOk.addEventListener("click", function () {
-          showToast("new-toast", "半屏完成");
-        });
-      }
-
       var toggle = document.getElementById("toggle-hotspots");
       if (toggle) {
         toggle.addEventListener("click", function () {

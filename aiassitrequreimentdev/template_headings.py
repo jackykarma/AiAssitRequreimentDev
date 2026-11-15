@@ -20,24 +20,32 @@ from __future__ import annotations
 
 # feature/prd.md（## 级须齐全；底稿 templates/feature/prd.md）
 SPEC_PRD_H2 = (
-    "背景与价值 *（必填）*",
-    "依赖关系 *（必填）*",
-    "FR / NFR *（必填）*",
-    "AC（验收标准）*（必填）*",
-    "完整场景矩阵 *（必填）*",
-    "变更记录（增量变更）",
+    "背景与目标",
+    "范围与非目标",
+    "核心用户旅程（UJ*）",
+    "功能需求（FR*）",
+    "非功能需求（NFR*）",
+    "边界与异常（E*）",
+    "验收标准（A*）",
+    "产品原型",
+    "补充场景（S*，可选）",
+    "开放问题",
 )
 
 # requirements/.../prd.md（底稿 templates/requirement/prd.md）
-EPIC_PRD_H2 = (
-    "背景、目标与价值 *（必填）*",
-    "范围 *（必填）*",
-    "约束与假设 *（必填）*",
-    "依赖关系 *（必填）*",
-    "Feature 拆分（EPIC → Feature）*（必填）*",
-    "EPIC 完成条件 *（必填）*",
-    "变更记录（增量变更）",
+REQ_PRD_H2 = (
+    "背景与目标",
+    "范围与非目标",
+    "核心用户旅程总览",
+    "功能与非功能总览",
+    "边界与异常总览",
+    "验收总览",
+    "Feature 拆分依据",
+    "开放问题",
 )
+
+# 兼容旧名
+EPIC_PRD_H2 = REQ_PRD_H2
 
 # feature/tech.md（底稿 templates/feature/tech.md）
 TECH_MD_H2 = (

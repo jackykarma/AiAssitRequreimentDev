@@ -35,7 +35,8 @@ node .agents/skills/archify/bin/archify.mjs finalize <type> <candidate.json> <fe
 
 ## 模板里的占位
 
-`templates/feature/tech.md`、`templates/design/*` 中图位已是 Archify 占位（非 Mermaid）。出图时替换 `diagrams/PLACEHOLDER.*` 为真实 stem，勿再写回 Mermaid 代码块。
+`templates/feature/tech.md`、`templates/design/*` 中图位已是 Archify 说明 + `diagrams/PLACEHOLDER.*.svg`（**可预览的灰底占位图**，避免 Markdown 裂图）。  
+出图时用 finalize 产物**覆盖**该 svg/html，或改成真实 stem 并更新 `![](...)`；**禁止**把占位 SVG 登记进 `tech.yaml` 过 G2T。勿再写回 Mermaid。
 
 ## 不要做
 

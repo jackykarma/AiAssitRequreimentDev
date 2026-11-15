@@ -47,7 +47,7 @@ features/<FEAT-id>/        # 交付切片
 | 门禁 | 条件 |
 | --- | --- |
 | G0 | path 合法；light 的 affected 一项 |
-| G1 | spec 含 UJ/FR/NFR/S/E/A 且形状合法、openQuestions 空；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；已接受则哈希一致 |
+| G1 | spec 含 UJ/FR/NFR/E/A（S 可选）且形状合法、openQuestions 空；prd 章节对齐模板；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；已接受则哈希一致 |
 | G2 | ux 覆盖或 skip；有 UI 须可交互 `prototype/ux/`（`htmlPrototype.entry`）；light 可无 ux 文件 |
 | G2T | tech.md + tech.yaml；含 aiConstraints/keyDesigns/interfaces/diagrams（架构 L0+L1 或 gaps；同类型可多图+scope）；变更/选型/风险/快稳省/数据/埋点；acceptance 全覆盖 |
 | G3 | 任务无环、写集不交；light 仅一任务 |

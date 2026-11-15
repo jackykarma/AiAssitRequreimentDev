@@ -5,6 +5,7 @@ AI 辅助需求开发流水线。从意图出发，用结构化规格把产品�
 你只需对主控说需求；文档与门禁命令由 Agent 代写代跑。有问题才打断，否则自动推进。
 
 - 仓库：https://github.com/jackykarma/AiAssitRequreimentDev
+- 新手指南（HTML）：[docs/getting-started.html](docs/getting-started.html)
 - 架构：[docs/architecture.md](docs/architecture.md)
 - 角色边界：[constitution.md](constitution.md)
 - Agent 入口：[AGENTS.md](AGENTS.md)
@@ -21,6 +22,8 @@ AI 辅助需求开发流水线。从意图出发，用结构化规格把产品�
 小需求可直开单个 feature。大需求：产品先写需求级 PRD，再在 `split.yaml` 决定拆几个；主控建目录。
 
 ## 开始
+
+完整上手与最佳实践见 [docs/getting-started.html](docs/getting-started.html)。
 
 在 Cursor 中启用 `aiassitrequreimentdev-lead`：
 

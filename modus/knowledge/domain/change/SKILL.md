@@ -1,4 +1,4 @@
-# Feature 交付流程
+﻿# Feature 交付流程
 
 一条**需求**拆成一个或多个 **feature**（`features/<id>/`），再走到部署清单。本领域不包含具体业务规则。
 
@@ -9,7 +9,7 @@
 | 阶段怎么迁移，哪一道门把任务堵住 | [references/state_machine.md](references/state_machine.md) |
 | 全量还是轻量 | [references/paths.md](references/paths.md) |
 | 大需求如何拆、过程中怎么改 | [references/decomposition.md](references/decomposition.md) |
-| 绘图（Archify，仅 html/svg） | [references/diagrams.md](references/diagrams.md) |
+| 绘图（Archify，仅 html/png） | [references/diagrams.md](references/diagrams.md) |
 | 设计展开模板（NFR/接口/库表/埋点/KD） | `aiassitrequreimentdev/templates/design/` |
 | 启动选哪个角色 | [references/roles.md](references/roles.md) |
 | 编号、哈希、写集、工件规则 | [references/rule.md](references/rule.md) |

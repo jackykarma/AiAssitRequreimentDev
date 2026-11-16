@@ -1,4 +1,4 @@
----
+﻿---
 name: aiassitrequreimentdev-lead
 description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让产品产出需求级 PRD 与 split.yaml，再创建一个或多个 feature。产物共仓于 features/<id>/。
 ---
@@ -22,7 +22,7 @@ description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让
 | 步骤 | 谁 | 做什么 |
 | --- | --- | --- |
 | 1 | 产品 | 需求级 PRD（大需求用 `init-req`） |
-| 2 | 架构师（建议） | 整需求架构草图 → `requirements/REQ-…/architecture/`（Archify html+svg）；可建议拆分 |
+| 2 | 架构师（建议） | 整需求架构草图 → `requirements/REQ-…/architecture/`（Archify html+png）；可建议拆分 |
 | 3 | 产品 | 填 `split.yaml`（1 或 N） |
 | 4 | 主控 | `decision: multi` 时打断人确认拆分 |
 | 5 | 主控 | `init` 各 feature，带 `--requirement` |

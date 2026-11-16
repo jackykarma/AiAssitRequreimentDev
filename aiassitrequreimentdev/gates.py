@@ -14,7 +14,7 @@
  ** ------------------------------------------------------------------------------
  ** limao2@Apps.Gallery 2026/11/03 1.0 INIT
  ** limao2@Apps.Gallery 2026/11/03 1.1 ux/tech/review/deploy gates
- ** limao2@Apps.Gallery 2026/11/14 1.2 archify html+svg diagram contract
+ ** limao2@Apps.Gallery 2026/11/16 1.3 archify html+png diagram contract
  ** limao2@Apps.Gallery 2026/11/14 1.3 dual-audience tech + diagrams[]
  ** limao2@Apps.Gallery 2026/11/14 1.4 L0/L1 arch + keyDesigns + multi diagrams
  ** limao2@Apps.Gallery 2026/11/14 1.5 nfr/iface/data/tracking + design templates
@@ -23,6 +23,7 @@
  ** limao2@Apps.Gallery 2026/11/15 1.8 tech.md 内嵌 SVG 预览 + sequence 图质量
  ** limao2@Apps.Gallery 2026/11/15 1.9 full 路径强制 workflow/sequence/class 图
  ** limao2@Apps.Gallery 2026/11/15 1.10 Archify HTML 溯源（generator + reader-contract）
+ ** limao2@Apps.Gallery 2026/11/16 1.11 预览改为 html+png，取消 svg 合同
  ** limao2@Apps.Gallery 2026/11/15 1.11 specify 模板章节标题强制对齐
  ** limao2@Apps.Gallery 2026/11/15 1.12 product SSOT；G1 的 S* 改为可选
  ** limao2@Apps.Gallery 2026/11/15 1.13 G2 interactionRules + ui-kit visual baseline
@@ -940,7 +941,7 @@ def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Viola
 def _check_tech_md_diagram_embeds(
     change_dir: Path, tech: dict, violations: list[Violation]
 ) -> None:
-    """tech.md 须用 Markdown 图片语法内嵌每张 svg，禁止仅表格/文字链接。"""
+    """tech.md 须用 Markdown 图片语法内嵌每张 png，禁止仅表格/文字链接。"""
     diagrams = tech.get("diagrams")
     if not isinstance(diagrams, list) or not diagrams:
         return
@@ -951,19 +952,28 @@ def _check_tech_md_diagram_embeds(
     for index, item in enumerate(diagrams):
         if not isinstance(item, dict):
             continue
-        svg = item.get("svg")
-        if not isinstance(svg, str) or not svg.strip():
+        if item.get("svg"):
+            violations.append(
+                Violation(
+                    "G2T",
+                    "TECH_DIAGRAM",
+                    f"diagrams[{index}] 已废弃 svg 字段；预览合同改为 png（Markdown 可预览），"
+                    "请删除 svg 并登记 png",
+                )
+            )
+        png = item.get("png")
+        if not isinstance(png, str) or not png.strip():
             continue
-        svg_norm = svg.strip().replace("\\", "/")
-        # ![任意说明](diagrams/xxx.svg) 或带 ./ 前缀
-        pattern = rf"!\[[^\]]*\]\((?:\./)?{re.escape(svg_norm)}\)"
+        png_norm = png.strip().replace("\\", "/")
+        # ![任意说明](diagrams/xxx.png) 或带 ./ 前缀
+        pattern = rf"!\[[^\]]*\]\((?:\./)?{re.escape(png_norm)}\)"
         if re.search(pattern, text) is None:
             violations.append(
                 Violation(
                     "G2T",
                     "TECH_MD_EMBED",
                     f"tech.md 须直接内嵌预览 diagrams[{index}]："
-                    f"![]({svg_norm})（禁止仅表格或文字链接）",
+                    f"![]({png_norm})（禁止仅表格或文字链接；勿再用 svg）",
                 )
             )
 
@@ -1000,54 +1010,50 @@ def _check_diagram_archify_html(
                 "G2T",
                 "TECH_DIAGRAM_ARCHIFY",
                 f"diagrams[{index}].html 须为 Archify 正式产物（含 meta generator=archify、"
-                "archify-reader-contract、style#archify-fonts）。禁止手写 HTML/Mermaid/随便画 SVG "
-                "冒充；须按 archify 技能对 architecture/workflow/sequence/class 执行 finalize。"
+                "archify-reader-contract、style#archify-fonts）。禁止手写 HTML/Mermaid/随便画图 "
+                "冒充；须按 archify 技能 finalize 后另导出同 stem 的 png 供 tech.md 预览。"
                 "工具：https://github.com/tt-a1i/archify",
             )
         )
 
 
-def _check_diagram_svg_quality(
+def _check_diagram_png_quality(
     change_dir: Path | None,
     item: dict,
     index: int,
     violations: list[Violation],
 ) -> None:
-    """拒绝空壳 SVG；时序图须含生命线（虚线）与箭头标记。"""
+    """拒绝空壳/非 PNG；登记进 tech.yaml 的预览图须为真实 PNG 字节。"""
     if change_dir is None:
         return
-    svg_rel = item.get("svg")
-    if not isinstance(svg_rel, str) or not svg_rel.strip():
+    png_rel = item.get("png")
+    if not isinstance(png_rel, str) or not png_rel.strip():
         return
-    path = (change_dir / svg_rel.strip()).resolve()
+    path = (change_dir / png_rel.strip()).resolve()
     try:
         path.relative_to(change_dir.resolve())
     except ValueError:
         return
     if not path.is_file():
         return
-    raw = path.read_text(encoding="utf-8", errors="ignore")
-    compact = re.sub(r"\s+", "", raw)
-    if len(compact) < 400:
+    raw = path.read_bytes()
+    if not raw.startswith(b"\x89PNG\r\n\x1a\n"):
         violations.append(
             Violation(
                 "G2T",
                 "TECH_DIAGRAM_QUALITY",
-                f"diagrams[{index}].svg 过简（有效内容过少），须为可审阅图形而非占位",
+                f"diagrams[{index}].png 不是有效 PNG 文件（缺少 PNG 签名）",
             )
         )
         return
-    if item.get("type") != "sequence":
-        return
-    has_lifeline = "stroke-dasharray" in raw
-    has_arrow = "marker-end" in raw or 'id="arrow"' in raw or "markerWidth" in raw
-    if not has_lifeline or not has_arrow:
+    # 模板占位可很小；正式登记图须可审阅（截自 Archify HTML）
+    if len(raw) < 2048:
         violations.append(
             Violation(
                 "G2T",
                 "TECH_DIAGRAM_QUALITY",
-                f"diagrams[{index}] 时序图须含生命线虚线（stroke-dasharray）与箭头（marker），"
-                "不得用简化折线冒充时序图",
+                f"diagrams[{index}].png 过小（<{len(raw)}B），须为 Archify HTML 截出的可审阅预览，"
+                "禁止 1×1/空壳占位登记进 tech.yaml",
             )
         )
 
@@ -1366,10 +1372,10 @@ def _check_tech_doc_sections(
                 change_dir, item.get("html"), "html", index, violations, suffix=".html"
             )
             _check_diagram_artifact_path(
-                change_dir, item.get("svg"), "svg", index, violations, suffix=".svg"
+                change_dir, item.get("png"), "png", index, violations, suffix=".png"
             )
             _check_diagram_archify_html(change_dir, item, index, violations)
-            _check_diagram_svg_quality(change_dir, item, index, violations)
+            _check_diagram_png_quality(change_dir, item, index, violations)
         if architecture_layers and architecture_layers != {0, 1}:
             gaps = tech.get("architectureLayerGaps")
             if not isinstance(gaps, str) or not gaps.strip():

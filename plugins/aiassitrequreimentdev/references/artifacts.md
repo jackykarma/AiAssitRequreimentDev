@@ -16,7 +16,7 @@
 | `tech.md` / `tech-spec.md` / KD·NFR·接口·库表·埋点 | 架构师 | 人读：feature 级 `templates/feature/tech.md` + `tech-spec.md`；展开件 `templates/design/` |
 | `tech.yaml` | 架构师 | 给 AI/门禁：`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams[]` |
 | `tasks.md` | 主控/架构 | 人读拆解：按 `templates/feature/tasks.md`；机器件仍为 `tasks.yaml` |
-| `diagrams/*` | 架构师 | [Archify](https://github.com/tt-a1i/archify) `finalize` 真出：`.html` + `.svg`（HTML 须含 generator/archify 溯源）；**并在 `tech.md` 用 `![](…svg)` 内嵌预览** |
+| `diagrams/*` | 架构师 | [Archify](https://github.com/tt-a1i/archify) `finalize` 真出：`.html` + `.png`（HTML 须含 generator/archify 溯源；**禁止 svg 预览合同**）；**并在 `tech.md` 用 `![](…png)` 内嵌预览** |
 | `tasks.yaml` | 主控 | G2T 之后的任务图：依赖、写集、验收、验证命令 |
 | `change.yaml` | 主控 | 变更台账：发起人、原因、级别、影响文件/门禁、时间、状态 |
 | `review.yaml` | Review | `findings[]`：`blocking` / `dispute` / `nit` |

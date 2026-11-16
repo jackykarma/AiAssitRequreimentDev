@@ -1,4 +1,4 @@
-# 需求、feature 拆分与过程变更
+﻿# 需求、feature 拆分与过程变更
 
 ## 名词
 
@@ -38,7 +38,7 @@ Feature **必须**是对本切片验收可独立关门禁（可 G4）的完整�
 ```text
 需求对话 / grill
     → 需求级 PRD（requirements/REQ-…/prd.md）
-    → 整需求架构草图（可选，architecture/；Archify html+svg）
+    → 整需求架构草图（可选，architecture/；Archify html+png）
     → 拆分决策（requirements/REQ-…/split.yaml）  ← 根据 PRD + 架构草图决定 1 或 N
     → 人确认（多 feature 时）
     → 创建 features/FEAT-*，写入 requirementId

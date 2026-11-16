@@ -38,7 +38,7 @@ features/<FEAT-id>/        # 交付切片
 
 启动：选角色 → 确认全量/轻量 → 产品 PRD。大需求先 `init-req`（可含整需求 Archify 草图）再按 `split.yaml` 建 feature；每个 feature 各自写 tech（G2T）。小需求直接一个 feature。
 
-绘图：一律 [Archify](https://github.com/tt-a1i/archify)，只保留 html + svg。详见 `modus/knowledge/domain/change/references/diagrams.md`。
+绘图：一律 [Archify](https://github.com/tt-a1i/archify)，只保留 html + png。详见 `modus/knowledge/domain/change/references/diagrams.md`。
 
 ## 状态与门禁
 

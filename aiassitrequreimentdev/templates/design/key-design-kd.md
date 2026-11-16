@@ -1,4 +1,4 @@
-# KD-001：[设计点名称]
+﻿# KD-001：[设计点名称]
 
 > **落盘**：复制到 `features/<FEAT-id>/` 下按需命名，如 `KD_001_<slug>.md`。  
 > **回链**：本 feature 的 `tech.md` §七 / `tech.yaml` → `keyDesigns`。  
@@ -48,11 +48,11 @@
 > - 须标注关键数据流方向与协议（如 Flow、Callback、Intent 等）
 > - 新增组件用蓝色主色，复用已有组件用绿色成功色，外部依赖用橙色警告色
 
-> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`architecture`。写 candidate → `finalize` → 产出 html+svg；**禁止**用 Mermaid 作正式图。
+> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`architecture`。写 candidate → `finalize` → 产出 html+png；**禁止**用 Mermaid 作正式图。
 >
-> 建议路径：`diagrams/PLACEHOLDER.1.architecture.html` + `diagrams/PLACEHOLDER.1.architecture.svg`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
+> 建议路径：`diagrams/PLACEHOLDER.1.architecture.html` + `diagrams/PLACEHOLDER.1.architecture.png`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
 
-![Archify architecture 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.1.architecture.svg)
+![Archify architecture 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.1.architecture.png)
 
 
 **架构说明**（绘制时填写；省略时无需此段）：
@@ -73,11 +73,11 @@
 > - **关系**：`-->` 依赖、`<|..` 实现、`<|--` 继承等须与「核心方案」叙述及下文**核心调用链时序图**的 participant 一致。
 > - **顺序建议**：先完成本节类图，再画**核心调用链时序图**，避免 participant 与类型脱节。
 
-> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`class`。写 candidate → `finalize` → 产出 html+svg；**禁止**用 Mermaid 作正式图。
+> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`class`。写 candidate → `finalize` → 产出 html+png；**禁止**用 Mermaid 作正式图。
 >
-> 建议路径：`diagrams/PLACEHOLDER.2.class.html` + `diagrams/PLACEHOLDER.2.class.svg`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
+> 建议路径：`diagrams/PLACEHOLDER.2.class.html` + `diagrams/PLACEHOLDER.2.class.png`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
 
-![Archify class 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.2.class.svg)
+![Archify class 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.2.class.png)
 
 
 **类图说明**：
@@ -93,11 +93,11 @@
 >
 > **粒度控制**：KD 阶段重点讲清**主干成功路径 + 影响方案可行性的关键异常/降级分支**；不要求展开到每个局部实现细节、内部私有方法或 Story 级边界条件。更细的方法调用、字段级转换、UI 细节和单 Story 专属分支，放到 L2 Story 设计中细化。
 
-> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`sequence`。写 candidate → `finalize` → 产出 html+svg；**禁止**用 Mermaid 作正式图。
+> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`sequence`。写 candidate → `finalize` → 产出 html+png；**禁止**用 Mermaid 作正式图。
 >
-> 建议路径：`diagrams/PLACEHOLDER.3.sequence.html` + `diagrams/PLACEHOLDER.3.sequence.svg`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
+> 建议路径：`diagrams/PLACEHOLDER.3.sequence.html` + `diagrams/PLACEHOLDER.3.sequence.png`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
 
-![Archify sequence 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.3.sequence.svg)
+![Archify sequence 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.3.sequence.png)
 
 
 **协作过程**（按下列结构在 **KD 粒度**展开；每项应有实质内容，不得仅列标题或一句话带过；目标是**未读图也能理解主干协作与关键分支差异**）：

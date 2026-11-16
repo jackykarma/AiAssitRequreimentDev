@@ -112,6 +112,43 @@ def write_archify_html(path: Path) -> None:
     )
 
 
+def write_preview_png(path: Path, *, w: int = 640, h: int = 400) -> None:
+    """可过 G2T PNG 质量门禁的预览桩（>=2KB；加噪避免纯色过度压缩）。"""
+    import struct
+    import zlib
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # 每行轻微变化，避免 zlib 把整图压到 <2KB
+    rows: list[bytes] = []
+    for y in range(h):
+        row = bytearray(1 + w * 3)
+        row[0] = 0
+        for x in range(w):
+            i = 1 + x * 3
+            row[i] = (x + y) & 0xFF
+            row[i + 1] = (x * 3 + y * 5) & 0xFF
+            row[i + 2] = (255 - ((x + y) & 0xFF)) & 0xFF
+        rows.append(bytes(row))
+    raw = b"".join(rows)
+
+    def chunk(tag: bytes, data: bytes) -> bytes:
+        return (
+            struct.pack(">I", len(data))
+            + tag
+            + data
+            + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+        )
+
+    ihdr = struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0)
+    png = (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", ihdr)
+        + chunk(b"IDAT", zlib.compress(raw, 6))
+        + chunk(b"IEND", b"")
+    )
+    path.write_bytes(png)
+
+
 def valid_spec() -> str:
     return """
 id: CH-014
@@ -818,28 +855,11 @@ acceptance:
         write_yaml(self.change / "tech.yaml", valid_tech())
         self.assertEqual(self.codes("G2T"), set())
 
-    def test_g2t_diagram_requires_archify_html_svg(self) -> None:
+    def test_g2t_diagram_requires_archify_html_png(self) -> None:
         self.put_state()
         write_yaml(self.change / "spec.yaml", valid_spec())
         diagrams = self.change / "diagrams"
         diagrams.mkdir(parents=True, exist_ok=True)
-        rich = (
-            "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'>"
-            + ("<rect x='10' y='10' width='100' height='40' fill='#cdf'/>" * 8)
-            + "</svg>\n"
-        )
-        seq_svg = (
-            '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">'
-            '<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" '
-            'orient="auto"><path d="M0,0 L6,3 L0,6 Z"/></marker></defs>'
-            '<line x1="80" y1="40" x2="80" y2="260" stroke="#333" stroke-dasharray="4 3"/>'
-            '<line x1="220" y1="40" x2="220" y2="260" stroke="#333" stroke-dasharray="4 3"/>'
-            '<line x1="80" y1="100" x2="220" y2="100" stroke="#333" marker-end="url(#arrow)"/>'
-            '<rect x="40" y="20" width="80" height="30" fill="#eee"/><text x="50" y="40">A</text>'
-            '<rect x="180" y="20" width="80" height="30" fill="#eee"/><text x="190" y="40">B</text>'
-            "<!-- pad " + ("x" * 200) + " -->"
-            "</svg>"
-        )
         for name in (
             "pay.L0.architecture",
             "pay.L1.architecture",
@@ -848,10 +868,7 @@ acceptance:
             "pay.class",
         ):
             write_archify_html(diagrams / f"{name}.html")
-            if name == "callback.sequence":
-                (diagrams / f"{name}.svg").write_text(seq_svg, encoding="utf-8")
-            else:
-                (diagrams / f"{name}.svg").write_text(rich, encoding="utf-8")
+            write_preview_png(diagrams / f"{name}.png")
         tech = valid_tech().replace(
             "diagrams: []\n"
             "diagramsNoneReason: 本切片沿用现有回调链路，无新模块边界，评审以文字约束与接口契约为准\n"
@@ -864,7 +881,7 @@ acceptance:
             "    scope: 渠道与订单服务边界\n"
             "    tool: archify\n"
             "    html: diagrams/pay.L0.architecture.html\n"
-            "    svg: diagrams/pay.L0.architecture.svg\n"
+            "    png: diagrams/pay.L0.architecture.png\n"
             "  - id: D-L1\n"
             "    type: architecture\n"
             "    layer: 1\n"
@@ -872,59 +889,54 @@ acceptance:
             "    scope: CallbackHandler 与 IdempotencyStore\n"
             "    tool: archify\n"
             "    html: diagrams/pay.L1.architecture.html\n"
-            "    svg: diagrams/pay.L1.architecture.svg\n"
+            "    png: diagrams/pay.L1.architecture.png\n"
             "  - id: D-wf\n"
             "    type: workflow\n"
             "    title: 回调流程\n"
             "    scope: 主路径与失败\n"
             "    tool: archify\n"
             "    html: diagrams/pay.workflow.html\n"
-            "    svg: diagrams/pay.workflow.svg\n"
+            "    png: diagrams/pay.workflow.png\n"
             "  - id: D-seq\n"
             "    type: sequence\n"
             "    title: 回调主路径\n"
             "    scope: 单次支付回调成功\n"
             "    tool: archify\n"
             "    html: diagrams/callback.sequence.html\n"
-            "    svg: diagrams/callback.sequence.svg\n"
+            "    png: diagrams/callback.sequence.png\n"
             "  - id: D-class\n"
             "    type: class\n"
             "    title: 回调类图\n"
             "    scope: Handler 与 Store\n"
             "    tool: archify\n"
             "    html: diagrams/pay.class.html\n"
-            "    svg: diagrams/pay.class.svg\n"
+            "    png: diagrams/pay.class.png\n"
             "diagramsNoneReason: \"\"\n"
             "architectureLayerGaps: \"\"\n",
         )
         write_tech_doc(self.change / "tech.md")
         md = (self.change / "tech.md").read_text(encoding="utf-8")
         md += (
-            "\n![L0](diagrams/pay.L0.architecture.svg)\n"
-            "![L1](diagrams/pay.L1.architecture.svg)\n"
-            "![wf](diagrams/pay.workflow.svg)\n"
-            "![seq](diagrams/callback.sequence.svg)\n"
-            "![class](diagrams/pay.class.svg)\n"
+            "\n![L0](diagrams/pay.L0.architecture.png)\n"
+            "![L1](diagrams/pay.L1.architecture.png)\n"
+            "![wf](diagrams/pay.workflow.png)\n"
+            "![seq](diagrams/callback.sequence.png)\n"
+            "![class](diagrams/pay.class.png)\n"
         )
         (self.change / "tech.md").write_text(md, encoding="utf-8")
         write_yaml(self.change / "tech.yaml", tech)
         self.assertEqual(self.codes("G2T"), set())
 
-    def test_g2t_tech_md_requires_svg_embed(self) -> None:
+    def test_g2t_tech_md_requires_png_embed(self) -> None:
         self.put_state()
         write_yaml(self.change / "spec.yaml", valid_spec())
         write_tech_doc(self.change / "tech.md")
         diagrams = self.change / "diagrams"
         diagrams.mkdir(parents=True, exist_ok=True)
-        rich = (
-            "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'>"
-            + ("<rect width='10' height='10'/>" * 50)
-            + "</svg>"
-        )
         write_archify_html(diagrams / "pay.L0.architecture.html")
-        (diagrams / "pay.L0.architecture.svg").write_text(rich, encoding="utf-8")
+        write_preview_png(diagrams / "pay.L0.architecture.png")
         write_archify_html(diagrams / "pay.L1.architecture.html")
-        (diagrams / "pay.L1.architecture.svg").write_text(rich, encoding="utf-8")
+        write_preview_png(diagrams / "pay.L1.architecture.png")
         tech = valid_tech().replace(
             "diagrams: []\n"
             "diagramsNoneReason: 本切片沿用现有回调链路，无新模块边界，评审以文字约束与接口契约为准\n"
@@ -937,7 +949,7 @@ acceptance:
             "    scope: ctx\n"
             "    tool: archify\n"
             "    html: diagrams/pay.L0.architecture.html\n"
-            "    svg: diagrams/pay.L0.architecture.svg\n"
+            "    png: diagrams/pay.L0.architecture.png\n"
             "  - id: D-L1\n"
             "    type: architecture\n"
             "    layer: 1\n"
@@ -945,7 +957,7 @@ acceptance:
             "    scope: mod\n"
             "    tool: archify\n"
             "    html: diagrams/pay.L1.architecture.html\n"
-            "    svg: diagrams/pay.L1.architecture.svg\n"
+            "    png: diagrams/pay.L1.architecture.png\n"
             "diagramsNoneReason: \"\"\n"
             "architectureLayerGaps: \"\"\n",
         )
@@ -958,19 +970,14 @@ acceptance:
         write_tech_doc(self.change / "tech.md")
         diagrams = self.change / "diagrams"
         diagrams.mkdir(parents=True, exist_ok=True)
-        rich = (
-            "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'>"
-            + ("<rect width='10' height='10'/>" * 50)
-            + "</svg>"
-        )
         (diagrams / "pay.L0.architecture.html").write_text("<html></html>", encoding="utf-8")
-        (diagrams / "pay.L0.architecture.svg").write_text(rich, encoding="utf-8")
+        write_preview_png(diagrams / "pay.L0.architecture.png")
         write_archify_html(diagrams / "pay.L1.architecture.html")
-        (diagrams / "pay.L1.architecture.svg").write_text(rich, encoding="utf-8")
+        write_preview_png(diagrams / "pay.L1.architecture.png")
         (self.change / "tech.md").write_text(
             "# 技术方案\n\n"
-            "![L0](diagrams/pay.L0.architecture.svg)\n"
-            "![L1](diagrams/pay.L1.architecture.svg)\n",
+            "![L0](diagrams/pay.L0.architecture.png)\n"
+            "![L1](diagrams/pay.L1.architecture.png)\n",
             encoding="utf-8",
         )
         tech = valid_tech().replace(
@@ -985,7 +992,7 @@ acceptance:
             "    scope: ctx\n"
             "    tool: archify\n"
             "    html: diagrams/pay.L0.architecture.html\n"
-            "    svg: diagrams/pay.L0.architecture.svg\n"
+            "    png: diagrams/pay.L0.architecture.png\n"
             "  - id: D-L1\n"
             "    type: architecture\n"
             "    layer: 1\n"
@@ -993,7 +1000,7 @@ acceptance:
             "    scope: mod\n"
             "    tool: archify\n"
             "    html: diagrams/pay.L1.architecture.html\n"
-            "    svg: diagrams/pay.L1.architecture.svg\n"
+            "    png: diagrams/pay.L1.architecture.png\n"
             "diagramsNoneReason: \"\"\n"
             "architectureLayerGaps: \"\"\n",
         )
@@ -1006,15 +1013,10 @@ acceptance:
         write_tech_doc(self.change / "tech.md")
         diagrams = self.change / "diagrams"
         diagrams.mkdir(parents=True, exist_ok=True)
-        rich = (
-            "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'>"
-            + ("<rect width='10' height='10'/>" * 50)
-            + "</svg>"
-        )
         write_archify_html(diagrams / "pay.L1.architecture.html")
-        (diagrams / "pay.L1.architecture.svg").write_text(rich, encoding="utf-8")
+        write_preview_png(diagrams / "pay.L1.architecture.png")
         (self.change / "tech.md").write_text(
-            "# 技术方案\n\n![L1](diagrams/pay.L1.architecture.svg)\n",
+            "# 技术方案\n\n![L1](diagrams/pay.L1.architecture.png)\n",
             encoding="utf-8",
         )
         bad = valid_tech().replace(
@@ -1029,7 +1031,7 @@ acceptance:
             "    scope: 内部模块\n"
             "    tool: archify\n"
             "    html: diagrams/pay.L1.architecture.html\n"
-            "    svg: diagrams/pay.L1.architecture.svg\n"
+            "    png: diagrams/pay.L1.architecture.png\n"
             "diagramsNoneReason: \"\"\n"
             "architectureLayerGaps: \"\"\n",
         )
@@ -1052,7 +1054,7 @@ acceptance:
             "    scope: x\n"
             "    tool: mermaid\n"
             "    html: diagrams/a.html\n"
-            "    svg: diagrams/a.svg\n"
+            "    png: diagrams/a.png\n"
             "diagramsNoneReason: \"\"\n"
             "architectureLayerGaps: 缺 1 层，仅测 tool\n",
         )

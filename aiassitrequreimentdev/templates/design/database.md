@@ -1,4 +1,4 @@
-# 数据库设计：FEAT-[编号] - [名称]
+﻿# 数据库设计：FEAT-[编号] - [名称]
 
 > **定位**：本 feature 数据表/存储展开件；约束边界在 `tech-spec.md` §三，摘要在 `tech.md` §十 / `tech.yaml` → `dataDesign`。  
 > **适用**：Room/SQLite/DataStore/云端等；无则整文 N/A。  
@@ -24,11 +24,11 @@
 
 > 用 ER 图展示关键数据表之间的关系，便于评审者理解整体数据模型。
 
-> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`erd`。写 candidate → `finalize` → 产出 html+svg；**禁止**用 Mermaid 作正式图。
+> **绘图（Archify，强制）**：启用技能 `aiassitrequreimentdev-archify`（底层 `.agents/skills/archify`）。类型：`erd`。写 candidate → `finalize` → 产出 html+png；**禁止**用 Mermaid 作正式图。
 >
-> 建议路径：`diagrams/PLACEHOLDER.1.erd.html` + `diagrams/PLACEHOLDER.1.erd.svg`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
+> 建议路径：`diagrams/PLACEHOLDER.1.erd.html` + `diagrams/PLACEHOLDER.1.erd.png`；在 `tech.yaml` → `diagrams[]` 登记（`tool: archify`）。
 
-![Archify erd 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.1.erd.svg)
+![Archify erd 占位（请替换为 finalize 产物）](diagrams/PLACEHOLDER.1.erd.png)
 
 
 

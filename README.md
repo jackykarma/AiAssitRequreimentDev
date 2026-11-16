@@ -68,7 +68,7 @@ python -m unittest tests.test_gates tests.test_roles tests.test_paths
 | `aiassitrequreimentdev-grill` | 系统追问，闭合旅程与规格清单 |
 | `aiassitrequreimentdev-product` | `prd.md`、可交互 `prototype/index.html`、`spec.yaml`（用户旅程/功能/非功能/场景/异常/验收；大需求另写需求级 PRD / `split.yaml`） |
 | `aiassitrequreimentdev-ux` | `ux.yaml`（交互规则 + 人选 ui-kit\|custom）、可交互 `prototype/ux/`（默认 ui-kit） |
-| `aiassitrequreimentdev-tech` | `tech.md`（人审）+ `tech.yaml`（AI 约束/接口/验收）；图用 [Archify](https://github.com/tt-a1i/archify) 仅 html+svg |
+| `aiassitrequreimentdev-tech` | `tech.md`（人审）+ `tech.yaml`（AI 约束/接口/验收）；图用 [Archify](https://github.com/tt-a1i/archify) 仅 html+png |
 | `aiassitrequreimentdev-dev` | 任务写集内源码 |
 | `aiassitrequreimentdev-review` | `review.yaml` |
 | `aiassitrequreimentdev-test` | `evidence.yaml` |

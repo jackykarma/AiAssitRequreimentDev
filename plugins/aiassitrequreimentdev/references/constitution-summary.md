@@ -1,4 +1,4 @@
-# 宪法要点
+﻿# 宪法要点
 
 对话编排 + 规格门禁。角色技能与检查器服从下列规则。本仓全文见 `constitution.md`；装到业务仓时以本摘要为最小集。
 
@@ -7,7 +7,7 @@
 3. 产品交付：`prd.md`（**章节标题须与 `templates/feature/prd.md` 完全对齐**）、可交互 `prototype/index.html`（无 UI 则 `uiRequired=false` + `uiNoneReason`）、`spec.yaml`。输入不完整先 brainstorm/grill。prd 与 spec 同源同口径。禁止用对话草稿或自创精简版代替模板。
 4. 一个 feature 只有一份机器规格 `spec.yaml`（`UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*`）。其他角色按编号引用，不改写规格正文。
 5. **G1 冻结：`check G1` 通过后由主控 `seal`（写 `specHash` 并置 `gates.G1=accepted`）。** 之后改 `spec.yaml` 必须先记变更、把 `gates.G1` 改回 `pending` 并重新 `seal`。检查器用 `specHash` 发现未经退回的修改。改规格须同步 PRD 及受影响原型。见 `change-control.md`。不要手改其它门禁的 `accepted`。
-6. 交互视觉写 `ux.yaml` + 可交互 `prototype/ux/`（或 `skip`）。技术方案写 `tech.md` + `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。架构/流程/时序/类图须用 [Archify](https://github.com/tt-a1i/archify) `finalize` 真出图（禁止手写/Mermaid 冒充），只留 html/svg。
+6. 交互视觉写 `ux.yaml` + 可交互 `prototype/ux/`（或 `skip`）。技术方案写 `tech.md` + `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。架构/流程/时序/类图须用 [Archify](https://github.com/tt-a1i/archify) `finalize` 真出图（禁止手写/Mermaid 冒充），只留 html/png。
 7. 验收必须能被一条命令判断。`given` / `when` / `then` / `verify` 都要有内容。**通过与否看命令退出码**（记入 `evidence.yaml` 的 `exitCode`）。`verify`/证据命令禁止空转成功；G1 seal 前人过 A* 清单（见产品技能）。
 8. `nonGoals` 里的事项开发不得实现。主控直接拒绝。
 9. 知识与源码冲突时以当前源码为准。规格与技术方案只保存链接。长期事实在业务仓 `modus/knowledge/`（可选）；插件内以本目录为准。

@@ -7,7 +7,7 @@
 3. 产品阶段交付：`prd.md`（给人）、可交互 HTML `prototype/index.html`（给人；无 UI 时 `spec.uiRequired=false` + `uiNoneReason`）、`spec.yaml`（给 Agent 与门禁）。输入不完整时须先 brainstorm/grill 再出稿。须覆盖核心用户旅程、功能需求、非功能需求、异常与边界、验收标准（清晰无歧义、可验收）；`prd` 与 `spec` 与原型是**全流程一套事实源**，同源同编号；禁止用对话草稿文件或平行口径代替。
 4. 一个 feature 只有一份机器规格：`features/<id>/spec.yaml`（必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选）。其他 Agent 按编号引用，不改写规格正文。
 5. G1 冻结：主控在 `check G1` 通过后执行 `seal`（写入 `specHash` 并置 `gates.G1=accepted`）。之后修改 `spec.yaml` 必须先把 `gates.G1` 改回 `pending` 并重新签字。检查器用 `specHash` 发现未经退回的修改。改规格须同步 PRD（及受影响原型）。**任何产品/UX/技术方案/范围变更须先写入 `change.yaml`**（发起人、原因、影响、回退门禁、时间），再改合同；细则见插件 `references/change-control.md`。
-6. 交互视觉写 `ux.yaml`（有 UI 须 `interactionRules` + 人选 `visual.baseline`：`ui-kit` 默认或 `custom` 自由发挥；Pencil/Figma 仅探索须回流 HTML）+ 可交互 `prototype/ux/`（或 `skip`）。与产品原型分工：产品=业务可点通，UX=规则与视觉精修。技术方案写 `tech.md`（人审）+ `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。旧 `design.yaml` 退役。架构图分 0 层/1 层；流程/时序/类图可多张（`scope` 区分）。绘图一律 Archify，只留 html/svg。
+6. 交互视觉写 `ux.yaml`（有 UI 须 `interactionRules` + 人选 `visual.baseline`：`ui-kit` 默认或 `custom` 自由发挥；Pencil/Figma 仅探索须回流 HTML）+ 可交互 `prototype/ux/`（或 `skip`）。与产品原型分工：产品=业务可点通，UX=规则与视觉精修。技术方案写 `tech.md`（人审）+ `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。旧 `design.yaml` 退役。架构图分 0 层/1 层；流程/时序/类图可多张（`scope` 区分）。绘图一律 Archify，只留 html/png。
 7. 验收必须能被一条命令判断。`given` / `when` / `then` / `verify` 都要有内容。`verify` 与证据 `command` 须能在 then 不成立时非 0；禁止空转成功。G1 seal 前产品须过人审 A* 清单（见产品技能）。
 8. `nonGoals` 里的事项，开发工人不得实现。主控直接拒绝。
 9. 知识库中的规则以当前源码为准。规格与技术方案只保存链接。长期事实只定义在 `modus/knowledge/`。

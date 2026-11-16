@@ -13,7 +13,7 @@
 | `prototype/ux/` | 交互视觉 | 可交互 UX HTML 原型（G2；入口默认 `index.html`） |
 | `tech.md` | 技术方案 | 给人读：一页纸、L0/L1 架构、关键设计（含判定原则）、可多张流程/时序/类图 |
 | `tech.yaml` | 技术方案 | 给 AI/门禁：`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams[]`（含 layer/scope） |
-| `diagrams/*` | 技术方案 | Archify：仅 `.html` + `.svg`；同类型可多张 |
+| `diagrams/*` | 技术方案 | Archify：仅 `.html` + `.png`；同类型可多张 |
 | `tasks.yaml` | 主控 | 任务图：依赖、写集、验收、验证命令 |
 | `review.yaml` | Review | `findings[]` |
 | `evidence.yaml` | 测试 | 每条验收的 command 与 exitCode |

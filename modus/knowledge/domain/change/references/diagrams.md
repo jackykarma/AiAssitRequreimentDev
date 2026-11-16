@@ -1,6 +1,6 @@
-# 绘图约定（Archify）
+﻿# 绘图约定（Archify）
 
-统一使用 [Archify](https://github.com/tt-a1i/archify)。仓库内只保留 `.html` + `.svg`。
+统一使用 [Archify](https://github.com/tt-a1i/archify)。仓库内保留 `.html`（交互）+ `.png`（Markdown 预览）。**不再把 `.svg` 作为预览合同**（Cursor 等预览器对 Archify SVG 不可见）。
 
 ## 架构分层
 
@@ -16,7 +16,7 @@
 `sequence` / `workflow` / `class` 等 **允许同类型多条**。每条必填：
 
 - `id`、`title`、`scope`（范围：场景/子系统/写集）
-- `tool: archify`、`html`、`svg`
+- `tool: archify`、`html`、`png`
 
 Feature 很大时按 scope 拆开，不要一张图画完全部。
 
@@ -31,7 +31,7 @@ diagrams:
     scope: 渠道与订单服务边界
     tool: archify
     html: diagrams/pay.L0.architecture.html
-    svg: diagrams/pay.L0.architecture.svg
+    png: diagrams/pay.L0.architecture.png
   - id: D-L1-a
     type: architecture
     layer: 1
@@ -39,18 +39,22 @@ diagrams:
     scope: Callback 写集
     tool: archify
     html: diagrams/pay.L1.callback.architecture.html
-    svg: diagrams/pay.L1.callback.architecture.svg
+    png: diagrams/pay.L1.callback.architecture.png
   - id: D-seq-ok
     type: sequence
     title: 回调成功
     scope: 单次成功路径
     tool: archify
     html: diagrams/callback.ok.sequence.html
-    svg: diagrams/callback.ok.sequence.svg
+    png: diagrams/callback.ok.sequence.png
 diagramsNoneReason: ""
 architectureLayerGaps: ""
 ```
 
-## 安装
+## 安装与导出 PNG
 
 本仓库：`.agents/skills/archify`（`node .agents/skills/archify/bin/archify.mjs doctor`）。
+
+```bash
+node plugins/aiassitrequreimentdev/scripts/export_diagram_png.mjs <stem>.html
+```

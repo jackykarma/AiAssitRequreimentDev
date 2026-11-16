@@ -2,7 +2,7 @@
 
 > **定位**：本 **feature 切片** 的技术方案人读件。与 `tech.yaml`（AI/门禁）、`tech-spec.md`（工程约束）同源。  
 > **输入**：本切片 `prd.md` / `spec.yaml` / 原型；若有 `requirementId` 再读需求级 PRD 与同需求其它 tech。  
-> **绘图**：正式图须用 [Archify](https://github.com/tt-a1i/archify) `finalize`，产物 html+svg 入 `diagrams/`，本文用 `![](…svg)` **直接内嵌**（禁止仅表格列路径）。  
+> **绘图**：正式图须用 [Archify](https://github.com/tt-a1i/archify) `finalize` 出 `.html`，再导出同 stem `.png` 入 `diagrams/`；本文用 `![](…png)` **直接内嵌**（禁止仅表格列路径；**不再使用 svg**）。  
 > **展开件**（按需复制）：`templates/design/`（KD / NFR / 接口 / 库表 / 埋点）。  
 > **Lite**：轻量路径可将详表收成索引 + 链接，但仍须保留下列全部 `##` 标题；`full` 还须保留强制 `###`。
 
@@ -75,9 +75,9 @@
 
 ### 4.2 零层架构图（必须）
 
-![L0 架构图](diagrams/PLACEHOLDER.2.architecture.svg)
+![L0 架构图](diagrams/PLACEHOLDER.2.architecture.png)
 
-> 替换为 Archify 真实 svg；`tech.md` 必须内嵌，禁止只写路径。
+> 替换为 Archify HTML 截出的真实 png；`tech.md` 必须内嵌，禁止只写路径。可交互原稿为同 stem `.html`。
 
 ---
 
@@ -87,7 +87,7 @@
 
 ### 5.1 一层框架图（必须）
 
-![L1 架构图](diagrams/PLACEHOLDER.3.architecture.svg)
+![L1 架构图](diagrams/PLACEHOLDER.3.architecture.png)
 
 ### 5.2 模块职责
 
@@ -97,7 +97,7 @@
 
 ### 5.3 组件协作流程（必须）
 
-![主路径协作](diagrams/PLACEHOLDER.4.workflow.svg)
+![主路径协作](diagrams/PLACEHOLDER.4.workflow.png)
 
 > `full` 路径还须在 `tech.yaml` diagrams 中具备 workflow / sequence / class（可多张，`scope` 区分）。
 

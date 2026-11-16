@@ -1,11 +1,11 @@
 ---
 name: aiassitrequreimentdev-tech
-description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门禁）：aiConstraints、关键设计、L0/L1 架构图、可多张流程/时序/类图（Archify html+svg）、接口、变更与验收落点。用户要技术方案或 G2T 时使用。
+description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门禁）：aiConstraints、关键设计、L0/L1 架构图、可多张流程/时序/类图（Archify html+png）、接口、变更与验收落点。用户要技术方案或 G2T 时使用。
 ---
 
 # 技术方案
 
-只写当前 feature 的技术方案人读件与 `tech.yaml`，以及 `diagrams/` 下 Archify 的 `.html`/`.svg`。不改规格、视觉与业务源码，不新增验收编号。
+只写当前 feature 的技术方案人读件与 `tech.yaml`，以及 `diagrams/` 下 Archify 的 `.html`/`.png`。不改规格、视觉与业务源码，不新增验收编号。
 
 **人读模板（必须与 `templates/feature/` 章节完全对齐；按需展开 `templates/design/`）**：
 
@@ -27,7 +27,7 @@ description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门
 | 时序图 | `sequence` |
 | 类图 | `class` |
 
-**必须真正用 Archify 绘制**，禁止手写 HTML/SVG、Mermaid 直出、或随便画图冒充：
+**必须真正用 Archify 绘制**，禁止手写 HTML/PNG、Mermaid 直出、或随便画图冒充：
 
 1. **启用**本仓技能 `aiassitrequreimentdev-archify`（封装入口；底层遵循 `.agents/skills/archify/SKILL.md`）。
 2. 按 type 写 `candidate.json` 并 `finalize`（详见 archify 技能）：
@@ -36,9 +36,15 @@ description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门
 node .agents/skills/archify/bin/archify.mjs finalize <type> <candidate.json> <diagrams/xxx.html> --quality showcase --json
 ```
 
-3. 自 HTML 导出/另存配套 `.svg`；`tech.yaml` → `diagrams[].tool` 必须为 `archify`。
-4. 模板中的图位已是 Archify 占位（非 Mermaid）；替换 `diagrams/PLACEHOLDER.*` 为真实产物。
-5. G2T 检查 HTML 溯源：`generator=archify`、`archify-reader-contract`、`#archify-fonts`。缺一则 `TECH_DIAGRAM_ARCHIFY` 失败。
+3. **导出同 stem `.png`**（供 Markdown 预览；**不要再交 svg**）：
+
+```bash
+node <插件>/scripts/export_diagram_png.mjs <diagrams/xxx.html>
+```
+
+4. `tech.yaml` → `diagrams[].tool` 必须为 `archify`；字段为 `html` + `png`（禁止 `svg`）。
+5. 模板中的图位已是 Archify 占位 PNG；替换 `diagrams/PLACEHOLDER.*` 为真实产物。
+6. G2T 检查 HTML 溯源：`generator=archify`、`archify-reader-contract`、`#archify-fonts`；PNG 须为有效且足够大的预览图。缺一则失败。
 
 ## 双受众
 
@@ -62,19 +68,19 @@ node .agents/skills/archify/bin/archify.mjs finalize <type> <candidate.json> <di
 
 | type | 中文 | 要求 |
 | --- | --- | --- |
-| `workflow` | 流程图 | 主路径 + 分支/失败出口（菱形判断、起止） |
-| `sequence` | 时序图 | UML：参与者、生命线虚线、激活条、调用/返回箭头、可选 alt |
-| `class` | 类图 | 关键类型/接口与依赖方向（框 + 关系线） |
+| `workflow` | 流程图 | 主路径 + 分支/失败出口 |
+| `sequence` | 时序图 | 参与者与调用关系（以 Archify HTML 为准；PNG 为预览） |
+| `class` | 类图 | 关键类型与依赖 |
 
 同类型可多张，禁止一张塞满。light 或 `diagramsNoneReason` 说明无新图时可跳过。
 
 ## tech.md 内嵌图（强制）
 
-- `tech.md` 对 `tech.yaml` → `diagrams[].svg` **每一张**必须用 Markdown 图片语法直接内嵌，例如：`![流程图](diagrams/xxx.workflow.svg)`。
-- **禁止**仅用表格列出 html/svg 路径、禁止「见某某文件 / 点击链接」代替预览。
-- 章节上须能直接看到：**流程图、时序图、类图**（以及 L0/L1），不要写「见上文」敷衍。
-- 时序图门禁检查 SVG 含 `stroke-dasharray` 与箭头 `marker`。
-- `diagrams/*.html` 可保留；人审以 `tech.md` 内嵌 SVG 为准。
+- `tech.md` 对 `tech.yaml` → `diagrams[].png` **每一张**必须用 Markdown 图片语法直接内嵌，例如：`![流程图](diagrams/xxx.workflow.png)`。
+- **禁止**仅用表格列出 html/png 路径、禁止「见某某文件 / 点击链接」代替预览。
+- **禁止**再内嵌 `.svg` 作为预览合同。
+- 章节上须能直接看到：**流程图、时序图、类图**（以及 L0/L1）。
+- `diagrams/*.html` 可保留供交互探索；人审以 `tech.md` 内嵌 PNG 为准。
 
 ## 关键设计
 

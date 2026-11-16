@@ -1,10 +1,10 @@
-﻿# 数据库设计：FEAT-[编号] - [名称]
+# 数据库设计：FEAT-[序号]-[kebab名称]
 
 > **定位**：本 feature 数据表/存储展开件；约束边界在 `tech-spec.md` §三，摘要在 `tech.md` §十 / `tech.yaml` → `dataDesign`。  
 > **适用**：Room/SQLite/DataStore/云端等；无则整文 N/A。  
 > **绘图**：Archify `erd` → `diagrams/`，并在 `tech.yaml` diagrams 登记。
 
-**Feature**：FEAT-[编号] - [名称]  
+**Feature**：FEAT-[序号]-[kebab名称]  
 **关联**：`tech-spec.md` · `tech.md` §十 · `tech.yaml`  
 **日期**：[YYYY-MM-DD]
 
@@ -17,7 +17,7 @@
 
 | 存储ID   | 存储名称       | 存储类型                                   | 所属 Feature | 表/集合数量 | 规约位置                   |
 | ------ | ---------- | -------------------------------------- | ---------- | ------ | ---------------------- |
-| DB-001 | [数据库/存储名称] | [Room/SQLite/SharedPrefs/DataStore/云端] | FEAT-xxx   | [N 张表] | tech-spec.md FEAT-xxx · 四 |
+| DB-001 | [数据库/存储名称] | [Room/SQLite/SharedPrefs/DataStore/云端] | FEAT-001-example   | [N 张表] | tech-spec.md FEAT-001-example · 四 |
 
 
 #### 10.1.2 数据库 ER 图（推荐）
@@ -40,7 +40,7 @@
 #### 10.2.1 [表名 / TABLE_A]
 
 - **所属模块**：[模块名称]
-- **所属 Feature**：FEAT-xxx
+- **所属 Feature**：FEAT-001-example
 - **用途描述**：[一句话说明该表存储什么数据、用于什么场景]
 
 ##### 字段设计
@@ -69,7 +69,7 @@
 | v2  | [新增字段/修改字段] | [ALTER TABLE / 数据迁移脚本] |
 
 
-- **约束来源**：→ `tech-spec.md FEAT-xxx · 四`
+- **约束来源**：→ `tech-spec.md FEAT-001-example · 四`
 
 #### 10.2.2 [表名 / TABLE_B]
 

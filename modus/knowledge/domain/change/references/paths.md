@@ -15,7 +15,7 @@
 ```bash
 python -m aiassitrequreimentdev recommend --text "修复单模块崩溃，无UI"
 python -m aiassitrequreimentdev paths --text "新功能跨模块状态机"
-python -m aiassitrequreimentdev path features/FEAT-001 --path 轻量自动 --recommended light-auto
+python -m aiassitrequreimentdev path features/FEAT-001-move-album --path 轻量自动 --recommended light-auto
 ```
 
 主控确认路径时优先在对话内弹选项（AskQuestion 或 `paths`/`recommend` 菜单）；`docs/path-picker.html` 仅备用可视化。

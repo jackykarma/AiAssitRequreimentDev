@@ -66,6 +66,17 @@ REQUIREMENT_ID_HINT = (
     "例如 REQ-001-move-album-20220305"
 )
 
+# FEAT-001-move-album
+FEATURE_ID_RE = re.compile(
+    r"^FEAT-(?P<seq>\d+)-(?P<name>[a-z0-9]+(?:-[a-z0-9]+)*)$"
+)
+FEATURE_SEQ_RE = re.compile(r"^FEAT-\d+$")
+FEATURE_ID_HINT = (
+    "feature id 格式：FEAT-<序号>-<kebab名称>，"
+    "例如 FEAT-001-move-album"
+)
+FEATURE_ID_PLACEHOLDER = "FEAT-000-example-name"
+
 GATES = ("G0", "G1", "G2", "G2T", "G3", "GR", "G4", "GD")
 PATHS = ("full", "light", "light-auto")
 REVIEW_SEVERITIES = ("nit", "dispute", "blocking")
@@ -168,6 +179,43 @@ def resolve_requirement_id(
     raise ValueError(f"{REQUIREMENT_ID_HINT}；收到: {requirement_id}")
 
 
+def validate_feature_id(feature_id: str) -> str:
+    """校验并返回完整 feature id：FEAT-<序号>-<kebab名称>。"""
+    text = feature_id.strip()
+    if not FEATURE_ID_RE.fullmatch(text):
+        raise ValueError(f"{FEATURE_ID_HINT}；收到: {feature_id}")
+    return text
+
+
+def compose_feature_id(seq: str, name: str) -> str:
+    """由序号段与名称拼出完整 feature id。"""
+    seq_text = seq.strip()
+    if not FEATURE_SEQ_RE.fullmatch(seq_text):
+        raise ValueError(f"feature 序号段须为 FEAT-<数字>，例如 FEAT-001；收到: {seq}")
+    slug = name.strip().lower().replace("_", "-").strip("-")
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+        raise ValueError(
+            f"feature 名称须为 kebab-case（小写字母/数字/短横线），例如 move-album；收到: {name}"
+        )
+    return f"{seq_text}-{slug}"
+
+
+def resolve_feature_id(feature_id: str, *, name: str | None = None) -> str:
+    """接受完整 id，或 FEAT-序号 + --name 拼装。"""
+    text = feature_id.strip()
+    if FEATURE_ID_RE.fullmatch(text):
+        if name:
+            raise ValueError("已提供完整 feature id 时不要再传 --name")
+        return validate_feature_id(text)
+    if FEATURE_SEQ_RE.fullmatch(text):
+        if not name:
+            raise ValueError(
+                f"{FEATURE_ID_HINT}；也可：init FEAT-001 --name move-album"
+            )
+        return compose_feature_id(text, name)
+    raise ValueError(f"{FEATURE_ID_HINT}；收到: {feature_id}")
+
+
 def init_requirement(root: Path, requirement_id: str) -> Path:
     requirement_id = validate_requirement_id(requirement_id)
     destination = root / "requirements" / requirement_id
@@ -180,7 +228,7 @@ def init_requirement(root: Path, requirement_id: str) -> Path:
     if isinstance(split_doc.get("features"), list) and split_doc["features"]:
         first = split_doc["features"][0]
         if isinstance(first, dict):
-            first["id"] = "FEAT-000"
+            first["id"] = FEATURE_ID_PLACEHOLDER
     split_path.write_text(
         yaml.safe_dump(split_doc, allow_unicode=True, sort_keys=False),
         encoding="utf-8",
@@ -189,6 +237,7 @@ def init_requirement(root: Path, requirement_id: str) -> Path:
 
 
 def init_feature(root: Path, feature_id: str, *, requirement_id: str | None = None) -> Path:
+    feature_id = validate_feature_id(feature_id)
     destination = root / "features" / feature_id
     if destination.exists():
         raise FileExistsError(f"feature 已存在: {destination}")

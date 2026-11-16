@@ -1,8 +1,8 @@
-# 埋点技术方案：FEAT-[编号] - [名称]
+# 埋点技术方案：FEAT-[序号]-[kebab名称]
 
 > **定位**：本 feature 埋点展开件；摘要在 `tech.md` §十一 / `tech.yaml` → `tracking`。仅列本切片新增或修改事件。
 
-**Feature**：FEAT-[编号] - [名称]  
+**Feature**：FEAT-[序号]-[kebab名称]  
 **关联**：`spec.yaml` · `tech.md` §十一 · `tech.yaml`  
 **日期**：[YYYY-MM-DD]
 

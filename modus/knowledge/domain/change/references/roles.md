@@ -8,10 +8,10 @@
 命令：
 
 ```bash
-python -m aiassitrequreimentdev start FEAT-001
+python -m aiassitrequreimentdev start FEAT-001-move-album
 python -m aiassitrequreimentdev roles
-python -m aiassitrequreimentdev adopt features/FEAT-001 --role 产品经理
-python -m aiassitrequreimentdev board features/FEAT-001
+python -m aiassitrequreimentdev adopt features/FEAT-001-move-album --role 产品经理
+python -m aiassitrequreimentdev board features/FEAT-001-move-album
 ```
 
 主控选角色时优先在对话内弹选项（AskQuestion 或 `roles` 菜单）；`docs/role-picker.html` 仅备用可视化。

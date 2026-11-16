@@ -37,8 +37,8 @@ AI 辅助需求开发流水线。从意图出发，用结构化规格把产品�
 python -m pip install -e .
 python -m aiassitrequreimentdev init-req REQ-001-move-album-20220305
 # 或：python -m aiassitrequreimentdev init-req REQ-001 --name move-album [--date 20220305]
-python -m aiassitrequreimentdev init FEAT-001 --requirement REQ-001-move-album-20220305
-python -m aiassitrequreimentdev check features/FEAT-001 --gate G1
+python -m aiassitrequreimentdev init FEAT-001-move-album --requirement REQ-001-move-album-20220305
+python -m aiassitrequreimentdev check features/FEAT-001-move-album --gate G1
 python -m unittest tests.test_gates tests.test_roles tests.test_paths
 ```
 
@@ -50,7 +50,7 @@ python -m unittest tests.test_gates tests.test_roles tests.test_paths
 1. 将本仓库加入 Codex marketplace（`.agents/plugins/marketplace.json`）
 2. `/plugins` 安装 `aiassitrequreimentdev`
 3. **新开会话**后使用 lead 等技能
-4. CLI：`python <plugin>/scripts/aad.py check features/FEAT-001 --gate G1`
+4. CLI：`python <plugin>/scripts/aad.py check features/FEAT-001-move-album --gate G1`
 
 ### Cursor
 1. Customize → 从本 Git 仓库 / 团队 marketplace 安装

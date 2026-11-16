@@ -51,7 +51,7 @@ class PathTests(unittest.TestCase):
 
     def test_set_path_confirms_state(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-PATH")
+            feature = init_feature(Path(tmp), "FEAT-001-path")
             state = set_path(feature, "轻量", recommended="light")
             self.assertEqual(state["path"], "light")
             self.assertTrue(state["pathConfirmed"])
@@ -63,7 +63,7 @@ class PathTests(unittest.TestCase):
 
     def test_set_path_light_auto(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-AUTO")
+            feature = init_feature(Path(tmp), "FEAT-001-auto")
             state = set_path(feature, "light-auto", recommended="light-auto")
             self.assertEqual(state["path"], "light-auto")
             self.assertTrue(state["pathConfirmed"])

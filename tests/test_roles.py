@@ -34,7 +34,7 @@ class RoleTests(unittest.TestCase):
 
     def test_adopt_writes_state_and_board(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-ROLE")
+            feature = init_feature(Path(tmp), "FEAT-001-role")
             refresh_board(feature)
             adopt_role(feature, "产品经理")
             state = json.loads((feature / "state.json").read_text(encoding="utf-8"))

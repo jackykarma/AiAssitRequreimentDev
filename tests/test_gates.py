@@ -4,12 +4,15 @@ import unittest
 from pathlib import Path
 
 from aiassitrequreimentdev.gates import (
+    compose_feature_id,
     compose_requirement_id,
     evaluate,
     init_feature,
     init_requirement,
+    resolve_feature_id,
     resolve_requirement_id,
     seal_spec,
+    validate_feature_id,
     validate_requirement_id,
 )
 
@@ -1256,7 +1259,7 @@ rollback: ""
     def test_init_feature_copies_template(self) -> None:
         root = Path(self.tmp.name) / "repo"
         req_id = "REQ-100-sample-feature-20220305"
-        destination = init_feature(root, "FEAT-100", requirement_id=req_id)
+        destination = init_feature(root, "FEAT-100-sample-feature-sample-feature", requirement_id=req_id)
         self.assertTrue((destination / "state.json").is_file())
         self.assertTrue((destination / "spec.yaml").is_file())
         self.assertTrue((destination / "ux.yaml").is_file())
@@ -1265,7 +1268,9 @@ rollback: ""
         self.assertTrue((destination / "tech.yaml").is_file())
         self.assertTrue((destination / "review.yaml").is_file())
         self.assertTrue((destination / "deploy.yaml").is_file())
-        self.assertTrue(str(destination).endswith(str(Path("features") / "FEAT-100")))
+        self.assertTrue(
+            str(destination).endswith(str(Path("features") / "FEAT-100-sample-feature-sample-feature"))
+        )
         created = json.loads((destination / "state.json").read_text(encoding="utf-8"))
         self.assertEqual(created["path"], "full")
         self.assertEqual(created["requirementId"], req_id)
@@ -1304,6 +1309,19 @@ rollback: ""
             resolve_requirement_id("REQ-001")
         with self.assertRaises(ValueError):
             validate_requirement_id("REQ-001-move-album-20221399")
+
+    def test_resolve_feature_id_full_and_compose(self) -> None:
+        full = "FEAT-001-move-album"
+        self.assertEqual(validate_feature_id(full), full)
+        self.assertEqual(resolve_feature_id(full), full)
+        self.assertEqual(compose_feature_id("FEAT-001", "move_album"), full)
+        self.assertEqual(resolve_feature_id("FEAT-001", name="move-album"), full)
+        with self.assertRaises(ValueError):
+            resolve_feature_id("FEAT-001")
+        with self.assertRaises(ValueError):
+            validate_feature_id("FEAT-001")
+        with self.assertRaises(ValueError):
+            init_feature(Path(self.tmp.name) / "bad", "FEAT-001")
 
 
 if __name__ == "__main__":

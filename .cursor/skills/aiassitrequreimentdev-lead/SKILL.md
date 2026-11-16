@@ -1,4 +1,4 @@
-﻿---
+---
 name: aiassitrequreimentdev-lead
 description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让产品产出需求级 PRD 与 split.yaml，再创建一个或多个 feature。产物共仓于 features/<id>/。
 ---
@@ -30,17 +30,19 @@ description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让
 | 7 | 架构师 | 各 feature 的 `tech.md`/`tech.yaml`（先发立契约，后发引用） |
 | 8 | 主控 | 之后才按 feature 推进门禁；G2T 后主控写 tasks.yaml，再 check G3 |
 
-小需求：直接 `start FEAT-xxx`，一个 feature 到底。
+小需求：直接 `start FEAT-001-move-album`（或 `start FEAT-001 --name move-album`），一个 feature 到底。
 
 ```bash
 python <本插件>/scripts/aad.py init-req REQ-001-move-album-20220305
 # 或：init-req REQ-001 --name move-album [--date 20220305]
 # 产品写完 prd + split 后：
-python <本插件>/scripts/aad.py init FEAT-001 --requirement REQ-001-move-album-20220305
-python <本插件>/scripts/aad.py init FEAT-002 --requirement REQ-001-move-album-20220305
+python <本插件>/scripts/aad.py init FEAT-001-move-album --requirement REQ-001-move-album-20220305
+python <本插件>/scripts/aad.py init FEAT-002-batch-progress --requirement REQ-001-move-album-20220305
+# 或：init FEAT-001 --name move-album --requirement …
 ```
 
-需求目录 / `requirementId` 格式：`REQ-<序号>-<kebab名称>-<YYYYMMDD>`。
+需求 id：`REQ-<序号>-<kebab名称>-<YYYYMMDD>`。  
+feature id / 目录名：`FEAT-<序号>-<kebab名称>`（如 `FEAT-001-move-album`），与 REQ 同构、便于区分。
 
 **不要**在没有需求级 PRD（或未确认的单 feature 捷径）时批量空建 feature。  
 **tasks.yaml** 只在单个 feature 的技术门禁之后拆，不是拆需求。G2T 通过后可用：
@@ -125,7 +127,7 @@ python <本插件>/scripts/aad.py change <feature目录> record \
 python <本插件>/scripts/aad.py change <requirements/REQ-…> record \
   --initiated-by product --level C4 --category split \
   --reason "…" --summary "…" --artifacts split.yaml,prd.md \
-  --features FEAT-001,FEAT-002 --gates G1 \
+  --features FEAT-001-move-album,FEAT-002-batch-progress --gates G1 \
   --status approved --confirmed-by human --confirmed-name "…"
 ```
 

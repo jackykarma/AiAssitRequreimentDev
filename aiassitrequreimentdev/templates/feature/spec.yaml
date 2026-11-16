@@ -2,7 +2,7 @@
 # 必填核心：problem、nonGoals、UJ*、FR*、NFR*（或 nfrNoneReason）、E*（或 edgeNoneReason）、A*、uiRequired。
 # 可选：scenarios（S*）——仅当 UJ 不够表达多条并列主流程时填写；勿与 UJ/E 重复。
 # 冻结前 openQuestions 必须为 []。
-id: FEAT-000
+id: FEAT-000-example-name
 problem: ""
 nonGoals: []
 uiRequired: true

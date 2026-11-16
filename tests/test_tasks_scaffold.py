@@ -17,7 +17,7 @@ from tests.test_gates import valid_spec, write_yaml
 class TasksScaffoldTests(unittest.TestCase):
     def test_light_auto_generates_single_task(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-TS")
+            feature = init_feature(Path(tmp), "FEAT-001-tasks")
             set_path(feature, "light-auto")
             write_yaml(feature / "spec.yaml", valid_spec())
             path = scaffold_tasks(feature)
@@ -28,7 +28,7 @@ class TasksScaffoldTests(unittest.TestCase):
 
     def test_full_per_acceptance(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-TS2")
+            feature = init_feature(Path(tmp), "FEAT-002-tasks")
             set_path(feature, "full")
             write_yaml(feature / "spec.yaml", valid_spec())
             path = scaffold_tasks(feature, mode="per-acceptance")
@@ -38,7 +38,7 @@ class TasksScaffoldTests(unittest.TestCase):
 
     def test_refuse_overwrite_without_force(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-TS3")
+            feature = init_feature(Path(tmp), "FEAT-003-tasks")
             set_path(feature, "full")
             write_yaml(feature / "spec.yaml", valid_spec())
             scaffold_tasks(feature, mode="single")

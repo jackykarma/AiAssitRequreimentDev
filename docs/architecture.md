@@ -29,7 +29,7 @@
 
 ```text
 requirements/REQ-<序号>-<名称>-<YYYYMMDD>/  # 如 REQ-001-move-album-20220305；PRD + split + architecture/
-features/<FEAT-id>/        # 交付切片
+features/FEAT-<序号>-<kebab>/  # 如 FEAT-001-move-album
   state.json               # requirementId、dependsOnFeatures、actorRole、path…
   BOARD.md
   prd.md / prototype / spec.yaml
@@ -72,10 +72,10 @@ features/<FEAT-id>/        # 交付切片
 
 ```bash
 python -m pip install -e .
-python -m aiassitrequreimentdev init FEAT-001
-python -m aiassitrequreimentdev check features/FEAT-001 --gate G1
-python -m aiassitrequreimentdev check features/FEAT-001 --gate G1 --accept
-python -m aiassitrequreimentdev tasks scaffold features/FEAT-001
+python -m aiassitrequreimentdev init FEAT-001-move-album
+python -m aiassitrequreimentdev check features/FEAT-001-move-album --gate G1
+python -m aiassitrequreimentdev check features/FEAT-001-move-album --gate G1 --accept
+python -m aiassitrequreimentdev tasks scaffold features/FEAT-001-move-album
 python -m unittest discover -s tests
 ```
 

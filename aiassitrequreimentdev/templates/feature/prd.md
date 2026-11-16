@@ -6,7 +6,7 @@
 
 | 字段 | 值 |
 | --- | --- |
-| Feature ID | FEAT-000 |
+| Feature ID | FEAT-000-example-name |
 | 关联需求 | REQ-000-example-name-20200101 或 —（小需求捷径） |
 | 状态 | 草稿 / 就绪 / 冻结 |
 | 有无 UI | 有（见 `prototype/`） / 无（说明原因） |

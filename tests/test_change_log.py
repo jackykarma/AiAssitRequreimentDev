@@ -13,14 +13,14 @@ from aiassitrequreimentdev.progress import accept_gate
 class ChangeLogTests(unittest.TestCase):
     def test_init_feature_includes_change_yaml(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-CHG")
+            feature = init_feature(Path(tmp), "FEAT-001-chg")
             self.assertTrue((feature / "change.yaml").is_file())
             text = (feature / "change.yaml").read_text(encoding="utf-8")
-            self.assertIn("FEAT-CHG", text)
+            self.assertIn("FEAT-001-chg", text)
 
     def test_record_change_requires_core_fields(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-CHG2")
+            feature = init_feature(Path(tmp), "FEAT-002-chg")
             set_path(feature, "full", recommended="full")
             entry = record_change(
                 feature,
@@ -47,7 +47,7 @@ class ChangeLogTests(unittest.TestCase):
 
     def test_approved_change_rolls_back_gates(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-CHG4")
+            feature = init_feature(Path(tmp), "FEAT-004-chg")
             set_path(feature, "full")
             # 先把若干门禁标为 accepted（G0 即可）
             accept_gate(feature, "G0")
@@ -78,7 +78,7 @@ class ChangeLogTests(unittest.TestCase):
 
     def test_c3_approved_requires_confirmed_by(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-CHG3")
+            feature = init_feature(Path(tmp), "FEAT-003-chg")
             with self.assertRaises(ValueError):
                 record_change(
                     feature,
@@ -97,8 +97,8 @@ class ChangeLogTests(unittest.TestCase):
             req_id = "REQ-500-split-c4-20220305"
             req = init_requirement(root, req_id)
             self.assertTrue((req / "change.yaml").is_file())
-            f1 = init_feature(root, "FEAT-A", requirement_id=req_id)
-            f2 = init_feature(root, "FEAT-B", requirement_id=req_id)
+            f1 = init_feature(root, "FEAT-001-alpha", requirement_id=req_id)
+            f2 = init_feature(root, "FEAT-002-beta", requirement_id=req_id)
             set_path(f1, "full")
             set_path(f2, "full")
             accept_gate(f1, "G0")
@@ -115,10 +115,10 @@ class ChangeLogTests(unittest.TestCase):
                 reason="埋点可独立上线",
                 level="C4",
                 category="split",
-                summary="拆出 FEAT-B",
+                summary="拆出 FEAT-002-beta",
                 artifacts=["split.yaml"],
                 gates_rollback=["G2T"],
-                features=["FEAT-A", "FEAT-B"],
+                features=["FEAT-001-alpha", "FEAT-002-beta"],
                 status="approved",
                 confirmed_by_role="human",
                 confirmed_by_name="负责人",

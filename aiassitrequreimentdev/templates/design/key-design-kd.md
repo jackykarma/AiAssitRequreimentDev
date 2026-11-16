@@ -1,11 +1,11 @@
-﻿# KD-001：[设计点名称]
+# KD-001：[设计点名称]
 
 > **落盘**：复制到 `features/<FEAT-id>/` 下按需命名，如 `KD_001_<slug>.md`。  
 > **回链**：本 feature 的 `tech.md` §七 / `tech.yaml` → `keyDesigns`。  
 > **定位**：验证本切片关键疑难点/亮点的技术可行性并锁定设计；与 `keyDesigns.mustFollow` / `pitfalls` 一致。  
 > **绘图**：Archify `finalize`（architecture / sequence / class）；时序图下方须有文字说明。
 
-**Feature**：FEAT-[编号] - [名称]  
+**Feature**：FEAT-[序号]-[kebab名称]  
 **KD 编号**：KD-001  
 **日期**：[YYYY-MM-DD]
 

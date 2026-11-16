@@ -18,7 +18,7 @@ def valid_split(req_id: str = "REQ-001-move-album-20220305") -> dict:
         "confirmedByHuman": False,
         "features": [
             {
-                "id": "FEAT-001",
+                "id": "FEAT-001-move-album",
                 "title": "移动相册主路径",
                 "scope": "图集内移动照片并覆盖 A1–A3",
                 "path": "full",
@@ -37,11 +37,11 @@ class SplitTests(unittest.TestCase):
         doc["decision"] = "multi"
         doc["features"].append(
             {
-                "id": "FEAT-002",
+                "id": "FEAT-002-move-tracking",
                 "title": "埋点",
                 "scope": "移动成功埋点",
                 "path": "light-auto",
-                "dependsOn": ["FEAT-001"],
+                "dependsOn": ["FEAT-001-move-album"],
             }
         )
         errors = validate_split_doc(doc)

@@ -1,10 +1,10 @@
-# NFR 技术评估：FEAT-[编号] - [名称]
+# NFR 技术评估：FEAT-[序号]-[kebab名称]
 
 > **定位**：本 feature 快稳省等量化展开件；摘要在 `tech.md` §八 / `tech.yaml` → `nfr`。  
 > **与 spec**：`spec.yaml` 的 NFR* 是验收目标；本文评估方案是否达标。超标须改设计或走变更（C3）。  
 > 不适用子节标 N/A 并简述原因。
 
-**Feature**：FEAT-[编号] - [名称]  
+**Feature**：FEAT-[序号]-[kebab名称]  
 **关联**：`spec.yaml` · `tech.md` §八 · `tech.yaml` · 可选 KD 展开件  
 **日期**：[YYYY-MM-DD]
 

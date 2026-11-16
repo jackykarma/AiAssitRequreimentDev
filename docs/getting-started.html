@@ -760,8 +760,8 @@
         </div>
 
         <p><strong>小需求 CLI 等价（通常由主控代跑）：</strong></p>
-        <div class="cmd" data-cmd><button type="button">复制</button><code>python -m aiassitrequreimentdev start FEAT-001 --need "相册移动到其他图集"</code></div>
-        <div class="cmd" data-cmd><button type="button">复制</button><code>python -m aiassitrequreimentdev check features/FEAT-001 --gate G1</code></div>
+        <div class="cmd" data-cmd><button type="button">复制</button><code>python -m aiassitrequreimentdev start FEAT-001-move-album --need "相册移动到其他图集"</code></div>
+        <div class="cmd" data-cmd><button type="button">复制</button><code>python -m aiassitrequreimentdev check features/FEAT-001-move-album --gate G1</code></div>
       </section>
 
       <section class="block" id="flow" data-toc-title="4. 工作流与门禁">
@@ -883,7 +883,7 @@
           <summary>大需求：init-req → split → 多 feature</summary>
           <p>顺序：需求级 PRD →（可选）整需求 Archify 草图 → 产品填 <code>split.yaml</code> → <code>decision: multi</code> 时人确认 → 主控 <code>init</code> 各 feature 并带 <code>--requirement</code> → 各切片 PRD/spec → 各自 tech（G2T）。</p>
           <div class="cmd" data-cmd><button type="button">复制</button><code>python -m aiassitrequreimentdev init-req REQ-001-move-album-20220305</code></div>
-          <div class="cmd" data-cmd><button type="button">复制</button><code>python -m aiassitrequreimentdev init FEAT-001 --requirement REQ-001-move-album-20220305</code></div>
+          <div class="cmd" data-cmd><button type="button">复制</button><code>python -m aiassitrequreimentdev init FEAT-001-move-album --requirement REQ-001-move-album-20220305</code></div>
         </details>
 
         <details class="advanced">

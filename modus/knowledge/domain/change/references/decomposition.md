@@ -1,11 +1,11 @@
-﻿# 需求、feature 拆分与过程变更
+# 需求、feature 拆分与过程变更
 
 ## 名词
 
 | 概念 | 含义 | 落盘 |
 | --- | --- | --- |
 | **需求** | 业务要解决的问题 / 史诗 | `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`；需求级 PRD + 拆分决策） |
-| **feature** | 可关门禁、可合并的交付切片 | `features/<FEAT-id>/` |
+| **feature** | 可关门禁、可合并的交付切片 | `features/FEAT-<序号>-<kebab名称>/`（如 `FEAT-001-move-album`） |
 | **task** | feature 内实现单元 | `features/.../tasks.yaml` |
 
 一条需求 → **1..N 个 feature**。先有需求级认知与 PRD，再决定拆几个 feature；**不是**先建一堆空 feature 目录再补故事。
@@ -41,13 +41,13 @@ Feature **必须**是对本切片验收可独立关门禁（可 G4）的完整�
     → 整需求架构草图（可选，architecture/；Archify html+png）
     → 拆分决策（requirements/REQ-…/split.yaml）  ← 根据 PRD + 架构草图决定 1 或 N
     → 人确认（多 feature 时）
-    → 创建 features/FEAT-*，写入 requirementId
+    → 创建 features/FEAT-<序号>-<kebab名称>/，写入 requirementId
     → 每个 feature：切片 PRD + 原型 + spec.yaml → 各自门禁（含各自 tech）
 ```
 
 **思考维度 vs 合同维度**：架构师应从整条需求看模块边界、契约与依赖；G2T 合同仍是**每个 feature 一份** `tech.md`/`tech.yaml`。先发 feature 写清跨切片骨架与接口；后发 feature 引用上游契约，不重写总览。需求级 `architecture/` 是对齐草图，不进 G2T。
 
-**小需求捷径**：明显只需一个 feature 时，可不建 `requirements/`，直接 `features/FEAT-xxx/`，该目录的 `prd.md` 同时充当需求级与 feature 级 PRD；`state.requirementId` 可等于 feature id 或单独 REQ id。
+**小需求捷径**：明显只需一个 feature 时，可不建 `requirements/`，直接 `features/FEAT-001-<slug>/`，该目录的 `prd.md` 同时充当需求级与 feature 级 PRD；`state.requirementId` 可等于 feature id 或单独 REQ id。
 
 **大需求**：禁止跳过需求级 PRD 直接开多个空 feature。
 

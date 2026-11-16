@@ -287,7 +287,7 @@ def record_change(
         if not targets:
             raise ValueError(
                 "无法回退门禁：未找到受影响 feature 目录。"
-                "请用 --features FEAT-001,FEAT-002 列出，或先 init 对应 feature。"
+                "请用 --features FEAT-001-a,FEAT-002-b 列出，或先 init 对应 feature。"
             )
         applied: list[dict] = []
         for feat_dir in targets:

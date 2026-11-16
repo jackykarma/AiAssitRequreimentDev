@@ -20,7 +20,7 @@ class UsageTests(unittest.TestCase):
     def setUp(self) -> None:
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
-        self.feature = init_feature(self.root, "FEAT-USAGE")
+        self.feature = init_feature(self.root, "FEAT-001-usage")
 
     def tearDown(self) -> None:
         self.tmp.cleanup()

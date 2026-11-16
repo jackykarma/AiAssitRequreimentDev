@@ -1,4 +1,4 @@
-# 技术方案：FEAT-[编号] - [名称]
+# 技术方案：FEAT-[序号]-[kebab名称]
 
 > **定位**：本 **feature 切片** 的技术方案人读件。与 `tech.yaml`（AI/门禁）、`tech-spec.md`（工程约束）同源。  
 > **输入**：本切片 `prd.md` / `spec.yaml` / 原型；若有 `requirementId` 再读需求级 PRD 与同需求其它 tech。  
@@ -6,7 +6,7 @@
 > **展开件**（按需复制）：`templates/design/`（KD / NFR / 接口 / 库表 / 埋点）。  
 > **Lite**：轻量路径可将详表收成索引 + 链接，但仍须保留下列全部 `##` 标题；`full` 还须保留强制 `###`。
 
-**Feature**：FEAT-[编号] - [名称]  
+**Feature**：FEAT-[序号]-[kebab名称]  
 **关联需求**：`requirementId` 或「单 feature 捷径」  
 **Version**：v0.1.0  
 **日期**：[YYYY-MM-DD]

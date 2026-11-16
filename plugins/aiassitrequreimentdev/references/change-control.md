@@ -6,7 +6,7 @@
 
 | 范围 | 落盘 | 典型级别 | CLI |
 | --- | --- | --- | --- |
-| **单个 feature** | `features/<id>/change.yaml` | C0–C3（实现/UX/tech/产品合同） | `change record features/FEAT-001 …` |
+| **单个 feature** | `features/<id>/change.yaml` | C0–C3（实现/UX/tech/产品合同） | `change record features/FEAT-001-move-album …` |
 | **整条需求（拆分）** | `requirements/<REQ>/change.yaml` | **C4**（增删改 feature、改 split） | `change record requirements/REQ-… …` |
 
 字段同构。`impacts.features` 列出受影响的 feature id；需求级回退时会对这些目录（或 `split.yaml` 里全部已存在 feature）执行门禁回退。
@@ -42,23 +42,23 @@
 
 | 场景 | 记在哪 | 动作 |
 | --- | --- | --- |
-| **新增** feature | `requirements/<REQ>/change.yaml` · C4 · `category=split` | 改 `split.yaml` → 人确认 → `init FEAT-x --requirement REQ-…` → 新产品切片 PRD/spec |
+| **新增** feature | `requirements/<REQ>/change.yaml` · C4 · `category=split` | 改 `split.yaml` → 人确认 → `init FEAT-<序号>-<slug> --requirement REQ-…` → 新产品切片 PRD/spec |
 | **移除** feature | 同上；`--features` 含被移除 id | 改 split；对该 feature 回退/停做；目录可保留并在 BOARD 标明废弃 |
 | **改某 feature 范围**（仍同一 id） | 需求台账 C4 + 该 feature 上再记 **C3**（若动 A*） | 先改 split/需求级 PRD 边界，再改切片 spec 并回 G1 |
 | **合并 / 拆开** | C4 | 改 split；旧 feature 停做或回退；新 feature `init` |
 
 ```bash
-# 需求级：拆出第二刀，并回退仍共享契约的 FEAT-001
+# 需求级：拆出第二刀，并回退仍共享契约的 FEAT-001-move-album
 python -m aiassitrequreimentdev change requirements/REQ-001-move-album-20220305 record \
   --initiated-by product --level C4 --category split \
-  --reason "埋点可独立上线" --summary "拆出 FEAT-002 埋点" \
+  --reason "埋点可独立上线" --summary "拆出 FEAT-002-move-tracking" \
   --artifacts split.yaml,prd.md \
-  --features FEAT-001,FEAT-002 \
+  --features FEAT-001-move-album,FEAT-002-move-tracking \
   --gates G1 \
   --status approved --confirmed-by human --confirmed-name "负责人"
 
 python -m aiassitrequreimentdev check-req requirements/REQ-001-move-album-20220305
-python -m aiassitrequreimentdev init FEAT-002 --requirement REQ-001-move-album-20220305
+python -m aiassitrequreimentdev init FEAT-002-move-tracking --requirement REQ-001-move-album-20220305
 ```
 
 单 feature 内改验收（不改拆分）→ 仍用 **feature 台账 C3**，不必升 C4。

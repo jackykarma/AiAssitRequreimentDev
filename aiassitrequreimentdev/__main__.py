@@ -39,6 +39,7 @@ from aiassitrequreimentdev.gates import (
     evaluate,
     init_feature,
     init_requirement,
+    resolve_feature_id,
     resolve_requirement_id,
     seal_spec,
 )
@@ -92,8 +93,16 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="aiassitrequreimentdev", description="规格门禁与 feature 入口")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    init_parser = sub.add_parser("init", help="按模板创建一个 feature 目录")
-    init_parser.add_argument("feature_id")
+    init_parser = sub.add_parser(
+        "init", help="按模板创建一个 feature 目录；id=FEAT-序号-kebab名称"
+    )
+    init_parser.add_argument(
+        "feature_id",
+        help="完整 id（FEAT-001-move-album）或仅序号段 FEAT-001（须配合 --name）",
+    )
+    init_parser.add_argument(
+        "--name", help="kebab 名称，如 move-album；与序号段拼装完整 id"
+    )
     init_parser.add_argument("--root", default=".", help="仓库根目录")
     init_parser.add_argument(
         "--requirement",
@@ -169,8 +178,16 @@ def main(argv: list[str] | None = None) -> int:
         help="需求原文，用于生成推荐（--need 与 --text 等价）",
     )
 
-    start_parser = sub.add_parser("start", help="初始化或复用 feature，并打印角色/路径选择提示")
-    start_parser.add_argument("feature_id")
+    start_parser = sub.add_parser(
+        "start", help="初始化或复用 feature，并打印角色/路径选择提示"
+    )
+    start_parser.add_argument(
+        "feature_id",
+        help="完整 id（FEAT-001-move-album）或仅序号段 FEAT-001（须配合 --name）",
+    )
+    start_parser.add_argument(
+        "--name", help="kebab 名称；与序号段拼装完整 id（仅新建时）"
+    )
     start_parser.add_argument("--root", default=".", help="仓库根目录")
     start_parser.add_argument("--role", help="若已知角色，直接 adopt")
     start_parser.add_argument(
@@ -293,9 +310,14 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "init":
+        try:
+            feature_id = resolve_feature_id(args.feature_id, name=args.name)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
         destination = init_feature(
             Path(args.root),
-            args.feature_id,
+            feature_id,
             requirement_id=args.requirement,
         )
         refresh_board(destination)
@@ -308,9 +330,9 @@ def main(argv: list[str] | None = None) -> int:
                     f"警告：未找到 {req_dir / 'split.yaml'}，请先写 split 再批量建 feature。",
                     file=sys.stderr,
                 )
-            elif not feature_listed_in_split(split_doc, args.feature_id):
+            elif not feature_listed_in_split(split_doc, feature_id):
                 print(
-                    f"警告：{args.feature_id} 未出现在 split.yaml features[] 中，请核对拆分表。",
+                    f"警告：{feature_id} 未出现在 split.yaml features[] 中，请核对拆分表。",
                     file=sys.stderr,
                 )
         return 0
@@ -404,9 +426,14 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "start":
         root = Path(args.root)
-        destination = root / "features" / args.feature_id
+        try:
+            feature_id = resolve_feature_id(args.feature_id, name=args.name)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+        destination = root / "features" / feature_id
         if not destination.exists():
-            destination = init_feature(root, args.feature_id)
+            destination = init_feature(root, feature_id)
         refresh_board(destination)
         print(destination)
         print("")

@@ -3,7 +3,7 @@
 | 概念 | 含义 | 落盘 |
 | --- | --- | --- |
 | 需求 | 业务问题 / 史诗 | `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`；需求级 PRD + `split.yaml`） |
-| feature | 可 G4 的交付切片 | `features/<FEAT-id>/` |
+| feature | 可 G4 的交付切片 | `features/FEAT-<序号>-<kebab名称>/`（如 `FEAT-001-move-album`） |
 | task | feature 内实现单元 | `tasks.yaml`，在该 feature **G2T 通过之后**由主控拆 |
 
 一条需求 → **1..N 个 feature**。先有需求级 PRD，再决定拆几个。不要先建一堆空 feature 再补故事。

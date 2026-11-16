@@ -1,7 +1,7 @@
 # 变更台账（全流程必记）。规范见插件 references/change-control.md
 # 每次产品/UX/技术/任务图变更：先 append 一条，再回退门禁并改工件。
 # 主控代跑：python -m aiassitrequreimentdev change <feature目录> record ...
-featureId: FEAT-000
+featureId: FEAT-000-example-name
 changes: []
 # - id: CHG-001
 #   at: "2026-11-15T20:54:00+08:00"

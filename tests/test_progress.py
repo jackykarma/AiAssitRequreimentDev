@@ -16,7 +16,7 @@ from tests.test_gates import valid_spec, write_spec_prd, write_yaml
 class ProgressTests(unittest.TestCase):
     def test_light_g1_next_is_tech(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-PROG")
+            feature = init_feature(Path(tmp), "FEAT-001-progress")
             set_path(feature, "light-auto")
             write_yaml(feature / "spec.yaml", valid_spec())
             self.assertEqual(
@@ -26,7 +26,7 @@ class ProgressTests(unittest.TestCase):
 
     def test_accept_g0_advances_stage(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-PROG2")
+            feature = init_feature(Path(tmp), "FEAT-002-progress")
             set_path(feature, "full")
             write_yaml(feature / "spec.yaml", valid_spec())
             state = accept_gate(feature, "G0")
@@ -35,7 +35,7 @@ class ProgressTests(unittest.TestCase):
 
     def test_accept_g1_seals_and_advances(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-PROG3")
+            feature = init_feature(Path(tmp), "FEAT-003-progress")
             set_path(feature, "light-auto")
             write_yaml(feature / "spec.yaml", valid_spec())
             write_spec_prd(feature / "prd.md")
@@ -50,7 +50,7 @@ class ProgressTests(unittest.TestCase):
 
     def test_accept_rejects_when_not_ready(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            feature = init_feature(Path(tmp), "FEAT-PROG4")
+            feature = init_feature(Path(tmp), "FEAT-004-progress")
             set_path(feature, "full")
             # template openQuestions 未清空 → G1 失败
             with self.assertRaises(ValueError):

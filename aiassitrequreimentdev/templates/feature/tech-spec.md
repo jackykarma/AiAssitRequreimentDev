@@ -1,10 +1,10 @@
-# 技术约束（Tech Spec）：FEAT-[编号] - [名称]
+# 技术约束（Tech Spec）：FEAT-[序号]-[kebab名称]
 
 > **定位**：本 **feature 切片** 的工程/边界约束（人读）。详细架构、KD、时序在 `tech.md`；机器合同在 `tech.yaml`。  
 > **禁止**：把整需求 EPIC 大包、Story/L2、接口字段表整份塞进本文；按需展开到 `templates/design/`。  
 > **输入**：`prd.md` / `spec.yaml`；有 `requirementId` 时对齐需求级 PRD 与 `split.yaml`。
 
-**Feature**：FEAT-[编号] - [名称]  
+**Feature**：FEAT-[序号]-[kebab名称]  
 **Version**：v0.1.0  
 **日期**：[YYYY-MM-DD]
 

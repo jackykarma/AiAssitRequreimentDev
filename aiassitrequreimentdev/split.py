@@ -22,7 +22,12 @@ from pathlib import Path
 
 import yaml
 
-from aiassitrequreimentdev.gates import REQUIREMENT_ID_RE, Violation, validate_requirement_id
+from aiassitrequreimentdev.gates import (
+    REQUIREMENT_ID_RE,
+    Violation,
+    validate_feature_id,
+    validate_requirement_id,
+)
 from aiassitrequreimentdev.paths import resolve_path
 
 PLACEHOLDER_RATIONALE = ("待产品", "待填写", "TODO", "TBD")
@@ -97,8 +102,13 @@ def validate_split_doc(
                 errors.append(f"feature id 重复: {fid}")
             seen_ids.add(fid)
             feature_ids.append(fid)
-            if fid.startswith("FEAT-000") or fid == "FEAT-000":
-                errors.append(f"{prefix}.id 仍是模板占位 FEAT-000")
+            if fid.startswith("FEAT-000"):
+                errors.append(f"{prefix}.id 仍是模板占位（FEAT-000-…）")
+            else:
+                try:
+                    validate_feature_id(fid)
+                except ValueError as exc:
+                    errors.append(f"{prefix}.id：{exc}")
 
         title = item.get("title")
         if not isinstance(title, str) or not title.strip() or title.strip() == "待填写":

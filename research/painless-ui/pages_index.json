@@ -1,0 +1,460 @@
+[
+  {
+    "name": "50_tab_words",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "005f1579cd13",
+    "texts": [
+      "I will not deny but that the best apolog",
+      "“我不否认，对付虚假指控的最佳辩解是沉默和忍耐，以及用诚实的行为对抗不诚实的言语",
+      "― John Milton",
+      "against",
+      "[单词]",
+      "[阅读]",
+      "[搜索]",
+      "[图表]",
+      "[设置]"
+    ]
+  },
+  {
+    "name": "51_tab_read",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "b12a5bc4030c",
+    "texts": [
+      "阅读",
+      "Jesus Walks on Water",
+      "After Jesus fed the five thousand people",
+      "communism",
+      "commune",
+      "communist",
+      "communal",
+      "Public Reads",
+      "A2",
+      "The Count of Monte Cristo",
+      "Young sailor Edmond Dantès was a happy a",
+      "despair"
+    ]
+  },
+  {
+    "name": "52_tab_search",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "d217eba9782f",
+    "texts": [
+      "Tap to search",
+      "随身听",
+      "vehicle",
+      "n. 交通工具, 媒介",
+      "[单词]",
+      "[阅读]",
+      "[搜索]",
+      "[图表]",
+      "[设置]"
+    ]
+  },
+  {
+    "name": "53_tab_stat",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "5121772e2f1a",
+    "texts": [
+      "[统计]",
+      "统计",
+      "[+0]",
+      "榜单",
+      "Vocabulary",
+      "Oxford 3000",
+      "共计 2,466 词",
+      "Progress",
+      "1.8%",
+      "已掌握 44 词",
+      "Distribution",
+      "熟识"
+    ]
+  },
+  {
+    "name": "54_tab_setting",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "3d4b8414d49c",
+    "texts": [
+      "终身会员",
+      "已解锁全部专属权益",
+      "个人信息",
+      "学习设置",
+      "数据云同步",
+      "已开启",
+      "学习提醒",
+      "外观",
+      "浅色",
+      "主题",
+      "文字大小",
+      "语言"
+    ]
+  },
+  {
+    "name": "60_words_clean",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "005f1579cd13"
+  },
+  {
+    "name": "61_words_tag_tap",
+    "focus": "mCurrentFocus=Window{3ed8d65 u0 PopupWindow:c7287f0}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "cf542b23f8a5",
+    "texts": [
+      "against",
+      "/əˈɡenst/",
+      "A2",
+      "opposing or not agreeing with someone or",
+      "R",
+      "not helpful or favorable to someone or s",
+      "prep. 反对, 不利, 靠着, 预防, 背景, 对比, 抵销, 抵押",
+      "Oxford 3000",
+      "移除",
+      "收藏"
+    ]
+  },
+  {
+    "name": "62_word_detail_or_same",
+    "focus": "mCurrentFocus=Window{3ed8d65 u0 PopupWindow:c7287f0}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "cf542b23f8a5",
+    "texts": [
+      "against",
+      "/əˈɡenst/",
+      "A2",
+      "opposing or not agreeing with someone or",
+      "R",
+      "not helpful or favorable to someone or s",
+      "prep. 反对, 不利, 靠着, 预防, 背景, 对比, 抵销, 抵押",
+      "Oxford 3000",
+      "移除",
+      "收藏"
+    ]
+  },
+  {
+    "name": "70_read_list",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "3dd5d7dc79cd",
+    "texts": [
+      "阅读",
+      "Jesus Walks on Water",
+      "After Jesus fed the five thousand people",
+      "communism",
+      "commune",
+      "communist",
+      "communal",
+      "Public Reads",
+      "A2",
+      "The Count of Monte Cristo",
+      "Young sailor Edmond Dantès was a happy a",
+      "despair"
+    ]
+  },
+  {
+    "name": "71_read_article",
+    "focus": "mCurrentFocus=Window{1218f1b u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.ArticleDetailActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "11761b95b9f6",
+    "texts": [
+      "阅读",
+      "Jesus Walks on Water",
+      "A2",
+      "Public Reads · 303 词",
+      "After Jesus fed the five thousand people",
+      "耶稣喂饱五千人后，吩咐门徒上船先到湖对岸去，自己则留下来遣散众人。傍晚时分，他独",
+      "The disciples were now in the middle of ",
+      "门徒的船此时正行至湖心。天色骤变，狂风骤起，巨浪拍打着船身。他们奋力划桨，船却行",
+      "Very early in the morning, while it was ",
+      "朗读",
+      "生词表",
+      "翻译"
+    ]
+  },
+  {
+    "name": "72_read_tool_朗读",
+    "focus": "mCurrentFocus=Window{1218f1b u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.ArticleDetailActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "11761b95b9f6",
+    "texts": [
+      "阅读",
+      "Jesus Walks on Water",
+      "A2",
+      "Public Reads · 303 词",
+      "After Jesus fed the five thousand people",
+      "耶稣喂饱五千人后，吩咐门徒上船先到湖对岸去，自己则留下来遣散众人。傍晚时分，他独",
+      "The disciples were now in the middle of ",
+      "门徒的船此时正行至湖心。天色骤变，狂风骤起，巨浪拍打着船身。他们奋力划桨，船却行",
+      "Very early in the morning, while it was ",
+      "朗读",
+      "生词表",
+      "翻译"
+    ]
+  },
+  {
+    "name": "72_read_tool_生词表",
+    "focus": "mCurrentFocus=Window{1218f1b u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.ArticleDetailActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "11761b95b9f6",
+    "texts": [
+      "阅读",
+      "Jesus Walks on Water",
+      "A2",
+      "Public Reads · 303 词",
+      "After Jesus fed the five thousand people",
+      "耶稣喂饱五千人后，吩咐门徒上船先到湖对岸去，自己则留下来遣散众人。傍晚时分，他独",
+      "The disciples were now in the middle of ",
+      "门徒的船此时正行至湖心。天色骤变，狂风骤起，巨浪拍打着船身。他们奋力划桨，船却行",
+      "Very early in the morning, while it was ",
+      "朗读",
+      "生词表",
+      "翻译"
+    ]
+  },
+  {
+    "name": "72_read_tool_翻译",
+    "focus": "mCurrentFocus=Window{1218f1b u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.ArticleDetailActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "11761b95b9f6",
+    "texts": [
+      "阅读",
+      "Jesus Walks on Water",
+      "A2",
+      "Public Reads · 303 词",
+      "After Jesus fed the five thousand people",
+      "耶稣喂饱五千人后，吩咐门徒上船先到湖对岸去，自己则留下来遣散众人。傍晚时分，他独",
+      "The disciples were now in the middle of ",
+      "门徒的船此时正行至湖心。天色骤变，狂风骤起，巨浪拍打着船身。他们奋力划桨，船却行",
+      "Very early in the morning, while it was ",
+      "朗读",
+      "生词表",
+      "翻译"
+    ]
+  },
+  {
+    "name": "80_search",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "7a9d140c5833",
+    "texts": [
+      "Tap to search",
+      "随身听",
+      "vehicle",
+      "n. 交通工具, 媒介",
+      "[单词]",
+      "[阅读]",
+      "[搜索]",
+      "[图表]",
+      "[设置]"
+    ]
+  },
+  {
+    "name": "81_search_input",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "7a9d140c5833",
+    "texts": [
+      "Tap to search",
+      "随身听",
+      "vehicle",
+      "n. 交通工具, 媒介",
+      "[单词]",
+      "[阅读]",
+      "[搜索]",
+      "[图表]",
+      "[设置]"
+    ]
+  },
+  {
+    "name": "82_search_player_more",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "58ab8c0546d9",
+    "texts": [
+      "取消",
+      "[单词]",
+      "[阅读]",
+      "[搜索]",
+      "[图表]",
+      "[设置]"
+    ]
+  },
+  {
+    "name": "90_stat",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "abeb41cd1804",
+    "texts": [
+      "[统计]",
+      "统计",
+      "[+0]",
+      "榜单",
+      "Vocabulary",
+      "Oxford 3000",
+      "共计 2,466 词",
+      "Progress",
+      "1.8%",
+      "已掌握 45 词",
+      "Distribution",
+      "熟识"
+    ]
+  },
+  {
+    "name": "91_stat_tap",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "00694ea4c673",
+    "texts": [
+      "[统计]",
+      "统计",
+      "[+0]",
+      "榜单",
+      "Vocabulary",
+      "Oxford 3000",
+      "共计 2,466 词",
+      "Progress",
+      "1.8%",
+      "已掌握 45 词",
+      "Distribution",
+      "熟识"
+    ]
+  },
+  {
+    "name": "100_setting",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "e7cf2473550f",
+    "texts": [
+      "终身会员",
+      "已解锁全部专属权益",
+      "个人信息",
+      "学习设置",
+      "数据云同步",
+      "已开启",
+      "学习提醒",
+      "外观",
+      "浅色",
+      "主题",
+      "文字大小",
+      "语言",
+      "[单词]",
+      "[阅读]",
+      "[搜索]",
+      "[图表]",
+      "[设置]"
+    ]
+  },
+  {
+    "name": "101_setting_00_浅色",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "8af5c896fd18",
+    "texts": [
+      "终身会员",
+      "已解锁全部专属权益",
+      "个人信息",
+      "学习设置",
+      "数据云同步",
+      "已开启",
+      "学习提醒",
+      "外观",
+      "浅色",
+      "主题",
+      "文字大小",
+      "语言"
+    ]
+  },
+  {
+    "name": "102_setting_scrolled",
+    "focus": "mCurrentFocus=Window{8163722 u0 tech.xiangzi.painless/tech.xiangzi.painless.ui.activity.MainActivity}",
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "b725462b926c",
+    "texts": [
+      "数据云同步",
+      "已开启",
+      "学习提醒",
+      "外观",
+      "浅色",
+      "主题",
+      "文字大小",
+      "语言",
+      "好评鼓励",
+      "帮助",
+      "联系",
+      "更多设置",
+      "Painless v4.6.3",
+      "[单词]",
+      "[阅读]",
+      "[搜索]",
+      "[图表]",
+      "[设置]"
+    ]
+  }
+]

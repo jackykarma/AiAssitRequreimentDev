@@ -9,6 +9,18 @@ from pathlib import Path
 
 PLUGIN_SKILLS = Path("plugins/aiassitrequreimentdev/skills")
 CURSOR_SKILLS = Path(".cursor/skills")
+SKIP_DIR_NAMES = {"__pycache__", ".git"}
+
+
+def _iter_files(root: Path) -> list[Path]:
+    files: list[Path] = []
+    for p in root.rglob("*"):
+        if not p.is_file():
+            continue
+        if any(part in SKIP_DIR_NAMES for part in p.parts):
+            continue
+        files.append(p)
+    return files
 
 
 def sync(repo: Path, *, check: bool) -> int:
@@ -19,17 +31,21 @@ def sync(repo: Path, *, check: bool) -> int:
         return 2
     drift = False
     for skill_dir in sorted(p for p in src_root.iterdir() if p.is_dir()):
-        src = skill_dir / "SKILL.md"
-        if not src.is_file():
+        if not (skill_dir / "SKILL.md").is_file():
             continue
-        dst = dst_root / skill_dir.name / "SKILL.md"
-        if check:
-            if not dst.is_file() or not filecmp.cmp(src, dst, shallow=False):
-                print(f"drift: {dst}")
-                drift = True
-            continue
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, dst)
+        dst_skill = dst_root / skill_dir.name
+        for src in _iter_files(skill_dir):
+            rel = src.relative_to(skill_dir)
+            dst = dst_skill / rel
+            if check:
+                if not dst.is_file() or not filecmp.cmp(src, dst, shallow=False):
+                    print(f"drift: {dst}")
+                    drift = True
+                continue
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dst)
+        if not check:
+            print(f"synced {skill_dir.name}")
     return 1 if drift else 0
 
 

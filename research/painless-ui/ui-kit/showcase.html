@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="zh-CN" data-pk-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Painless UI Kit Showcase</title>
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="components.css" />
+    <link rel="stylesheet" href="phone.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: var(--pk-font);
+        background: #e7ecdf;
+        color: var(--pk-ink);
+      }
+      .stage {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 24px;
+        padding: 24px;
+      }
+      .side {
+        background: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: var(--pk-shadow-card);
+        height: fit-content;
+        position: sticky;
+        top: 24px;
+      }
+      .side h1 {
+        margin: 0 0 8px;
+        font-size: 20px;
+      }
+      .side p {
+        margin: 0 0 16px;
+        color: var(--pk-ink-secondary);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .side button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 8px;
+        border: 1px solid var(--pk-line);
+        background: #f7faf2;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font: inherit;
+        cursor: pointer;
+      }
+      .side button.is-on {
+        border-color: var(--pk-accent);
+        background: var(--pk-accent-soft);
+        color: var(--pk-accent-press);
+        font-weight: 600;
+      }
+      .phones {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 28px;
+        align-items: flex-start;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .swatch-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .swatch {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <aside class="side">
+        <h1>Painless UI Kit</h1>
+        <p>
+          自 <code>tech.xiangzi.painless</code> v4.6.3 真机截图归纳。仅作原型视觉参考。
+        </p>
+        <button class="is-on" data-screen="words">单词 · 语境卡</button>
+        <button data-screen="detail">词详 · 翻译模糊</button>
+        <button data-screen="read">阅读 · 列表</button>
+        <button data-screen="article">阅读 · 正文</button>
+        <button data-screen="search">搜索 · 随身听</button>
+        <button data-screen="stat">图表 · 统计</button>
+        <button data-screen="setting">设置</button>
+        <button data-screen="sheet">词气泡</button>
+        <div class="swatch-row" title="tokens">
+          <div class="swatch" style="background:#f0f5e7"></div>
+          <div class="swatch" style="background:#7ba23a"></div>
+          <div class="swatch" style="background:#f5a623"></div>
+          <div class="swatch" style="background:#5b9bd5"></div>
+          <div class="swatch" style="background:#e86a2a"></div>
+          <div class="swatch" style="background:#fff"></div>
+        </div>
+      </aside>
+
+      <div class="phones">
+        <!-- WORDS -->
+        <div class="pk-phone" data-panel="words">
+          <div class="pk-phone__screen">
+            <div class="pk-phone__notch"></div>
+            <div class="pk-app">
+              <div class="pk-scroll" style="position: relative">
+                <div class="pk-card pk-quote-card">
+                  <div class="pk-quote-card__mark">“</div>
+                  <div class="pk-quote-card__en">
+                    I will not deny but that the best apology
+                    <span class="pk-hl">against</span> false accusers is silence
+                    and sufferance…
+                  </div>
+                  <div
+                    class="pk-quote-card__zh pk-blur-text pk-blur-text--soft"
+                    role="button"
+                    tabindex="0"
+                    aria-pressed="false"
+                    title="点击揭晓翻译"
+                  >
+                    “我不否认，对付虚假指控的最佳辩解是沉默和忍耐……”
+                  </div>
+                  <div class="pk-quote-card__author">
+                    <div class="pk-avatar"></div>
+                    ― John Milton
+                  </div>
+                </div>
+                <span class="pk-word-tag">against</span>
+                <div class="pk-fab-col">
+                  <button class="pk-fab" type="button">⇧</button>
+                  <button class="pk-fab" type="button">🔊</button>
+                  <button class="pk-fab" type="button">🧠</button>
+                </div>
+              </div>
+              <div class="pk-progress"><span></span></div>
+              <nav class="pk-bottom-nav">
+                <button class="is-active" type="button"><span class="ico">📘</span>单词</button>
+                <button type="button"><span class="ico">📖</span>阅读</button>
+                <button type="button"><span class="ico">🔍</span>搜索</button>
+                <button type="button"><span class="ico">📊</span>图表</button>
+                <button type="button"><span class="ico">⚙️</span>设置</button>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- WORD DETAIL · blur translation -->
+        <div class="pk-phone hidden" data-panel="detail">
+          <div class="pk-phone__screen">
+            <div class="pk-phone__notch"></div>
+            <div class="pk-app">
+              <div class="pk-topbar">
+                <button class="pk-topbar__back" type="button">‹</button>
+                <div class="pk-topbar__title">词详</div>
+              </div>
+              <div class="pk-scroll">
+                <div style="font-size:28px;font-weight:700">intellectually</div>
+                <div style="color:var(--pk-ink-secondary);margin-top:4px">
+                  /ˌɪntəˈlektʃuəli/ <span style="color:var(--pk-accent)">🔊</span>
+                </div>
+                <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                  <span class="pk-chip">TOP10000</span>
+                  <span class="pk-chip pk-chip--warm">CEFR-C2</span>
+                </div>
+                <div class="pk-word-sheet__actions" style="margin-top:14px">
+                  <button class="pk-soft-btn is-star" type="button">收藏</button>
+                  <button class="pk-soft-btn is-del" type="button">移除</button>
+                  <button class="pk-soft-btn is-search" type="button">搜索</button>
+                </div>
+
+                <div style="margin-top:20px">
+                  <span class="pk-label-pill">adverb</span>
+                  <div style="margin-top:10px;color:var(--pk-ink-secondary)">
+                    in a way that uses thinking and understanding
+                  </div>
+                </div>
+
+                <div class="pk-example-block">
+                  <div class="pk-example-block__en">
+                    This puzzle is <span class="pk-word">intellectually</span> stimulating
+                    and makes you think hard.
+                    <span style="color:var(--pk-accent)">🔊</span>
+                  </div>
+                  <div
+                    class="pk-example-block__zh pk-blur-text"
+                    role="button"
+                    tabindex="0"
+                    aria-pressed="false"
+                    title="点击揭晓例句翻译"
+                  >
+                    这个谜题在智力上很有挑战性，让你绞尽脑汁。
+                  </div>
+                </div>
+
+                <div class="pk-translation-block">
+                  <span class="pk-label-pill">translation</span>
+                  <div
+                    class="pk-translation-block__body pk-blur-text pk-blur-text--strong"
+                    role="button"
+                    tabindex="0"
+                    aria-pressed="false"
+                    title="点击揭晓释义"
+                  >
+                    adv. 智力上
+                  </div>
+                </div>
+
+                <div class="pk-card" style="margin-top:20px">
+                  <div style="color:var(--pk-info);font-weight:700">Mnemonic</div>
+                  <div style="margin-top:8px;font-size:14px;line-height:1.55">
+                    <b>intellectually</b> 基于词根 <b>intellect</b>（智力），加 -ual / -ly
+                    构成副词，表示「在智力层面」。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- READ LIST -->
+        <div class="pk-phone hidden" data-panel="read">
+          <div class="pk-phone__screen">
+            <div class="pk-phone__notch"></div>
+            <div class="pk-app">
+              <div class="pk-topbar"><div class="pk-topbar__title">阅读</div></div>
+              <div class="pk-scroll">
+                <div class="pk-card pk-article-card">
+                  <div class="pk-article-card__title">Jesus Walks on Water</div>
+                  <div class="pk-article-card__snippet">
+                    After Jesus fed the five thousand people, he told his disciples…
+                  </div>
+                  <div class="pk-tag-row">
+                    <span class="pk-chip">communism</span>
+                    <span class="pk-chip">commune</span>
+                    <span class="pk-chip">communist</span>
+                  </div>
+                  <div class="pk-article-card__foot">
+                    <span>Public Reads</span>
+                    <span class="pk-level-badge">A2</span>
+                  </div>
+                </div>
+                <div class="pk-card pk-article-card">
+                  <div class="pk-article-card__title">The Count of Monte Cristo</div>
+                  <div class="pk-article-card__snippet">
+                    Young sailor Edmond Dantès was a happy and honest man…
+                  </div>
+                  <div class="pk-tag-row">
+                    <span class="pk-chip pk-chip--warm">despair</span>
+                    <span class="pk-chip pk-chip--warm">political</span>
+                  </div>
+                  <div class="pk-article-card__foot">
+                    <span>Public Reads</span>
+                    <span class="pk-level-badge is-b2">B2</span>
+                  </div>
+                </div>
+              </div>
+              <nav class="pk-bottom-nav">
+                <button type="button"><span class="ico">📘</span>单词</button>
+                <button class="is-active" type="button"><span class="ico">📖</span>阅读</button>
+                <button type="button"><span class="ico">🔍</span>搜索</button>
+                <button type="button"><span class="ico">📊</span>图表</button>
+                <button type="button"><span class="ico">⚙️</span>设置</button>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARTICLE -->
+        <div class="pk-phone hidden" data-panel="article">
+          <div class="pk-phone__screen">
+            <div class="pk-phone__notch"></div>
+            <div class="pk-app">
+              <div class="pk-topbar">
+                <button class="pk-topbar__back" type="button">‹</button>
+                <div class="pk-topbar__title">阅读</div>
+              </div>
+              <div class="pk-scroll" style="padding-bottom: 120px">
+                <div class="pk-read-title">Jesus Walks on Water</div>
+                <div class="pk-read-meta">
+                  <span class="pk-level-badge">A2</span>
+                  <span>Public Reads · 303词</span>
+                </div>
+                <div class="pk-read-en">
+                  After Jesus
+                  <span class="pk-hl--underline">fed</span>
+                  the five thousand people, he told his disciples to get into the
+                  <span class="pk-hl pk-hl--green">boat</span>
+                  and go ahead of him to the other side.
+                </div>
+                <div
+                  class="pk-read-zh pk-blur-text"
+                  role="button"
+                  tabindex="0"
+                  aria-pressed="false"
+                  title="点击揭晓翻译"
+                >
+                  耶稣喂饱五千人之后，吩咐门徒上船，先到对岸去。
+                </div>
+              </div>
+              <div class="pk-tool-dock">
+                <button type="button"><span class="tile is-green">🔊</span>朗读</button>
+                <button type="button"><span class="tile is-warm">📄</span>生词表</button>
+                <button type="button"><span class="tile is-blue">👁</span>翻译</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="pk-phone hidden" data-panel="search">
+          <div class="pk-phone__screen">
+            <div class="pk-phone__notch"></div>
+            <div class="pk-app">
+              <div class="pk-scroll">
+                <div class="pk-search">🔍 Tap to search</div>
+                <div class="pk-section-label">随身听</div>
+                <div class="pk-card pk-player-card">
+                  <div class="pk-player-stage">
+                    <div class="word">vehicle</div>
+                    <div class="meaning">n. 交通工具, 媒介</div>
+                  </div>
+                  <div class="pk-player-controls">
+                    <button type="button">↺</button>
+                    <button type="button">⏮</button>
+                    <button class="play" type="button">▶</button>
+                    <button type="button">⏭</button>
+                    <button type="button">···</button>
+                  </div>
+                </div>
+              </div>
+              <nav class="pk-bottom-nav">
+                <button type="button"><span class="ico">📘</span>单词</button>
+                <button type="button"><span class="ico">📖</span>阅读</button>
+                <button class="is-active" type="button"><span class="ico">🔍</span>搜索</button>
+                <button type="button"><span class="ico">📊</span>图表</button>
+                <button type="button"><span class="ico">⚙️</span>设置</button>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- STAT -->
+        <div class="pk-phone hidden" data-panel="stat">
+          <div class="pk-phone__screen">
+            <div class="pk-phone__notch"></div>
+            <div class="pk-app" style="background: linear-gradient(180deg, var(--pk-bg-stat-top), var(--pk-bg))">
+              <div class="pk-topbar"><div class="pk-topbar__title">统计</div></div>
+              <div class="pk-scroll">
+                <div class="pk-stat-row">
+                  <div class="pk-card">
+                    <div style="font-size:13px;color:var(--pk-ink-secondary)">Vocabulary</div>
+                    <div class="pk-stat-metric is-warn" style="font-size:18px;margin-top:8px">Oxford 3000</div>
+                    <div style="font-size:12px;color:var(--pk-ink-secondary);margin-top:6px">共计 2,466 词</div>
+                  </div>
+                  <div class="pk-card">
+                    <div style="font-size:13px;color:var(--pk-ink-secondary)">Progress</div>
+                    <div class="pk-stat-metric" style="margin-top:4px">1.8%</div>
+                    <div style="font-size:12px;color:var(--pk-ink-secondary)">已掌握 44 词</div>
+                  </div>
+                </div>
+                <div class="pk-card" style="margin-top:12px">
+                  <div style="font-weight:600;margin-bottom:12px">Today</div>
+                  <div class="pk-stat-grid">
+                    <div class="pk-stat-pill is-green">复习 1 · 新学 5</div>
+                    <div class="pk-stat-pill is-warm">收藏 0 · 移除 0</div>
+                    <div class="pk-stat-pill is-blue">学习 11 分钟</div>
+                    <div class="pk-stat-pill is-blue">打开 5 次</div>
+                  </div>
+                </div>
+              </div>
+              <nav class="pk-bottom-nav">
+                <button type="button"><span class="ico">📘</span>单词</button>
+                <button type="button"><span class="ico">📖</span>阅读</button>
+                <button type="button"><span class="ico">🔍</span>搜索</button>
+                <button class="is-active" type="button"><span class="ico">📊</span>图表</button>
+                <button type="button"><span class="ico">⚙️</span>设置</button>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTING -->
+        <div class="pk-phone hidden" data-panel="setting">
+          <div class="pk-phone__screen">
+            <div class="pk-phone__notch"></div>
+            <div class="pk-app">
+              <div class="pk-scroll">
+                <div class="pk-card pk-pro-card">
+                  <div class="pk-pro-card__hero">🎁</div>
+                  <div class="pk-pro-card__body">
+                    <div class="pk-pro-card__title">终身会员</div>
+                    <div class="pk-pro-card__sub">已解锁全部专属权益</div>
+                  </div>
+                </div>
+                <div class="pk-card pk-settings-group" style="margin-top:16px;padding:4px 0">
+                  <button class="pk-settings-row" type="button">
+                    <span class="pk-settings-ico is-blue">人</span>
+                    <span class="pk-settings-row__title">个人信息</span>
+                    <span class="pk-settings-row__meta">›</span>
+                  </button>
+                  <button class="pk-settings-row" type="button">
+                    <span class="pk-settings-ico is-green">书</span>
+                    <span class="pk-settings-row__title">学习设置</span>
+                    <span class="pk-settings-row__meta">›</span>
+                  </button>
+                  <button class="pk-settings-row" type="button">
+                    <span class="pk-settings-ico is-blue">云</span>
+                    <span class="pk-settings-row__title">数据云同步</span>
+                    <span class="pk-settings-row__meta">已开启</span>
+                  </button>
+                  <button class="pk-settings-row" type="button">
+                    <span class="pk-settings-ico is-orange">铃</span>
+                    <span class="pk-settings-row__title">学习提醒</span>
+                    <span class="pk-settings-row__meta">›</span>
+                  </button>
+                </div>
+                <div class="pk-card pk-settings-group" style="margin-top:16px;padding:4px 0">
+                  <button class="pk-settings-row" type="button">
+                    <span class="pk-settings-ico is-gray">◐</span>
+                    <span class="pk-settings-row__title">外观</span>
+                    <span class="pk-settings-row__meta">浅色</span>
+                  </button>
+                  <button class="pk-settings-row" type="button">
+                    <span class="pk-settings-ico is-green">🎨</span>
+                    <span class="pk-settings-row__title">主题</span>
+                    <span class="pk-settings-row__meta">›</span>
+                  </button>
+                </div>
+              </div>
+              <nav class="pk-bottom-nav">
+                <button type="button"><span class="ico">📘</span>单词</button>
+                <button type="button"><span class="ico">📖</span>阅读</button>
+                <button type="button"><span class="ico">🔍</span>搜索</button>
+                <button type="button"><span class="ico">📊</span>图表</button>
+                <button class="is-active" type="button"><span class="ico">⚙️</span>设置</button>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- SHEET -->
+        <div class="pk-phone hidden" data-panel="sheet">
+          <div class="pk-phone__screen">
+            <div class="pk-phone__notch"></div>
+            <div class="pk-app">
+              <div class="pk-scroll" style="filter: brightness(0.55)">
+                <div class="pk-card pk-quote-card">
+                  <div class="pk-quote-card__en">…apology against false accusers…</div>
+                </div>
+              </div>
+              <div class="pk-word-sheet">
+                <div class="pk-word-sheet__word">against</div>
+                <div class="pk-word-sheet__phonetic">/əˈɡenst/ · prep.</div>
+                <div style="margin-top:12px;color:var(--pk-ink-secondary)">in opposition to</div>
+                <div style="margin-top:8px">prep. 反对；倚靠；以防</div>
+                <div class="pk-word-sheet__actions">
+                  <button class="pk-soft-btn is-del" type="button">移除</button>
+                  <button class="pk-soft-btn is-star" type="button">收藏</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const buttons = document.querySelectorAll(".side button[data-screen]");
+      const panels = document.querySelectorAll("[data-panel]");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          buttons.forEach((b) => b.classList.remove("is-on"));
+          btn.classList.add("is-on");
+          const id = btn.dataset.screen;
+          panels.forEach((p) => p.classList.toggle("hidden", p.dataset.panel !== id));
+        });
+      });
+
+      /** 翻译模糊：点击揭晓 / 再点盖回（演示用） */
+      function toggleBlur(el) {
+        const on = el.classList.toggle("is-revealed");
+        el.setAttribute("aria-pressed", on ? "true" : "false");
+      }
+      document.querySelectorAll(".pk-blur-text").forEach((el) => {
+        el.addEventListener("click", () => toggleBlur(el));
+        el.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleBlur(el);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

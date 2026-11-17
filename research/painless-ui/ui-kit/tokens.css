@@ -1,0 +1,125 @@
+/*********************************************************************************
+ ** Copyright (C), 2019-2029, OPLUS Mobile Comm Corp., Ltd
+ ** All rights reserved.
+ **
+ ** File: - tokens.css
+ ** Description: Painless(无痛单词)-inspired design tokens from device capture
+ ** Version: 1.0
+ ** Date: 2026/11/16
+ ** Author: limao2@Apps.Gallery
+ **
+ ** ------------------------------- Revision History: ----------------------------
+ ** <author> <date> <version> <desc>
+ ** ------------------------------------------------------------------------------
+ ** limao2@Apps.Gallery 2026/11/16 1.0 INIT from tech.xiangzi.painless v4.6.3
+ *********************************************************************************/
+
+:root,
+html[data-pk-theme="light"] {
+  --pk-font: "PingFang SC", "SF Pro Text", "Segoe UI", "Noto Sans SC",
+    system-ui, sans-serif;
+
+  --pk-fs-xs: 11px;
+  --pk-fs-sm: 13px;
+  --pk-fs-md: 15px;
+  --pk-fs-lg: 17px;
+  --pk-fs-title: 20px;
+  --pk-fs-word: 28px;
+  --pk-fs-display: 34px;
+  --pk-lh: 1.45;
+  --pk-lh-read: 1.7;
+  --pk-fw-regular: 400;
+  --pk-fw-medium: 500;
+  --pk-fw-semibold: 600;
+  --pk-fw-bold: 700;
+
+  --pk-space-1: 4px;
+  --pk-space-2: 8px;
+  --pk-space-3: 12px;
+  --pk-space-4: 16px;
+  --pk-space-5: 20px;
+  --pk-space-6: 24px;
+  --pk-space-8: 32px;
+
+  --pk-radius-sm: 8px;
+  --pk-radius-md: 12px;
+  --pk-radius-lg: 16px;
+  --pk-radius-card: 24px;
+  --pk-radius-pill: 999px;
+
+  --pk-phone-w: 360px;
+  --pk-phone-h: 740px;
+  --pk-phone-bezel: #2a2a2a;
+
+  --pk-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --pk-duration: 240ms;
+  --pk-duration-fast: 160ms;
+
+  /**
+   * 翻译防剧透模糊（真机：例句中译 / translation 释义先盖住，点按揭晓）
+   * 参考：screens/20_read_explore.png、orca-paste 例句翻译区
+   */
+  --pk-blur-spoiler: 7px;
+  --pk-blur-spoiler-strong: 10px;
+  --pk-blur-spoiler-soft: 4px;
+
+  --pk-bg: #f0f5e7;
+  --pk-bg-stat-top: #f1f9fc;
+  --pk-surface: #ffffff;
+  --pk-surface-recessed: #f5f5f3;
+  --pk-scrim: rgba(0, 0, 0, 0.45);
+
+  --pk-ink: #1c1c1e;
+  --pk-ink-secondary: #8e8e93;
+  --pk-ink-muted: #a8a8a0;
+  --pk-ink-inverse: #ffffff;
+
+  --pk-accent: #7ba23a;
+  --pk-accent-soft: #e4f0d4;
+  --pk-accent-press: #62862e;
+  --pk-on-accent: #ffffff;
+
+  --pk-warn: #f5a623;
+  --pk-warn-deep: #e86a2a;
+  --pk-warn-soft: #fde8d4;
+  --pk-ok: #8bc34a;
+  --pk-ok-soft: #e8f5d4;
+  --pk-info: #5b9bd5;
+  --pk-info-soft: #e3f0fa;
+  --pk-danger: #e57373;
+  --pk-danger-soft: #f8e0de;
+  --pk-star-soft: #f8f0c8;
+
+  --pk-line: rgba(60, 60, 67, 0.12);
+  --pk-nav-idle: #9aa094;
+  --pk-shadow-card: 0 8px 24px rgba(60, 80, 40, 0.06);
+  --pk-shadow-dock: 0 10px 28px rgba(40, 50, 30, 0.12);
+
+  --pk-level-a2: #8bc34a;
+  --pk-level-b2: #f5a623;
+  --pk-level-c1: #e86a2a;
+
+  color-scheme: light;
+}
+
+html[data-pk-theme="dark"] {
+  --pk-bg: #12140f;
+  --pk-bg-stat-top: #14181c;
+  --pk-surface: #1c1e18;
+  --pk-surface-recessed: #262820;
+  --pk-scrim: rgba(0, 0, 0, 0.6);
+  --pk-ink: #f2f2ef;
+  --pk-ink-secondary: rgba(235, 235, 245, 0.55);
+  --pk-ink-muted: rgba(235, 235, 245, 0.35);
+  --pk-line: rgba(235, 235, 245, 0.12);
+  --pk-nav-idle: #8a9080;
+  --pk-shadow-card: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --pk-shadow-dock: 0 10px 28px rgba(0, 0, 0, 0.4);
+  --pk-accent-soft: rgba(123, 162, 58, 0.28);
+  --pk-warn-soft: rgba(245, 166, 35, 0.22);
+  --pk-info-soft: rgba(91, 155, 213, 0.22);
+  --pk-danger-soft: rgba(229, 115, 115, 0.22);
+  --pk-star-soft: rgba(248, 240, 200, 0.18);
+  --pk-ok-soft: rgba(139, 195, 74, 0.22);
+  color-scheme: dark;
+}

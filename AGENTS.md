@@ -13,3 +13,5 @@
 先读 `docs/architecture.md` 和 `constitution.md`。知识从 `modus/knowledge/architecture-overview.md` 进入。
 
 角色只写自己的工件。门禁：`python -m aiassitrequreimentdev check <feature目录> --gate <G0|G1|G2|G2T|G3|GR|G4|GD>`。
+
+竞品/对标 App 视觉：提供包名时启用 `aiassitrequreimentdev-apk-uikit`（ADB 抓页 → `research/<app>-ui/ui-kit/`）。

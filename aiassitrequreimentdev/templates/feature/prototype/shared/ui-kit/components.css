@@ -854,3 +854,22 @@
   gap: var(--uk-space-6);
   width: 100%;
 }
+
+/* motion contract → research/ui-kits/MOTION.md */
+.uk-pressable {
+  transition: transform var(--uk-duration-fast) var(--uk-ease);
+  will-change: transform;
+}
+
+.uk-pressable:active {
+  transform: scale(var(--uk-press-scale));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

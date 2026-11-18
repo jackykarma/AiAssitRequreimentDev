@@ -1,0 +1,63 @@
+# Copyright (C), 2019-2029, OPLUS Mobile Comm Corp., Ltd
+# File: catalog.yaml — research UI kit registry for UX visual.baseline selection
+#
+# 视觉基线规则：
+# 1) 若 projectStyle.locked=true → 项目已有自有 UI，设计必须遵循；不强制三选一
+# 2) 否则 → 移动端三种内置风格 ui-kit | painless | midoo；另可选 custom
+# 菜单：python -m aiassitrequreimentdev kits
+# 动效合同：MOTION.md
+
+version: 1
+motionContract: research/ui-kits/MOTION.md
+
+# 项目自有风格（业务仓有设计系统时开启）
+# locked=true 时：默认 baseline=projectStyle.id；G2 不强制三选一；出设计须遵循 path/themeDoc
+projectStyle:
+  locked: false
+  id: project
+  label: 项目自有风格
+  description: 当前产品/业务仓已有 UI 规范，原型与视觉须对齐，不得改套竞品 kit
+  path: null          # 例：docs/design-system 或 prototype/shared/project-ui
+  prefix: null        # 例：app / ds
+  themeDoc: null      # 例：docs/ui-guidelines.md
+  notes: ""
+
+# 无项目锁定时的默认与主推三选
+default: ui-kit
+styleKitIds: [ui-kit, painless, midoo]
+
+kits:
+  - id: ui-kit
+    label: Music 默认 kit
+    description: 仓内模板 Apple Music 风亮/暗双主题（uk-*）
+    path: aiassitrequreimentdev/templates/feature/prototype/shared/ui-kit
+    featurePath: prototype/shared/ui-kit
+    prefix: uk
+    package: null
+    source: template
+
+  - id: painless
+    label: 无痛单词（painless）
+    description: 护眼纸感 + 苔藓绿 + 翻译防剧透模糊（pk-*）
+    path: research/painless-ui/ui-kit
+    prefix: pk
+    package: tech.xiangzi.painless
+    source: apk-uikit
+    showcase: research/painless-ui/ui-kit/showcase.html
+
+  - id: midoo
+    label: Midoo AI
+    description: 淡紫蓝渐变画布 + 毛玻璃底栏 + 渐变 CTA（md-*）
+    path: research/midoo-ui/ui-kit
+    prefix: md
+    package: com.midoo.ai
+    source: apk-uikit
+    showcase: research/midoo-ui/ui-kit/showcase.html
+
+  - id: custom
+    label: 自由发挥
+    description: 不强制引用已有 kit；须写 visual.notes
+    path: null
+    prefix: null
+    package: null
+    source: freeform

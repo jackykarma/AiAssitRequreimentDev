@@ -31,6 +31,7 @@
  ** limao2@Apps.Gallery 2026/11/15 1.15 light-auto 路径（无 UI 小需求）
  ** limao2@Apps.Gallery 2026/11/15 1.16 G2 无 UI 跳过模板 ux；seal 写 G1 accepted；G0 pathConfirmed
  ** limao2@Apps.Gallery 2026/11/15 1.17 feature 级 tech 标题；light 免强制 H3 架构小节
+ ** limao2@Apps.Gallery 2026/11/18 1.18 visual.baseline 扩展 research kit catalog（painless/midoo）
  *********************************************************************************/
 """
 
@@ -46,6 +47,7 @@ from pathlib import Path
 
 import yaml
 
+from aiassitrequreimentdev.change_log import repo_root_for
 from aiassitrequreimentdev.paths import is_light_path
 from aiassitrequreimentdev.template_headings import (
     SPEC_PRD_H2,
@@ -733,7 +735,7 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
             violations.append(Violation("G2", "UX_SKIP_REASON", "ux.skip 为 true 时必须写 reason"))
         return
     _check_ux_interaction_rules(ux, violations)
-    _check_ux_visual(ux, violations)
+    _check_ux_visual(ux, violations, change_dir)
     expected = _acceptance_ids(spec)
     mapped = ux.get("acceptance")
     if not isinstance(mapped, list):
@@ -797,18 +799,165 @@ def _check_g2(change_dir: Path, state: dict, spec: dict, violations: list[Violat
         return
     visual = ux.get("visual") if isinstance(ux.get("visual"), dict) else {}
     baseline = visual.get("baseline")
-    # custom：人选自由发挥，不强制 ui-kit；ui-kit / 未写 baseline 仍须引用 kit
+    # custom：自由发挥不强制 kit；其它 baseline 须引用对应 path/prefix
     if baseline != "custom":
+        kit = _visual_kit_by_id(change_dir, baseline if isinstance(baseline, str) else "ui-kit")
+        # 项目锁定风格可能只在 projectStyle 里，不在 kits 列表
+        if kit is None and isinstance(baseline, str):
+            ps = _project_style(change_dir)
+            if baseline == ps.get("id"):
+                kit = {
+                    "id": ps.get("id"),
+                    "prefix": ps.get("prefix"),
+                    "path": ps.get("path"),
+                    "source": "project",
+                }
         proto_text = entry.read_text(encoding="utf-8", errors="ignore").lower()
-        if "ui-kit" not in proto_text and "uk-" not in proto_text:
+        path_hint = ""
+        prefix = "uk"
+        if isinstance(kit, dict):
+            raw_path = kit.get("path") or kit.get("featurePath") or ""
+            if isinstance(raw_path, str) and raw_path.strip():
+                path_hint = raw_path.strip().replace("\\", "/").lower()
+            raw_prefix = kit.get("prefix")
+            if isinstance(raw_prefix, str) and raw_prefix.strip():
+                prefix = raw_prefix.strip().lower()
+        markers: list[str] = []
+        if isinstance(kit, dict) and isinstance(kit.get("prefix"), str) and kit.get("prefix").strip():
+            markers.append(f"{str(kit.get('prefix')).strip().lower()}-")
+        elif baseline == "ui-kit":
+            markers.append("uk-")
+        if baseline == "ui-kit" or (isinstance(kit, dict) and kit.get("source") == "template"):
+            markers.append("ui-kit")
+        if path_hint:
+            markers.append(path_hint)
+            markers.append(Path(path_hint).name.lower())
+        # 项目风格若尚未配置 path/prefix，跳过引用检查（配置后即强制）
+        if isinstance(kit, dict) and kit.get("source") == "project":
+            require_markers = bool(path_hint) or (
+                isinstance(kit.get("prefix"), str) and bool(str(kit.get("prefix")).strip())
+            )
+        else:
+            require_markers = bool(markers)
+        if require_markers and not any(m and m in proto_text for m in markers):
+            label = baseline if isinstance(baseline, str) and baseline.strip() else "ui-kit"
             violations.append(
                 Violation(
                     "G2",
                     "UX_PROTO_UIKIT",
-                    "visual.baseline=ui-kit（默认）时 UX 原型须引用 shared/ui-kit"
-                    "（tokens/components/phone 或 uk-* 类名）；自由发挥请设 baseline=custom 并写 notes",
+                    f"visual.baseline={label} 时 UX 原型须引用对应 kit"
+                    f"（path 或 {prefix}-* 类名；见 research/ui-kits/catalog.yaml）；"
+                    "自由发挥请设 baseline=custom 并写 notes",
                 )
             )
+
+
+# 无 catalog 文件时的内置三种风格 + custom（与 research/ui-kits/catalog.yaml 对齐）
+_BUILTIN_UI_KITS: list[dict] = [
+    {
+        "id": "ui-kit",
+        "label": "Music 默认 kit",
+        "prefix": "uk",
+        "path": "prototype/shared/ui-kit",
+        "source": "template",
+    },
+    {
+        "id": "painless",
+        "label": "无痛单词（painless）",
+        "prefix": "pk",
+        "path": "research/painless-ui/ui-kit",
+        "source": "apk-uikit",
+    },
+    {
+        "id": "midoo",
+        "label": "Midoo AI",
+        "prefix": "md",
+        "path": "research/midoo-ui/ui-kit",
+        "source": "apk-uikit",
+    },
+    {
+        "id": "custom",
+        "label": "自由发挥",
+        "prefix": None,
+        "path": None,
+        "source": "freeform",
+    },
+]
+
+
+def _load_ui_kit_catalog(change_dir: Path) -> dict:
+    root = repo_root_for(change_dir)
+    path = root / "research" / "ui-kits" / "catalog.yaml"
+    if not path.is_file():
+        return {
+            "default": "ui-kit",
+            "styleKitIds": ["ui-kit", "painless", "midoo"],
+            "projectStyle": {"locked": False, "id": "project"},
+            "kits": list(_BUILTIN_UI_KITS),
+        }
+    doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return doc if isinstance(doc, dict) else {}
+
+
+def _project_style(change_dir: Path) -> dict:
+    catalog = _load_ui_kit_catalog(change_dir)
+    raw = catalog.get("projectStyle")
+    if not isinstance(raw, dict):
+        return {"locked": False, "id": "project"}
+    kit_id = raw.get("id")
+    if not isinstance(kit_id, str) or not kit_id.strip():
+        kit_id = "project"
+    return {
+        "locked": bool(raw.get("locked")),
+        "id": kit_id.strip(),
+        "label": raw.get("label") or "项目自有风格",
+        "path": raw.get("path") if isinstance(raw.get("path"), str) else None,
+        "prefix": raw.get("prefix") if isinstance(raw.get("prefix"), str) else None,
+        "themeDoc": raw.get("themeDoc") if isinstance(raw.get("themeDoc"), str) else None,
+        "notes": raw.get("notes") if isinstance(raw.get("notes"), str) else "",
+    }
+
+
+def _catalog_kits_by_id(catalog: dict) -> dict[str, dict]:
+    kits = catalog.get("kits")
+    if not isinstance(kits, list):
+        return {item["id"]: item for item in _BUILTIN_UI_KITS}
+    out: dict[str, dict] = {}
+    for item in kits:
+        if isinstance(item, dict) and isinstance(item.get("id"), str):
+            out[item["id"]] = item
+    # 保证三种内置风格始终可选（即使旧 catalog 未登记）
+    for item in _BUILTIN_UI_KITS:
+        out.setdefault(item["id"], item)
+    return out
+
+
+def _allowed_visual_baselines(change_dir: Path) -> set[str]:
+    catalog = _load_ui_kit_catalog(change_dir)
+    ids = set(_catalog_kits_by_id(catalog))
+    ids.update({"ui-kit", "painless", "midoo", "custom", "project"})
+    ps = _project_style(change_dir)
+    ids.add(str(ps.get("id") or "project"))
+    return ids
+
+
+def _visual_kit_by_id(change_dir: Path, kit_id: str) -> dict | None:
+    kits = _catalog_kits_by_id(_load_ui_kit_catalog(change_dir))
+    if kit_id in kits:
+        return kits[kit_id]
+    ps = _project_style(change_dir)
+    if kit_id == ps.get("id"):
+        return {
+            "id": ps.get("id"),
+            "label": ps.get("label"),
+            "prefix": ps.get("prefix"),
+            "path": ps.get("path"),
+            "source": "project",
+        }
+    for item in _BUILTIN_UI_KITS:
+        if item["id"] == kit_id:
+            return item
+    return None
 
 
 def _check_ux_interaction_rules(ux: dict, violations: list[Violation]) -> None:
@@ -844,14 +993,16 @@ def _check_ux_interaction_rules(ux: dict, violations: list[Violation]) -> None:
                 violations.append(Violation("G2", "UX_RULES", f"{identifier} 缺少 {key}"))
 
 
-def _check_ux_visual(ux: dict, violations: list[Violation]) -> None:
+def _check_ux_visual(
+    ux: dict, violations: list[Violation], change_dir: Path | None = None
+) -> None:
     visual = ux.get("visual")
     if visual is None:
         violations.append(
             Violation(
                 "G2",
                 "UX_VISUAL",
-                "有 UI 时须填写 visual.baseline（ui-kit|custom；人选后写入）",
+                "有 UI 时须填写 visual.baseline（项目锁定用 project；否则 ui-kit|painless|midoo|custom…）",
             )
         )
         return
@@ -859,22 +1010,41 @@ def _check_ux_visual(ux: dict, violations: list[Violation]) -> None:
         violations.append(Violation("G2", "UX_VISUAL", "visual 必须是映射"))
         return
     baseline = visual.get("baseline")
-    if baseline not in ("ui-kit", "custom"):
+    allowed = (
+        _allowed_visual_baselines(change_dir)
+        if change_dir is not None
+        else {"ui-kit", "custom", "painless", "midoo", "project"}
+    )
+    if baseline not in allowed:
+        allowed_txt = "|".join(sorted(allowed))
         violations.append(
             Violation(
                 "G2",
                 "UX_VISUAL",
-                "visual.baseline 须为 ui-kit 或 custom（人选后写入，不可省略）",
+                f"visual.baseline 须为已注册项（{allowed_txt}；见 research/ui-kits/catalog.yaml）",
             )
         )
-    if baseline == "custom":
-        notes = visual.get("notes")
-        if not isinstance(notes, str) or not notes.strip():
+    notes = visual.get("notes")
+    notes_ok = isinstance(notes, str) and bool(notes.strip())
+    if baseline == "custom" and not notes_ok:
+        violations.append(
+            Violation(
+                "G2",
+                "UX_VISUAL",
+                "visual.baseline=custom 时须在 notes 说明为何不用已注册 kit",
+            )
+        )
+    # 项目已锁定自有风格：偏离 project 须 notes
+    if change_dir is not None:
+        ps = _project_style(change_dir)
+        project_id = ps.get("id") or "project"
+        if ps.get("locked") and baseline not in {project_id, None} and not notes_ok:
             violations.append(
                 Violation(
                     "G2",
                     "UX_VISUAL",
-                    "visual.baseline=custom 时须在 notes 说明为何不用 ui-kit",
+                    f"projectStyle.locked=true 时默认遵循 {project_id}；"
+                    f"若 baseline={baseline} 偏离项目风格，须在 visual.notes 说明原因",
                 )
             )
     motion = visual.get("motion")

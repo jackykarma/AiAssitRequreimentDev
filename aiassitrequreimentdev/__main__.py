@@ -48,6 +48,7 @@ from aiassitrequreimentdev.split import (
     feature_listed_in_split,
     load_split,
 )
+from aiassitrequreimentdev.kits import menu_text as kit_menu_text
 from aiassitrequreimentdev.paths import menu_text as path_menu_text
 from aiassitrequreimentdev.paths import recommend_path, resolve_path
 from aiassitrequreimentdev.roles import menu_text, resolve_menu_choice
@@ -139,6 +140,16 @@ def main(argv: list[str] | None = None) -> int:
     seal_parser.add_argument("feature_dir")
 
     sub.add_parser("roles", help="打印可选择的角色菜单")
+
+    kits_parser = sub.add_parser(
+        "kits", help="打印视觉基线菜单（ui-kit / painless / midoo / custom）"
+    )
+    kits_parser.add_argument(
+        "--root",
+        default=".",
+        help="仓库根目录（读取 research/ui-kits/catalog.yaml）",
+    )
+    kits_parser.add_argument("--json", action="store_true", help="输出 JSON 选项列表")
 
     adopt_parser = sub.add_parser("adopt", help="为 feature 写入当前角色并刷新共仓看板")
     adopt_parser.add_argument("feature_dir")
@@ -352,6 +363,51 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "roles":
         print(menu_text())
+        return 0
+
+    if args.command == "kits":
+        root = Path(args.root).resolve()
+        if args.json:
+            from aiassitrequreimentdev.kits import (
+                default_baseline,
+                load_kits,
+                load_project_style,
+                menu_choices_for_ask,
+                project_style_locked,
+            )
+
+            ps = load_project_style(repo_root=root)
+            payload = {
+                "default": default_baseline(repo_root=root),
+                "projectStyleLocked": project_style_locked(repo_root=root),
+                "projectStyle": {
+                    "locked": ps.locked,
+                    "id": ps.id,
+                    "label": ps.label,
+                    "path": ps.path,
+                    "prefix": ps.prefix,
+                    "themeDoc": ps.theme_doc,
+                },
+                "motionContract": "research/ui-kits/MOTION.md",
+                "choices": menu_choices_for_ask(repo_root=root),
+                "kits": [
+                    {
+                        "id": k.id,
+                        "label": k.label,
+                        "description": k.description,
+                        "path": k.path,
+                        "prefix": k.prefix,
+                        "source": k.source,
+                        "package": k.package,
+                    }
+                    for k in load_kits(repo_root=root)
+                ],
+            }
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            print(kit_menu_text(repo_root=root))
+            print("")
+            print("写入 features/<id>/ux.yaml → visual.baseline: <id>")
         return 0
 
     if args.command == "adopt":

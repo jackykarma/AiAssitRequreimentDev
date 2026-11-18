@@ -50,4 +50,5 @@
 ## 与需求流水线
 
 - 产出默认在 `research/<app>-ui/`，不直接改 feature 门禁工件。
-- UX 若采用：`visual.baseline: custom` + notes 注明包名与 kit 路径；或拷贝到 `prototype/shared/ui-kit/`。
+- 完成后登记 `research/ui-kits/catalog.yaml`，动效对齐 `research/ui-kits/MOTION.md`。
+- UX 人选：`visual.baseline: <catalog.id>`；原型引用该 kit 的 tokens/components/phone。

@@ -45,3 +45,6 @@ research/<short>-ui/
 - [ ] showcase 能体现主色/卡片/底栏
 - [ ] 若真机有翻译模糊，kit 必须有 blur 组件与演示
 - [ ] `_invalid_other_app` 不参与 THEME
+- [ ] tokens 含 MOTION.md 要求的 duration/fast/slow、press-scale、blur-glass（及 spoiler 若适用）
+- [ ] components 含 pressable（或等价）与 `prefers-reduced-motion`
+- [ ] 已写入 `research/ui-kits/catalog.yaml` 供 workflow 人选

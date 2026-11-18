@@ -1,0 +1,67 @@
+[
+  {
+    "name": "00_home",
+    "focus": "mCurrentFocus=Window{13aa642 u0 com.midoo.ai/com.midoo.ai.MainActivity}",
+    "packageOk": true,
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "10d4e63224d8",
+    "png": "00_home.png",
+    "preview": "00_home.jpg",
+    "xml": "00_home.xml"
+  },
+  {
+    "name": "110_tab_课程",
+    "focus": "mCurrentFocus=Window{13aa642 u0 com.midoo.ai/com.midoo.ai.MainActivity}",
+    "packageOk": true,
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "10d4e63224d8",
+    "png": "110_tab_课程.png",
+    "preview": "110_tab_课程.jpg",
+    "xml": "110_tab_课程.xml"
+  },
+  {
+    "name": "120_tab_对话",
+    "focus": "mCurrentFocus=Window{13aa642 u0 com.midoo.ai/com.midoo.ai.MainActivity}",
+    "packageOk": true,
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "2ab281d41abf",
+    "png": "120_tab_对话.png",
+    "preview": "120_tab_对话.jpg",
+    "xml": "120_tab_对话.xml"
+  },
+  {
+    "name": "130_tab_趣玩",
+    "focus": "mCurrentFocus=Window{13aa642 u0 com.midoo.ai/com.midoo.ai.MainActivity}",
+    "packageOk": true,
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "7eb4181b87a0",
+    "png": "130_tab_趣玩.png",
+    "preview": "130_tab_趣玩.jpg",
+    "xml": "130_tab_趣玩.xml"
+  },
+  {
+    "name": "140_tab_我的",
+    "focus": "mCurrentFocus=Window{13aa642 u0 com.midoo.ai/com.midoo.ai.MainActivity}",
+    "packageOk": true,
+    "size": [
+      1440,
+      3168
+    ],
+    "sha1": "3744969d4e89",
+    "png": "140_tab_我的.png",
+    "preview": "140_tab_我的.jpg",
+    "xml": "140_tab_我的.xml"
+  }
+]

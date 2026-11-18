@@ -14,4 +14,4 @@
 
 角色只写自己的工件。门禁：`python -m aiassitrequreimentdev check <feature目录> --gate <G0|G1|G2|G2T|G3|GR|G4|GD>`。
 
-竞品/对标 App 视觉：提供包名时启用 `aiassitrequreimentdev-apk-uikit`（ADB 抓页 → `research/<app>-ui/ui-kit/`）。
+竞品/对标 App 视觉：提供包名时启用 `aiassitrequreimentdev-apk-uikit`（ADB 抓页 → `research/<app>-ui/ui-kit/`），完成后登记 `research/ui-kits/catalog.yaml`；动效对齐 `research/ui-kits/MOTION.md`。G2 视觉：若 `projectStyle.locked=true` 则遵循项目自有 UI（不强制三选一）；否则人选 `ui-kit` / `painless` / `midoo`（可选 `custom`）。

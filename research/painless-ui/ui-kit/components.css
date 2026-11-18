@@ -705,3 +705,46 @@
   width: 12%;
   background: var(--pk-accent);
 }
+
+/* motion contract → research/ui-kits/MOTION.md */
+.pk-pressable {
+  transition: transform var(--pk-duration-fast) var(--pk-ease),
+    opacity var(--pk-duration) var(--pk-ease);
+  will-change: transform;
+}
+
+.pk-pressable:active {
+  transform: scale(var(--pk-press-scale));
+}
+
+.pk-fade-up {
+  animation: pk-fade-up var(--pk-duration-slow) var(--pk-ease) both;
+}
+
+@keyframes pk-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pk-sheet-motion {
+  transition: transform var(--pk-duration-slow) var(--pk-ease);
+}
+
+.pk-scrim-motion {
+  transition: opacity var(--pk-duration-slow) var(--pk-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

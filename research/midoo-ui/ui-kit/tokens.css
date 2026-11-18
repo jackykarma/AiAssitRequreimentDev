@@ -1,0 +1,128 @@
+/*********************************************************************************
+ ** Copyright (C), 2019-2029, OPLUS Mobile Comm Corp., Ltd
+ ** All rights reserved.
+ **
+ ** File: - tokens.css
+ ** Description: Midoo AI–inspired design tokens from device capture (com.midoo.ai)
+ ** Version: 1.0
+ ** Date: 2026/11/18
+ ** Author: limao2@Apps.Gallery
+ **
+ ** ------------------------------- Revision History: ----------------------------
+ ** <author> <date> <version> <desc>
+ ** ------------------------------------------------------------------------------
+ ** limao2@Apps.Gallery 2026/11/18 1.0 INIT from com.midoo.ai v1.5.27
+ *********************************************************************************/
+
+:root,
+html[data-md-theme="light"] {
+  --md-font: "PingFang SC", "SF Pro Text", "Segoe UI", "Noto Sans SC",
+    system-ui, sans-serif;
+  --md-font-display: "Segoe Script", "Snell Roundhand", "Bradley Hand",
+    "PingFang SC", cursive;
+
+  --md-fs-xs: 11px;
+  --md-fs-sm: 13px;
+  --md-fs-md: 15px;
+  --md-fs-lg: 17px;
+  --md-fs-title: 20px;
+  --md-fs-display: 34px;
+  --md-lh: 1.4;
+  --md-fw-regular: 400;
+  --md-fw-medium: 500;
+  --md-fw-semibold: 600;
+  --md-fw-bold: 700;
+
+  --md-space-1: 4px;
+  --md-space-2: 8px;
+  --md-space-3: 12px;
+  --md-space-4: 16px;
+  --md-space-5: 20px;
+  --md-space-6: 24px;
+  --md-space-8: 32px;
+
+  --md-radius-sm: 10px;
+  --md-radius-md: 16px;
+  --md-radius-lg: 22px;
+  --md-radius-card: 28px;
+  --md-radius-pill: 999px;
+
+  --md-phone-w: 360px;
+  --md-phone-h: 740px;
+  --md-phone-bezel: #2a2a2a;
+
+  /* motion contract → research/ui-kits/MOTION.md */
+  --md-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --md-duration: 260ms;
+  --md-duration-fast: 170ms;
+  --md-duration-slow: 360ms;
+  --md-press-scale: 0.96;
+
+  --md-blur-glass: 20px;
+  --md-blur-spoiler: 7px;
+  --md-blur-spoiler-strong: 10px;
+  --md-blur-spoiler-soft: 4px;
+  --md-saturate-glass: 1.35;
+
+  --md-bg: #e8e6f6;
+  --md-bg-2: #f4f0ff;
+  --md-bg-3: #e8f4fc;
+  --md-bg-gradient: linear-gradient(
+    165deg,
+    #d9d0ff 0%,
+    #e8e6f6 38%,
+    #eef6fc 72%,
+    #f7f4ff 100%
+  );
+  --md-surface: rgba(255, 255, 255, 0.88);
+  --md-surface-solid: #ffffff;
+  --md-surface-soft: rgba(255, 255, 255, 0.55);
+  --md-scrim: rgba(20, 16, 40, 0.35);
+
+  --md-ink: #1c1c1e;
+  --md-ink-secondary: #6b6b76;
+  --md-ink-muted: #9a9aa8;
+  --md-ink-inverse: #ffffff;
+
+  --md-accent: #6b8cff;
+  --md-accent-2: #9b7bff;
+  --md-accent-soft: #dce6ff;
+  --md-accent-press: #5570e0;
+  --md-on-accent: #ffffff;
+  --md-cta-gradient: linear-gradient(90deg, #7eb6ff 0%, #b49cfc 55%, #d0b8ff 100%);
+  --md-progress-gradient: linear-gradient(90deg, #5aa8ff, #8b7bff);
+
+  --md-warn: #f5a623;
+  --md-ok: #4cd964;
+  --md-danger: #ff5a5f;
+  --md-info: #5b9bd5;
+  --md-line: rgba(60, 60, 67, 0.1);
+  --md-nav-idle: #8e8e98;
+  --md-nav-active-bg: rgba(28, 28, 30, 0.12);
+  --md-shadow-card: 0 12px 32px rgba(80, 70, 140, 0.1);
+  --md-shadow-dock: 0 10px 28px rgba(60, 50, 120, 0.14);
+  --md-shadow-soft: 0 4px 16px rgba(80, 70, 140, 0.08);
+
+  color-scheme: light;
+}
+
+html[data-md-theme="dark"] {
+  --md-bg: #14121c;
+  --md-bg-2: #1a1726;
+  --md-bg-3: #121820;
+  --md-bg-gradient: linear-gradient(165deg, #1a1528 0%, #14121c 50%, #101820 100%);
+  --md-surface: rgba(36, 34, 48, 0.88);
+  --md-surface-solid: #242230;
+  --md-surface-soft: rgba(50, 46, 68, 0.55);
+  --md-scrim: rgba(0, 0, 0, 0.55);
+  --md-ink: #f2f2f7;
+  --md-ink-secondary: rgba(235, 235, 245, 0.6);
+  --md-ink-muted: rgba(235, 235, 245, 0.38);
+  --md-line: rgba(235, 235, 245, 0.12);
+  --md-nav-idle: #a0a0aa;
+  --md-nav-active-bg: rgba(255, 255, 255, 0.14);
+  --md-shadow-card: 0 12px 32px rgba(0, 0, 0, 0.4);
+  --md-shadow-dock: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --md-accent-soft: rgba(107, 140, 255, 0.28);
+  color-scheme: dark;
+}

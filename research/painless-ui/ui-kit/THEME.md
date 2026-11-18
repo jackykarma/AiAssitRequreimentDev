@@ -142,13 +142,23 @@
 
 ---
 
-## 6. 动效（观感）
+## 6. 动效 / 特效（对齐 `research/ui-kits/MOTION.md`）
 
-- 按压缩放 ≈ 0.96，180ms  
-- 卡片出现轻微上浮/淡入  
+| 令牌/类 | 值 | 用途 |
+| --- | --- | --- |
+| `--pk-ease` | `cubic-bezier(0.22,1,0.36,1)` | 标准缓动 |
+| `--pk-duration` / `fast` / `slow` | 240 / 160 / 360ms | 通用 / 按压 / sheet |
+| `--pk-press-scale` | `0.96` | `.pk-pressable:active` |
+| `--pk-blur-glass` | `18px` | 可选玻璃表面 |
+| `--pk-blur-spoiler*` | 4 / 7 / 10px | 防剧透 |
+| `.pk-fade-up` | 入场 | 列表卡可选 |
+| `prefers-reduced-motion` | 关动画/过渡 | 无障碍必含 |
+
 - 底栏切换：图标着色，无夸张动效  
-- 词气泡：自下而上 sheet + scrim  
-- **翻译模糊揭晓**：blur → sharp，约 220ms |
+- 词气泡：自下而上 sheet + scrim（`--pk-duration-slow`）  
+- **翻译模糊揭晓**：blur → sharp，约 `--pk-duration`
+
+人选 id：`visual.baseline: painless`（见 `research/ui-kits/catalog.yaml`）。
 
 ---
 
@@ -162,4 +172,4 @@
 ```
 
 橱窗：`showcase.html`。  
-正式 feature 若选用此风格，可复制到 `prototype/shared/ui-kit/` 或设 `visual.baseline: custom` 并注明来源。
+正式 feature：人选 `visual.baseline: painless`，复制或软引本目录；勿再仅用 `custom` + notes 代替已注册 kit。

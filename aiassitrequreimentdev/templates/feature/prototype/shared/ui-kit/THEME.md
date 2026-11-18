@@ -148,15 +148,16 @@
 
 ---
 
-## 8. 动效（原型级）
+## 8. 动效 / 特效（对齐 `research/ui-kits/MOTION.md`）
 
 | 令牌/类 | 值 | 用途 |
 | --- | --- | --- |
-| `--uk-duration` | 280ms | 默认 |
-| `--uk-duration-fast` | 180ms | 按压缩放 |
+| `--uk-duration` / `fast` / `slow` | 280 / 180 / 360ms | 通用 / 按压 / sheet |
 | `--uk-ease` | `cubic-bezier(0.22,1,0.36,1)` | 标准 |
-| 按下 | `scale(0.96–0.98)` | 封面/按钮 |
+| `--uk-press-scale` | `0.96` | 按下 |
+| `--uk-blur-glass` | `22px` | 材质玻璃近似 |
 | Toast | 上浮淡入 | `.uk-toast.is-show` |
+| `prefers-reduced-motion` | 关动画/过渡 | 无障碍 |
 
 复杂 Mesh 专辑渐变：原型用 `.uk-ambient` 静态模糊即可；真机 Metal 不在本 kit 范围。
 
@@ -164,6 +165,7 @@
 
 ## 9. 产品 / UX 约定
 
-- 有 UI 时须人选并写入 `visual.baseline: ui-kit|custom`
+- 有 UI 时须人选并写入 `visual.baseline`（见 `research/ui-kits/catalog.yaml`：`ui-kit` / `painless` / `midoo` / `custom`…）
 - **ui-kit（默认）**：`visual.theme: dark|light`；禁止页面内另起色板；引用 `tokens.css` + `materials.css` + `components.css` + `phone.css`；关键屏建议可切换亮暗
+- **已注册 research kit**（如 `painless` / `midoo`）：引用对应 `research/<app>-ui/ui-kit/`（前缀 `pk`/`md`），动效对齐 MOTION.md
 - **custom**：不强制本 kit；`notes` 说明原因；可读插件 `references/visual-explore.md`

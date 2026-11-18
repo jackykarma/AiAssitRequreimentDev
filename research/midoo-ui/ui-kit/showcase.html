@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-md-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Midoo UI Kit Showcase</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <link rel="stylesheet" href="components.css" />
+  <link rel="stylesheet" href="phone.css" />
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--md-font);
+      background: #1a1a22;
+      color: #eee;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 32px 16px 48px;
+    }
+    .stage { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+    .stage h2 { margin: 0; font-size: 14px; font-weight: 600; opacity: 0.85; }
+    .tools {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .tools button {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 14px;
+      cursor: pointer;
+      background: #333;
+      color: #fff;
+    }
+    .tools button.is-on { background: #6b8cff; }
+  </style>
+</head>
+<body>
+  <div class="tools">
+    <button type="button" data-screen="plan" class="is-on">课程 Plan</button>
+    <button type="button" data-screen="chat">对话 Chat</button>
+    <button type="button" data-screen="play">趣玩 Play</button>
+    <button type="button" data-screen="me">我的</button>
+    <button type="button" id="themeToggle">切换亮/暗</button>
+    <button type="button" id="sheetDemo">Sheet 动效</button>
+  </div>
+
+  <div class="stage">
+    <h2>com.midoo.ai · md-* · motion contract</h2>
+    <div class="md-phone">
+      <div class="md-phone__screen" id="screen">
+        <div class="md-phone__notch"></div>
+        <div class="md-app" id="app"></div>
+        <div class="md-scrim" id="scrim"></div>
+        <div class="md-sheet" id="sheet">
+          <strong>标准化 Sheet</strong>
+          <p style="color:var(--md-ink-secondary);font-size:13px;margin:8px 0 16px">
+            `--md-duration-slow` + ease；点遮罩关闭。
+          </p>
+          <button type="button" class="md-cta md-pressable" id="closeSheet">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <template id="tpl-plan">
+    <div class="md-topbar">
+      <div class="md-topbar__side"><button class="md-icon-btn md-pressable" type="button">☰</button></div>
+      <div class="md-topbar__title">Plan</div>
+      <div class="md-topbar__side" style="justify-content:flex-end">
+        <span style="font-size:13px">🔥 0</span>
+        <button class="md-icon-btn md-pressable" type="button">+</button>
+      </div>
+    </div>
+    <div class="md-scroll md-fade-up">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px">
+        <span>国际航班中转指引</span><span style="color:var(--md-ink-secondary)">阶段 1 ›</span>
+      </div>
+      <div class="md-progress"><div class="md-progress__bar"></div></div>
+      <div class="md-card md-card--solid" style="margin-top:16px">
+        <strong style="font-size:18px">重新打印登机牌</strong>
+        <div class="md-mode-row">
+          <button type="button" class="md-mode md-pressable is-active"><span class="md-mode__badge">讲解</span><div style="font-size:28px">🐱</div>讲解</button>
+          <button type="button" class="md-mode md-pressable"><span class="md-mode__badge" style="background:#f3a">练习</span><div style="font-size:28px">✍️</div>练习</button>
+          <button type="button" class="md-mode md-pressable"><span class="md-mode__badge" style="background:#9b7bff">情景</span><div style="font-size:28px">💬</div>情景对话</button>
+        </div>
+        <button type="button" class="md-cta md-pressable">开始</button>
+      </div>
+      <div class="md-step md-pressable"><div class="md-step__icon">✈️</div><div>快速前往登机</div></div>
+      <div class="md-step md-pressable"><div class="md-step__icon">🛒</div><div>免税店购物与支付</div></div>
+      <div class="md-step md-pressable"><div class="md-step__icon">🧴</div><div>寻找特定品牌</div></div>
+    </div>
+  </template>
+
+  <template id="tpl-chat">
+    <div class="md-topbar"><div class="md-topbar__title" style="margin-left:8px">Chat</div><div></div><div></div></div>
+    <div class="md-scroll md-fade-up">
+      <div class="md-hero-card">
+        <div class="md-hero-card__name">Ella</div>
+        <div class="md-hero-card__meta">伦敦</div>
+        <div class="md-chip-row">
+          <span class="md-chip">健谈</span>
+          <span class="md-chip">日常生活</span>
+        </div>
+        <button type="button" class="md-cta md-pressable">去聊聊</button>
+      </div>
+      <div style="text-align:center;margin-top:12px;opacity:.5">● ○ ○ ○</div>
+    </div>
+  </template>
+
+  <template id="tpl-play">
+    <div class="md-topbar"><div class="md-topbar__title" style="margin-left:8px">Play</div><div></div><div></div></div>
+    <div class="md-scroll md-fade-up">
+      <div class="md-pill-row">
+        <span class="md-pill">推荐</span><span class="md-pill">挑战</span><span class="md-pill">派对</span><span class="md-pill">更多</span>
+      </div>
+      <div class="md-masonry">
+        <div class="md-masonry__item md-masonry__item--tall"></div>
+        <div class="md-masonry__item"></div>
+        <div class="md-masonry__item"></div>
+        <div class="md-masonry__item md-masonry__item--tall"></div>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-me">
+    <div class="md-topbar">
+      <div></div><div></div>
+      <div class="md-topbar__side" style="justify-content:flex-end"><button class="md-icon-btn md-pressable" type="button">⚙</button></div>
+    </div>
+    <div class="md-scroll md-fade-up">
+      <div class="md-profile">
+        <div class="md-avatar">🐱</div>
+        <div>
+          <strong style="font-size:20px">Jacky</strong>
+          <div style="color:var(--md-ink-secondary);font-size:12px">ID: 10000436260</div>
+        </div>
+      </div>
+      <div class="md-stats">
+        <div><strong>4</strong><span>学习时长(分钟)</span></div>
+        <div><strong>309</strong><span>掌握词汇</span></div>
+        <div><strong>0</strong><span>收藏</span></div>
+      </div>
+      <div class="md-card md-card--solid">
+        <div class="md-vip">
+          <div>
+            <div class="md-vip__title">解锁全部内容</div>
+            <p style="font-size:12px;color:var(--md-ink-secondary);margin:8px 0 12px">所有课程和老师，无限次学习</p>
+            <button type="button" class="md-cta md-pressable" style="color:#fff">立即体验</button>
+          </div>
+          <div style="font-size:64px;text-align:center">👑</div>
+        </div>
+      </div>
+      <div class="md-card md-card--solid" style="margin-top:16px">
+        <strong>学习概览</strong>
+        <div class="md-overview" style="margin-top:12px">
+          <div class="md-metric md-metric--blue"><div class="md-metric__n">3</div><div style="font-size:12px">发音表现</div></div>
+          <div style="display:grid;gap:12px">
+            <div class="md-metric md-metric--purple"><div class="md-metric__n">0</div><div style="font-size:12px">语法表现</div></div>
+            <div class="md-metric md-metric--yellow"><div class="md-metric__n">0</div><div style="font-size:12px">地道表达</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="md-blur-text" style="margin-top:16px" data-blur>点我揭晓：隐藏提示文案（blur 合同演示）</p>
+    </div>
+  </template>
+
+  <script>
+    const app = document.getElementById("app");
+    const map = { plan: "tpl-plan", chat: "tpl-chat", play: "tpl-play", me: "tpl-me" };
+    const labels = ["课程", "对话", "Midoo", "趣玩", "我的"];
+    const icons = ["☰", "📹", "🐱", "🎮", "👤"];
+    const screenOf = { plan: 0, chat: 1, play: 3, me: 4 };
+
+    function navHtml(activeIdx) {
+      return `<nav class="md-bottom-nav">${labels.map((l, i) =>
+        `<button type="button" class="${i === activeIdx ? "is-active" : ""}" data-nav="${i}"><span class="ico">${icons[i]}</span>${l}</button>`
+      ).join("")}</nav>`;
+    }
+
+    function render(name) {
+      const tpl = document.getElementById(map[name]);
+      app.innerHTML = "";
+      app.appendChild(tpl.content.cloneNode(true));
+      app.insertAdjacentHTML("beforeend", navHtml(screenOf[name]));
+      app.querySelectorAll("[data-nav]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.getAttribute("data-nav"));
+          const order = ["plan", "chat", "plan", "play", "me"];
+          if (i === 2) return;
+          render(order[i]);
+          document.querySelectorAll(".tools [data-screen]").forEach((b) => {
+            b.classList.toggle("is-on", b.getAttribute("data-screen") === order[i]);
+          });
+        });
+      });
+      app.querySelectorAll("[data-blur]").forEach((el) => {
+        el.addEventListener("click", () => el.classList.toggle("is-revealed"));
+      });
+      app.querySelectorAll(".md-mode").forEach((el) => {
+        el.addEventListener("click", () => {
+          app.querySelectorAll(".md-mode").forEach((m) => m.classList.remove("is-active"));
+          el.classList.add("is-active");
+        });
+      });
+    }
+
+    document.querySelectorAll(".tools [data-screen]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tools [data-screen]").forEach((b) => b.classList.remove("is-on"));
+        btn.classList.add("is-on");
+        render(btn.getAttribute("data-screen"));
+      });
+    });
+
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      const html = document.documentElement;
+      html.setAttribute(
+        "data-md-theme",
+        html.getAttribute("data-md-theme") === "dark" ? "light" : "dark"
+      );
+    });
+
+    const scrim = document.getElementById("scrim");
+    const sheet = document.getElementById("sheet");
+    function closeSheet() {
+      scrim.classList.remove("is-open");
+      sheet.classList.remove("is-open");
+    }
+    document.getElementById("sheetDemo").addEventListener("click", () => {
+      scrim.classList.add("is-open");
+      sheet.classList.add("is-open");
+    });
+    document.getElementById("closeSheet").addEventListener("click", closeSheet);
+    scrim.addEventListener("click", closeSheet);
+
+    render("plan");
+  </script>
+</body>
+</html>

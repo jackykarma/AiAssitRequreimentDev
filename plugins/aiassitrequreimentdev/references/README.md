@@ -10,5 +10,7 @@
 | [artifacts.md](artifacts.md) | `features/<id>/` 产物表 |
 | [decomposition.md](decomposition.md) | 需求 ≠ feature；`tasks.yaml` 在 G2T 之后 |
 | [visual-explore.md](visual-explore.md) | 仅 `visual.baseline: custom`：自由发挥视觉检查单 |
+| 仓内 `research/ui-kits/catalog.yaml` | G2 视觉目录；`projectStyle.locked` 时遵循项目风格，否则三选一 |
+| 仓内 `research/ui-kits/MOTION.md` | 各 kit 动效/特效标准合同 |
 
 CLI 优先 `python <本插件>/scripts/aad.py …`（或 PATH 上的 `aad`），等价 `python -m aiassitrequreimentdev`。不要手改 `gates.*.accepted`。

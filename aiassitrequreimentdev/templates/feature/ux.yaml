@@ -1,12 +1,15 @@
 # 交互视觉合同（G2）· 私人项目默认无专职设计师。
 # 分工：产品 prototype/index.html = 业务可点通；本文件 + prototype/ux/ = 交互规则精修 + 视觉落点。
-# 视觉路径须人选：ui-kit（默认，引 uk-*）| custom（自由发挥，须 notes；可读插件 references/visual-explore.md）。
+# 视觉路径见 research/ui-kits/catalog.yaml：
+#   若 projectStyle.locked=true → baseline=project（或 projectStyle.id），遵循项目自有 UI，不强制三选一
+#   否则人选：ui-kit | painless | midoo | custom（custom / 偏离项目风格须 notes）
+# 动效合同：research/ui-kits/MOTION.md；CLI：python -m aiassitrequreimentdev kits
 # Pencil/Figma 仅探索，必须回流 HTML，链接进 artifacts。
 # 无 UI：skip=true 并写 reason。
 skip: false
 reason: ""
 uiKit:
-  baseline: shared/ui-kit   # custom 路径可删本块或忽略
+  baseline: shared/ui-kit   # 仅 baseline=ui-kit 时有意义；research kit 可改指向或忽略
   showcase: prototype/shared/ui-kit/showcase.html
 interactionRules:
   # - id: IR1
@@ -17,10 +20,10 @@ interactionRules:
   #   coversAcceptance: [A1]
   []
 visual:
-  baseline: ui-kit   # 人选后写入：ui-kit | custom（custom 须填 notes）
+  baseline: ui-kit   # project（项目锁定）| ui-kit | painless | midoo | custom
   theme: dark        # dark | light；ui-kit 路径须与 html data-uk-theme 一致
-  notes: ""          # custom 必填为何不用 kit；ui-kit 可空
-  motion: []         # 可选动效规则
+  notes: ""          # custom 或偏离 projectStyle 时必填
+  motion: []         # 可选产品动效 M*；kit 级按压/揭晓见 MOTION.md
   # - id: M1
   #   trigger: 主操作成功
   #   effect: toast 滑入

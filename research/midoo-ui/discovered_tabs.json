@@ -1,0 +1,26 @@
+[
+  {
+    "label": "课程",
+    "cx": 224,
+    "cy": 2960,
+    "clickable": true
+  },
+  {
+    "label": "对话",
+    "cx": 472,
+    "cy": 2960,
+    "clickable": true
+  },
+  {
+    "label": "趣玩",
+    "cx": 968,
+    "cy": 2960,
+    "clickable": true
+  },
+  {
+    "label": "我的",
+    "cx": 1216,
+    "cy": 2960,
+    "clickable": true
+  }
+]

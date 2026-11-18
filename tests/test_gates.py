@@ -752,6 +752,147 @@ document.getElementById("go").addEventListener("click", function () {
         write_interactive_html(self.change / "prototype" / "ux" / "index.html")
         self.assertIn("UX_VISUAL", self.codes("G2"))
 
+    def test_g2_painless_baseline_requires_pk_prefix(self) -> None:
+        self.put_state()
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
+        ux = valid_ux().replace(
+            "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
+            "visual:\n  baseline: painless\n  notes: \"\"\n",
+        )
+        write_yaml(self.change / "ux.yaml", ux)
+        path = self.change / "prototype" / "ux" / "index.html"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><title>painless</title>
+<link rel="stylesheet" href="../../../../research/painless-ui/ui-kit/tokens.css" />
+</head>
+<body class="pk-app">
+<button type="button" class="pk-soft-btn" id="go">切换</button>
+<section id="a" class="pk-card">A</section>
+<section id="b" class="pk-card" hidden>B</section>
+<script>
+document.getElementById("go").addEventListener("click", function () {
+  document.getElementById("a").hidden = !document.getElementById("a").hidden;
+  document.getElementById("b").hidden = !document.getElementById("b").hidden;
+});
+</script>
+</body></html>
+""",
+            encoding="utf-8",
+        )
+        self.assertEqual(self.codes("G2"), set())
+
+    def test_g2_project_locked_requires_notes_when_departing(self) -> None:
+        self.put_state()
+        catalog = self.change.parent / "research" / "ui-kits"
+        catalog.mkdir(parents=True)
+        (catalog / "catalog.yaml").write_text(
+            """
+projectStyle:
+  locked: true
+  id: project
+  label: 业务风格
+  path: docs/design-system
+  prefix: app
+kits:
+  - id: ui-kit
+    prefix: uk
+    path: prototype/shared/ui-kit
+  - id: custom
+    prefix: null
+    path: null
+""",
+            encoding="utf-8",
+        )
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
+        # follow project — ok without notes
+        ux = valid_ux().replace(
+            "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
+            "visual:\n  baseline: project\n  notes: \"\"\n",
+        )
+        write_yaml(self.change / "ux.yaml", ux)
+        path = self.change / "prototype" / "ux" / "index.html"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><title>project</title>
+<link rel="stylesheet" href="../../docs/design-system/tokens.css" />
+</head>
+<body class="app-shell">
+<button type="button" class="app-btn" id="go">切换</button>
+<section id="a">A</section>
+<section id="b" hidden>B</section>
+<script>
+document.getElementById("go").addEventListener("click", function () {
+  document.getElementById("a").hidden = !document.getElementById("a").hidden;
+  document.getElementById("b").hidden = !document.getElementById("b").hidden;
+});
+</script>
+</body></html>
+""",
+            encoding="utf-8",
+        )
+        self.assertEqual(self.codes("G2"), set())
+        # depart to ui-kit without notes — fail
+        bad = valid_ux().replace(
+            "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
+            "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
+        )
+        write_yaml(self.change / "ux.yaml", bad)
+        write_interactive_html(path)
+        self.assertIn("UX_VISUAL", self.codes("G2"))
+
+    def test_g2_midoo_baseline_requires_md_marker(self) -> None:
+        self.put_state()
+        write_yaml(self.change / "spec.yaml", valid_spec_ui())
+        ux = valid_ux().replace(
+            "visual:\n  baseline: ui-kit\n  notes: \"\"\n",
+            "visual:\n  baseline: midoo\n  notes: \"\"\n",
+        )
+        write_yaml(self.change / "ux.yaml", ux)
+        # missing md-/midoo path → fail
+        path = self.change / "prototype" / "ux" / "index.html"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><title>no kit</title></head>
+<body>
+<button type="button" id="go">切换</button>
+<section id="a">A</section>
+<section id="b" hidden>B</section>
+<script>
+document.getElementById("go").addEventListener("click", function () {
+  document.getElementById("a").hidden = !document.getElementById("a").hidden;
+  document.getElementById("b").hidden = !document.getElementById("b").hidden;
+});
+</script>
+</body></html>
+""",
+            encoding="utf-8",
+        )
+        self.assertIn("UX_PROTO_UIKIT", self.codes("G2"))
+        path.write_text(
+            """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><title>midoo</title>
+<link rel="stylesheet" href="../../../../research/midoo-ui/ui-kit/tokens.css" />
+</head>
+<body class="md-app">
+<button type="button" class="md-cta" id="go">切换</button>
+<section id="a" class="md-card">A</section>
+<section id="b" class="md-card" hidden>B</section>
+<script>
+document.getElementById("go").addEventListener("click", function () {
+  document.getElementById("a").hidden = !document.getElementById("a").hidden;
+  document.getElementById("b").hidden = !document.getElementById("b").hidden;
+});
+</script>
+</body></html>
+""",
+            encoding="utf-8",
+        )
+        self.assertEqual(self.codes("G2"), set())
+
     def test_light_path_skips_missing_ux(self) -> None:
         self.put_state(path="light")
         write_yaml(self.change / "spec.yaml", valid_spec())

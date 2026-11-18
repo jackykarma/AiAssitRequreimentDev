@@ -70,6 +70,34 @@ python <本插件>/scripts/aad.py tasks <feature目录> scaffold   # 或 tasks s
 
 `docs/role-picker.html` / `docs/path-picker.html` **仅备用**（浏览器可视化、离线演示）；**不是**启动必经步骤。文档与 `start` 输出里若出现选择页链接，当作可选，不得写成「请先打开 HTML」。
 
+### 视觉基线怎么问人（有 UI · G2 前 · 打断码 `I_VISUAL_BASELINE`）
+
+先读 `research/ui-kits/catalog.yaml` 的 **`projectStyle`**（或跑 `kits`）：
+
+**A. 项目已有自有 UI（`projectStyle.locked: true`）→ 不强制三选一**
+
+1. 默认 `visual.baseline: <projectStyle.id>`（多为 `project`）
+2. 出设计 / UX 原型**必须遵循** `path` / `prefix` / `themeDoc`
+3. 对话只需确认「遵循项目风格」；若人要改套 ui-kit/painless/midoo/custom，须 `visual.notes` 写明例外原因
+4. **禁止**在已锁定时仍弹出三种竞品风格逼选
+
+**B. 未锁定（`locked: false`）→ 三种内置风格人选**
+
+| # | baseline | 说明 |
+| --- | --- | --- |
+| 1 | `ui-kit` | Music 默认（`uk-*`） |
+| 2 | `painless` | 无痛单词（`pk-*`） |
+| 3 | `midoo` | Midoo AI（`md-*`） |
+
+另可选 `custom`（须 notes）。菜单：
+
+```bash
+python <本插件>/scripts/aad.py kits
+# 或：python -m aiassitrequreimentdev kits [--json]
+```
+
+人选后写入 `features/<id>/ux.yaml` → `visual.baseline`，再派 UX。动效：`MOTION.md`。
+
 ## 路径与执行
 
 | path | 适用 | 执行方式 |
@@ -96,7 +124,7 @@ seal **之后**不要停下来等人点「下一步」，连续完成：
 | 角色 | 技能 | 写出 |
 | --- | --- | --- |
 | 产品经理 | product | 需求级/切片 prd 严格按 `templates/requirement|feature/prd.md`；prototype + `spec.yaml` |
-| 交互视觉 | ux | `ux.yaml`（`IR*` + 人选 `visual.baseline` ui-kit\|custom）+ `prototype/ux/`；默认 ui-kit |
+| 交互视觉 | ux | `ux.yaml`（`IR*` + 人选 `visual.baseline`：`research/ui-kits/catalog.yaml` 的 ui-kit\|painless\|midoo\|custom…）+ `prototype/ux/`；默认 ui-kit；动效合同 MOTION.md |
 | 架构师SE | tech | 人读严格按 `templates/feature/tech.md` 等 + `tech.yaml`；绘图用 `aiassitrequreimentdev-archify` |
 | 开发 | dev | 写集内源码 |
 | 测试 | test | evidence.yaml |

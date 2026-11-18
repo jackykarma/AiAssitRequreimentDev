@@ -11,7 +11,9 @@
 | `prototype/index.html` | 产品 | 可交互产品原型（G1；主路径+异常）；无 UI 时 `uiRequired=false` + `uiNoneReason` |
 | `prototype/shared/ui-kit/` | 共享（模板） | Music 风亮/暗双主题（`THEME.md`）+ `showcase.html`；`data-uk-theme` |
 | `spec.yaml` | 产品 | 全流程机器事实源与 G1/`seal`：必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选；`uiRequired` |
-| `ux.yaml` | 交互视觉 | G2：必填 `interactionRules` + `visual.baseline`（`ui-kit`\|`custom`）；可选 `motion`；验收映射；Pencil/Figma→`artifacts`；或 `skip` |
+| `ux.yaml` | 交互视觉 | G2：必填 `interactionRules` + `visual.baseline`（catalog：`ui-kit`\|`painless`\|`midoo`\|`custom`…）；可选 `motion`；验收映射；Pencil/Figma→`artifacts`；或 `skip` |
+| `research/ui-kits/catalog.yaml` | 共享注册 | UX 人选视觉基线目录；apk-uikit 新 kit 须登记 id/path/prefix |
+| `research/ui-kits/MOTION.md` | 共享合同 | 各 kit 动效/特效令牌与行为标准 |
 | `prototype/ux/` | 交互视觉 | 可交互 UX HTML（规则+视觉；`ui-kit` 须引 kit，`custom` 可自建；与产品原型分工见 UX 技能） |
 | `tech.md` / `tech-spec.md` / KD·NFR·接口·库表·埋点 | 架构师 | 人读：feature 级 `templates/feature/tech.md` + `tech-spec.md`；展开件 `templates/design/` |
 | `tech.yaml` | 架构师 | 给 AI/门禁：`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams[]` |

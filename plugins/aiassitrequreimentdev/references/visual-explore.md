@@ -1,6 +1,6 @@
 # 视觉探索清单（仅 `visual.baseline: custom`）
 
-`ui-kit` 路径**不要**用本文另起色板。本文是 custom 自由发挥时的精简检查单（吸收公开移动端/通用 UI 习惯，非外部 skill 全量拷贝）。
+`ui-kit` / 已注册 research kit（`painless` / `midoo` 等，见 `research/ui-kits/catalog.yaml`）路径**不要**用本文另起色板。本文是 custom 自由发挥时的精简检查单（吸收公开移动端/通用 UI 习惯，非外部 skill 全量拷贝）。动效仍建议对齐 `research/ui-kits/MOTION.md`。
 
 ## 何时用
 

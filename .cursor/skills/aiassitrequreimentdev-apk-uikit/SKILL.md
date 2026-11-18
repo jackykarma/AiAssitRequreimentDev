@@ -117,7 +117,9 @@ python .../scripts/scaffold_uikit.py \
 ### 7) 与本仓 UX 衔接
 
 - 探索/竞品 kit：留在 `research/<short>-ui/ui-kit/`
-- 若产品选用该风格：复制或软引到 feature 的 `prototype/shared/ui-kit/`，`ux.yaml` 中 `visual.baseline: custom`，`notes` 写明来源包名与路径
+- **登记人选目录**：在 `research/ui-kits/catalog.yaml` 增加一条（`id` / `label` / `path` / `prefix` / `package`），供 G2 视觉打断列出
+- **动效/特效**：对齐 `research/ui-kits/MOTION.md`（`--{p}-duration*` / `press-scale` / `blur-*` / `.pressable` / reduced-motion）；THEME.md 须有动效节
+- 若产品选用该风格：`ux.yaml` 写 `visual.baseline: <catalog.id>`（如 `painless` / `midoo`），原型引用该 kit；勿再用 `custom`+notes 代替已注册 id
 
 ## 禁止
 

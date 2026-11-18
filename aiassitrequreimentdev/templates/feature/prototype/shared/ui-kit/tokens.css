@@ -58,9 +58,13 @@
   --uk-phone-h: 740px;
   --uk-phone-bezel: #1c1c1e;
 
+  /* motion contract → research/ui-kits/MOTION.md */
   --uk-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --uk-duration: 280ms;
   --uk-duration-fast: 180ms;
+  --uk-duration-slow: 360ms;
+  --uk-press-scale: 0.96;
+  --uk-blur-glass: 22px;
 
   /* Apple Music Red */
   --uk-accent: #fa2d48;

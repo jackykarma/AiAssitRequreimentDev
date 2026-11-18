@@ -6,9 +6,10 @@
 
 | 概念 | 含义 |
 | --- | --- |
-| 需求 | 业务问题 / 史诗；目录可选 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`；需求级 PRD + `split.yaml`） |
-| feature | 可 G4 的交付切片（对本切片 `A*` 可独立验收；≠ 整需求零依赖大包）；`features/<id>/`；一条需求 → 1..N 个 feature |
-| task | feature 内实现单元；该 feature 门禁中后期的 `tasks.yaml` |
+| 需求 | 业务问题 / 史诗；目录可选 `requirements/REQ-…/`（PRD + `split.yaml` + **`architecture/` Epic Design**，对齐 AISDD epic-design；`check-req` 硬门槛） |
+| feature | 可 G4 的交付切片（对本切片 `A*` 可独立验收；对交付负责）；`features/<id>/`；一条需求 → 1..N 个 feature |
+| story | 可选；技术实现 / 并行开发单元，挂在 Feature 下；**不对独立交付负责** |
+| task | 写集与验证；可挂 `storyId`；该 feature 门禁中后期的 `tasks.yaml` |
 
 **谁拆 feature**：产品主责，依据需求级 PRD 写 `split.yaml`；主控执行创建目录；架构师可建议；开发不拆。  
 **何时拆**：需求级 PRD 之后（小需求可直开单个 feature）。  
@@ -28,15 +29,16 @@
 ## 目录
 
 ```text
-requirements/REQ-<序号>-<名称>-<YYYYMMDD>/  # 如 REQ-001-move-album-20220305；PRD + split + architecture/
+requirements/REQ-<序号>-<名称>-<YYYYMMDD>/  # PRD + split + architecture/（L0/L1 硬）
 features/FEAT-<序号>-<kebab>/  # 如 FEAT-001-move-album
   state.json               # requirementId、dependsOnFeatures、actorRole、path…
   BOARD.md
   prd.md / prototype / spec.yaml
-  ux.yaml / tech.md / tech.yaml / diagrams/ / tasks.yaml / review.yaml / evidence.yaml / deploy.yaml
+  ux.yaml / tech.md / tech.yaml / diagrams/ / stories.yaml / tasks.yaml / …
+  stories/ST-…/            # 可选；story-tech.md（并行落码，非 G4）
 ```
 
-启动：选角色 → 确认全量/轻量 → 产品 PRD。大需求先 `init-req`（可含整需求 Archify 草图）再按 `split.yaml` 建 feature；每个 feature 各自写 tech（G2T）。小需求直接一个 feature。
+启动：选角色 → 确认全量/轻量 → 产品 PRD。大需求先 `init-req` → 整需求架构 → `split.yaml` → `check-req` → 建 feature；每个 feature 写切片 tech（引用 REQ 契约）。小需求直接一个 feature（tech 兼任整体）。
 
 绘图：一律 [Archify](https://github.com/tt-a1i/archify)，只保留 html + png。详见 `modus/knowledge/domain/change/references/diagrams.md`。
 

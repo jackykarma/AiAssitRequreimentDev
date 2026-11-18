@@ -1,6 +1,6 @@
 # 流程：G0 → GD
 
-启动：主控在**对话内**弹选项选角色 → 确认 `full` / `light` / `light-auto`（须 `pathConfirmed`）→ 产品 PRD。HTML picker 仅备用。大需求先写需求级 PRD 与 `split.yaml`，再创建各 feature；小需求直接一个 feature。
+启动：主控在**对话内**弹选项选角色 → 确认 `full` / `light` / `light-auto`（须 `pathConfirmed`）→ 产品 PRD。HTML picker 仅备用。大需求先写需求级 PRD + **整需求 architecture** + `split.yaml`，`check-req` 通过后再创建各 feature；小需求直接一个 feature。可选 Story 仅并行落码，G4 只认 Feature。
 
 `stage`：`intake` → `clarify` → `ux` → `tech` → `plan` → `implement` → `review` → `verify` → `release` → `done`。门禁 `check --gate … --accept` 通过后自动推进（light / 无 UI 时 G1 后可跳到 `tech`）。
 

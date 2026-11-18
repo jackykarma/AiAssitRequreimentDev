@@ -1,0 +1,12 @@
+# 可选：给开发 Agent 的 Story 机器摘要。人读以 story-tech.md 为准。
+storyId: ST-001-example
+featureId: FEAT-000-example-name
+purpose: ""
+coversAcceptance: []
+writeScopeHint: []
+dependsOnStories: []
+relatedKeyDesigns: []
+aiConstraints:
+  mustFollow: []
+  mustNot: []
+diagrams: []

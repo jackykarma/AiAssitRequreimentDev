@@ -29,6 +29,7 @@ from aiassitrequreimentdev.gates import (
     validate_requirement_id,
 )
 from aiassitrequreimentdev.paths import resolve_path
+from aiassitrequreimentdev.req_architecture import evaluate_req_architecture
 
 PLACEHOLDER_RATIONALE = ("待产品", "待填写", "TODO", "TBD")
 
@@ -159,7 +160,7 @@ def validate_split_doc(
 
 
 def evaluate_requirement(req_dir: Path) -> list[Violation]:
-    """校验需求目录：split.yaml（及 requirementId 与目录名一致）。"""
+    """校验需求目录：split.yaml + 整需求 architecture（硬门槛）。"""
     violations: list[Violation] = []
     req_dir = req_dir.resolve()
     if not req_dir.is_dir():
@@ -177,22 +178,38 @@ def evaluate_requirement(req_dir: Path) -> list[Violation]:
         )
 
     split_path = req_dir / "split.yaml"
+    split_feature_ids: list[str] | None = None
     if not split_path.is_file():
         violations.append(Violation("G0", "SPLIT_MISSING", "缺少 split.yaml"))
-        return violations
+    else:
+        try:
+            doc = yaml.safe_load(split_path.read_text(encoding="utf-8"))
+        except Exception as exc:  # noqa: BLE001
+            violations.append(
+                Violation("G0", "SPLIT_PARSE", f"split.yaml 无法解析: {exc}")
+            )
+            doc = None
+        if doc is not None and not isinstance(doc, dict):
+            violations.append(Violation("G0", "SPLIT_PARSE", "split.yaml 必须是映射"))
+            doc = None
+        if isinstance(doc, dict):
+            expected = dir_name if REQUIREMENT_ID_RE.match(dir_name) else None
+            for message in validate_split_doc(doc, expected_requirement_id=expected):
+                violations.append(Violation("G0", "SPLIT_SHAPE", message))
+            features = doc.get("features")
+            if isinstance(features, list):
+                split_feature_ids = [
+                    item["id"].strip()
+                    for item in features
+                    if isinstance(item, dict)
+                    and isinstance(item.get("id"), str)
+                    and item["id"].strip()
+                    and not item["id"].strip().startswith("FEAT-000")
+                ]
 
-    try:
-        doc = yaml.safe_load(split_path.read_text(encoding="utf-8"))
-    except Exception as exc:  # noqa: BLE001
-        violations.append(Violation("G0", "SPLIT_PARSE", f"split.yaml 无法解析: {exc}"))
-        return violations
-    if not isinstance(doc, dict):
-        violations.append(Violation("G0", "SPLIT_PARSE", "split.yaml 必须是映射"))
-        return violations
-
-    expected = dir_name if REQUIREMENT_ID_RE.match(dir_name) else None
-    for message in validate_split_doc(doc, expected_requirement_id=expected):
-        violations.append(Violation("G0", "SPLIT_SHAPE", message))
+    violations.extend(
+        evaluate_req_architecture(req_dir, split_feature_ids=split_feature_ids or None)
+    )
     return violations
 
 

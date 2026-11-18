@@ -2,9 +2,10 @@
 
 | 概念 | 含义 | 落盘 |
 | --- | --- | --- |
-| 需求 | 业务问题 / 史诗 | `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`；需求级 PRD + `split.yaml`） |
-| feature | 可 G4 的交付切片 | `features/FEAT-<序号>-<kebab名称>/`（如 `FEAT-001-move-album`） |
-| task | feature 内实现单元 | `tasks.yaml`，在该 feature **G2T 通过之后**由主控拆 |
+| 需求 | 业务问题 / 史诗 | `requirements/REQ-…/`：PRD + `split.yaml` + **`architecture/`（整需求 L0/L1，check-req 硬）** |
+| feature | 可 G4 的交付切片（对交付负责） | `features/FEAT-<序号>-<kebab名称>/` |
+| story | 可选；技术实现 / 并行开发（不对独立交付负责） | `stories.yaml` + `stories/ST-*/`；默认不启用 |
+| task | 写集与验证 | `tasks.yaml`（可挂 `storyId`），在该 feature **G2T 通过之后**由主控拆 |
 
 一条需求 → **1..N 个 feature**。先有需求级 PRD，再决定拆几个。不要先建一堆空 feature 再补故事。
 
@@ -25,9 +26,10 @@
 
 `tasks.yaml` 是 plan 阶段的任务 DAG，发生在该 feature 的 G2T 之后，与拆 feature 不是同一层。
 
-顺序：澄清 → 需求级 PRD → 可选整需求架构草图 → `split.yaml` → 人确认（多 feature）→ 创建 feature → 各切片 PRD / 原型 / spec → 各自门禁（含各自 tech）。
+顺序：澄清 → 需求级 PRD → **整需求架构（硬）** → `split.yaml` → `check-req` → 人确认（多 feature）→ 创建 feature → 各切片 PRD / 原型 / spec → 切片 tech（引用 REQ）→ 可选 Story → tasks → 门禁至 G4。
 
-小需求可不建 `requirements/`，直接一个 feature，其 `prd.md` 兼任两级。大需求禁止跳过需求级 PRD 直接开多个空 feature。
+小需求可不建 `requirements/`，直接一个 feature，其 `prd.md` / tech 兼任两级。大需求禁止跳过需求级 PRD / 架构直接开多个空 feature。  
+**边界**：Feature = 能不能交；Story = 怎么并行做出来；二者不混用。
 
 ## 一个还是多个
 

@@ -63,6 +63,14 @@
 | --- | --- | --- | --- |
 | FEAT-000-example-name | [……] | [……] | — |
 
+## 整需求架构
+
+> 大需求硬门槛：架构师产出 **Epic Design**（`architecture/architecture.md`，对齐 AISDD epic-design）。  
+> 单 Feature 捷径未建本需求目录时可写「见该 Feature 薄 tech（兼任）」。
+
+- **链接**：[`architecture/architecture.md`](./architecture/architecture.md)
+- **要点**：[系统边界 / 跨 Feature 契约 / 关键风险 各一行]
+
 ## 开放问题
 
 > 未闭合前不要批量建 feature；阻塞项必须标明。

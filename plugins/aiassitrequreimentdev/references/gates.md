@@ -9,7 +9,7 @@
 | G0 | `path` 为 full / light / light-auto；**`pathConfirmed=true`**；轻量族的 `affected` 恰好一项 |
 | G1 | `UJ*`/`FR*`/`NFR*`/`S*`/`E*`/`A*` 形状合法（NFR/E 可声明无）；`openQuestions` 为空。**有 UI**：可交互 `prototype/index.html`。**无 UI**：`uiRequired=false` 且 `uiNoneReason`。**light-auto** 另须 `uiRequired=false`。已接受则 `specHash` 与规格一致 |
 | G2 | **`uiRequired=false`**：跳过 UX 精修（init 模板 `ux.yaml` 不挡门禁；若显式 `skip: true` 须写 `reason`）。有 UI：须 `interactionRules` + `visual.baseline`。`projectStyle.locked` 时默认项目自有风格（偏离须 notes）；否则 `ui-kit`\|`painless`\|`midoo`\|`custom`。可交互 `prototype/ux/`（注册/项目 kit 须引对应前缀/path；或 `skip`）。轻量族可无 ux 文件，视为 skip |
-| G2T | `tech.md` + `tech-spec.md` + `tech.yaml`（章节对齐 **feature 级**模板，非旧 EPIC/Story）。`summary`、`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams`。架构 layer 0+1（或 gaps）。**full** 另强制 tech.md 三级标题 4.2/5.1/5.3，且 diagrams 含 workflow+sequence+class。图为 Archify `.html` + 预览 `.png`（**禁止 svg**）；**`tech.md` 用 `![](…png)` 内嵌**。含变更、选型、风险、快稳省、数据、埋点；`acceptance` 全覆盖 |
+| G2T | **薄** `tech.md` + `tech-spec.md` + `tech.yaml`（交付落点；整册在 REQ Epic Design）。`summary`、`aiConstraints`、`keyDesigns`、`interfaces`、`diagrams`（或 `architectureLayerGaps` 引 Epic）。**full** 强制 tech.md `###` 4.1/4.2，且 diagrams 含 workflow+sequence+class。Archify html+png；tech.md 内嵌 png。`storiesEnabled=true` 时校验 Story。`acceptance` 全覆盖 |
 | G3 | 任务无环、写集不相交；轻量族仅一个任务。主控不得手写 `accepted` 盖过 `TASK_CYCLE` / `TASK_SCOPE_OVERLAP` |
 | GR | 无未关闭 `blocking`；无未裁决 `dispute`。`nit` 不挡门禁 |
 | G4 | `evidence` 覆盖全部验收且 `exitCode` 为 0，并且 GR 结构通过 |

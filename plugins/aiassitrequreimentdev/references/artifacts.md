@@ -25,6 +25,7 @@
 | `evidence.yaml` | 测试 | 每条验收的 command 与 `exitCode`；command 须对应 `spec.verify`，禁止空转成功 |
 | `deploy.yaml` | 部署 | 环境、命令、回滚；不代执行上线 |
 
-大需求另有 `requirements/REQ-<序号>-<名称>-<YYYYMMDD>/`（如 `REQ-001-move-album-20220305`）：需求级 `prd.md`、`split.yaml`，可选 `architecture/`（Archify 草图，不进 G2T）。
+大需求另有 `requirements/REQ-…/`：`prd.md`、`split.yaml`、**`architecture/` Epic Design**（对齐 AISDD epic-design；`check-req` 硬门槛）。  
+Feature **薄** `tech.md`（交付落点 + 相对 Epic 增量；G2T）。可选 `stories.yaml` + `stories/ST-*/story-tech.md`。`tasks.yaml` 可带 `storyId`。
 
 `prd.md` 给人读，`spec.yaml` 给 Agent 与门禁，**同一套编号、一套事实源**（贯穿 UX/tech/dev/review/test/deploy）。禁止只交其中一份或另起平行口径。改规格必须同步 PRD 及受影响原型。

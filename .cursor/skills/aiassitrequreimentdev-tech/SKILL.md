@@ -1,20 +1,23 @@
 ---
 name: aiassitrequreimentdev-tech
-description: 技术方案 Agent。共写 tech.md（人审）+ tech.yaml（AI/门禁）：aiConstraints、关键设计、L0/L1 架构图、可多张流程/时序/类图（Archify html+png）、接口、变更与验收落点。用户要技术方案或 G2T 时使用。
+description: 技术方案 Agent。写 REQ Epic Design（architecture/）与/或 Feature 薄 tech.md+tech.yaml；可选 Story 详细设计。Archify 出图。用户要技术方案、G2T 或 check-req 架构时使用。
 ---
 
 # 技术方案
 
-只写当前 feature 的技术方案人读件与 `tech.yaml`，以及 `diagrams/` 下 Archify 的 `.html`/`.png`。不改规格、视觉与业务源码，不新增验收编号。
+大需求先写 **Epic Design**（`requirements/…/architecture/`）；各 Feature 只写**薄** `tech.md` + `tech.yaml`（交付落点与增量）及按需 Story。不改规格、视觉与业务源码，不新增验收编号。
 
 **人读模板（必须与 `templates/feature/` 章节完全对齐；按需展开 `templates/design/`）**：
 
-1. 底稿：`templates/feature/tech.md`（本切片方案）、`tech-spec.md`（工程/边界约束）；展开件：`templates/design/`（KD / NFR / 接口 / 库表 / 埋点）。
-2. **保留模板全部 `##` 标题原文**；`full` 路径还须保留强制 `###`（4.2 / 5.1 / 5.3）。禁止删减、改名、合并、重排或自创精简版。
-3. G2T：`TECH_MD_TEMPLATE` / `TECH_SPEC_TEMPLATE` 校验标题；`light` / `light-auto` 不强制 L0/L1 三级标题，但仍须 `##` 齐全 + `tech.yaml`。
-4. 本文是 **feature 切片** 合同，不是旧 AISDD EPIC/Story 大包；勿引用 `epic.md` / `/aisdd.*`。
+1. **Epic Design**（整需求）：`templates/requirement/architecture/architecture.md`（对齐 AISDD epic-design）→ `requirements/…/architecture/`。
+2. **Feature 薄 tech**：`templates/feature/tech.md` + `tech-spec.md` + `tech.yaml`；只写交付落点与相对 Epic 的增量，禁止重抄 Epic 总册。
+3. **保留薄 tech 全部 `##`**；`full` 还须强制 `###`（4.1 / 4.2）。展开件：`templates/design/`。
+4. G2T 校验薄 tech 标题 + `tech.yaml`；`light` 不强制 4.1/4.2，但仍须 `##` + yaml。
+5. 可借鉴 AISDD 结构，**禁止**跑 `/aisdd.*`；Story 不可 G4。
+6. 并行/复杂落码：`stories.yaml` + `templates/story/`；验收只认 Feature `A*`。
+7. 无 `requirementId`（单 Feature 捷径）：薄 tech **兼任** Epic 关键结论并出齐必要图。
 
-确认 `state.actorRole` 为 `architect`。先读 `BOARD.md`、`prd.md`、`prototype/`、`spec.yaml`；有 `requirementId` 时再读需求级 PRD / `architecture/` 与同需求其它 tech。G1 就绪且 G2 通过或 skip 后再写。
+确认 `state.actorRole` 为 `architect`。先读 Epic Design（若有）、`BOARD.md`、`prd`/`spec`。G1 就绪且 G2 通过或 skip 后再写。
 
 ## 绘图工具（强制 Archify）
 

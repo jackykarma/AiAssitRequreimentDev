@@ -132,7 +132,8 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     check_req_parser = sub.add_parser(
-        "check-req", help="检查需求目录 split.yaml（及目录名与 requirementId）"
+        "check-req",
+        help="检查需求目录：split.yaml + architecture/（整需求 L0/L1 硬门槛）",
     )
     check_req_parser.add_argument("requirement_dir")
 
@@ -317,7 +318,10 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         destination = init_requirement(Path(args.root), requirement_id)
         print(destination)
-        print("下一步：产品写需求级 PRD，再填 split.yaml 决定 1 或 N 个 feature。")
+        print(
+            "下一步：产品写需求级 PRD；架构师写 architecture/（L0/L1）；"
+            "再填 split.yaml 决定 1 或 N 个 feature；check-req 通过后再 init feature。"
+        )
         return 0
 
     if args.command == "init":

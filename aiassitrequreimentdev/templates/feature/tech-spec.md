@@ -1,8 +1,8 @@
 # 技术约束（Tech Spec）：FEAT-[序号]-[kebab名称]
 
-> **定位**：本 **feature 切片** 的工程/边界约束（人读）。详细架构、KD、时序在 `tech.md`；机器合同在 `tech.yaml`。  
-> **禁止**：把整需求 EPIC 大包、Story/L2、接口字段表整份塞进本文；按需展开到 `templates/design/`。  
-> **输入**：`prd.md` / `spec.yaml`；有 `requirementId` 时对齐需求级 PRD 与 `split.yaml`。
+> **定位**：本 **feature 切片** 的工程/边界约束（人读）。整需求方案在 Epic Design（`architecture/`）；切片落点在薄 `tech.md`；落码细节在可选 Story。机器合同在 `tech.yaml`。  
+> **禁止**：把 Epic Design / Story 详表整份塞进本文。  
+> **输入**：`prd.md` / `spec.yaml`；有 `requirementId` 时对齐 PRD、`split.yaml` 与 `architecture/`。
 
 **Feature**：FEAT-[序号]-[kebab名称]  
 **Version**：v0.1.0  
@@ -58,7 +58,7 @@
 - **缓存 / 一致性**：…
 - **迁移 / 回滚红线**：… / N/A
 
-表字段细节放 `tech.md` §十 或 `templates/design/database.md`。
+表字段细节放 Epic Design §十、本切片 `tech.md` §六 增量或 `templates/design/database.md`。
 
 ---
 

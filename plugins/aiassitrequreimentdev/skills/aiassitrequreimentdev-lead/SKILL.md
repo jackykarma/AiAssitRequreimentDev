@@ -22,13 +22,13 @@ description: AiAssitRequreimentDev 主控。选角色与路径；大需求先让
 | 步骤 | 谁 | 做什么 |
 | --- | --- | --- |
 | 1 | 产品 | 需求级 PRD（大需求用 `init-req`） |
-| 2 | 架构师（建议） | 整需求架构草图 → `requirements/REQ-…/architecture/`（Archify html+png）；可建议拆分 |
+| 2 | 架构师 | **Epic Design（硬）** → `requirements/REQ-…/architecture/`（对齐 AISDD epic-design；L0/L1 Archify；`check-req`）；可建议拆分 |
 | 3 | 产品 | 填 `split.yaml`（1 或 N） |
-| 4 | 主控 | `decision: multi` 时打断人确认拆分 |
+| 4 | 主控 | `check-req`；`decision: multi` 时打断人确认拆分 |
 | 5 | 主控 | `init` 各 feature，带 `--requirement` |
 | 6 | 产品 | 各 feature 切片 PRD/原型/spec |
-| 7 | 架构师 | 各 feature 的 `tech.md`/`tech.yaml`（先发立契约，后发引用） |
-| 8 | 主控 | 之后才按 feature 推进门禁；G2T 后主控写 tasks.yaml，再 check G3 |
+| 7 | 架构师 | 各 feature **薄** `tech`（交付落点 + 增量）；可选 Story 详细设计（并行落码，不对 G4 负责） |
+| 8 | 主控 | 按 feature 推进门禁；G2T 后写 tasks.yaml（可挂 `storyId`），再 check G3 |
 
 小需求：直接 `start FEAT-001-move-album`（或 `start FEAT-001 --name move-album`），一个 feature 到底。
 

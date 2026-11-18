@@ -1,1 +1,2 @@
+# 可选字段 storyId：挂到 stories.yaml 中的 ST-*；无 Story 时省略。
 tasks: []

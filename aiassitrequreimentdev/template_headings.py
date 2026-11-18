@@ -42,36 +42,51 @@ REQ_PRD_H2 = (
     "边界与异常总览",
     "验收总览",
     "Feature 拆分依据",
+    "整需求架构",
     "开放问题",
+)
+
+# requirements/.../architecture/architecture.md（Epic Design，对齐 AISDD epic-design）
+REQ_ARCH_H2 = (
+    "变更记录（增量变更）",
+    "设计前置检查",
+    "一、简介",
+    "二、需求概述",
+    "三、领域模型",
+    "四、零层架构（L0）",
+    "五、一层架构（L1）",
+    "六、技术风险与边界场景",
+    "七、关键功能与疑难点/亮点设计",
+    "八、技术评估（NFR）",
+    "九、接口设计",
+    "十、数据库设计",
+    "十一、埋点技术方案",
+    "十二、Feature 与 Story 拆解索引",
+    "十三、Story 详细设计索引",
+    "附录：与 Feature tech / Story / tasks 的对应关系",
 )
 
 # 兼容旧名
 EPIC_PRD_H2 = REQ_PRD_H2
 
-# feature/tech.md（底稿 templates/feature/tech.md）· 本切片技术方案
+# feature/tech.md · 薄切片交付合同（整册在 REQ Epic Design）
 TECH_MD_H2 = (
     "变更记录",
     "设计前置检查",
-    "一、简介与范围",
-    "二、需求与验收追溯",
-    "三、关键设计判定",
-    "四、零层架构（L0）",
-    "五、一层架构（L1）",
-    "六、技术风险与边界",
-    "七、关键设计",
-    "八、NFR 评估",
-    "九、接口设计",
-    "十、数据设计",
-    "十一、埋点",
-    "十二、实现与任务指引",
-    "附录：与 tech.yaml / tasks 对应",
+    "一、简介与交付范围",
+    "二、验收追溯",
+    "三、Epic 引用与本切片增量",
+    "四、本切片架构增量",
+    "五、本切片关键设计",
+    "六、本切片约束与风险增量",
+    "七、Story 与任务指引",
+    "附录：与 tech.yaml / Epic / Story 对应",
 )
 
 # full 路径强制；light 族可省略（见 gates._check_g2t）
 TECH_MD_H3_REQUIRED = (
-    "4.2 零层架构图（必须）",
-    "5.1 一层框架图（必须）",
-    "5.3 组件协作流程（必须）",
+    "4.1 相对 Epic 的架构说明",
+    "4.2 本切片架构图（增量或引用内嵌）",
 )
 
 # feature/tech-spec.md · 本切片工程/边界约束（非 EPIC 大包）

@@ -6,7 +6,7 @@
 2. 主控在对话内推荐并确认路径 → `path`（`full` / `light` / `light-auto`；`recommend` 可选）
 3. 进入对应技能；产物共仓在 `features/<id>/`（`BOARD.md`）。产品输入不完整时：`aiassitrequreimentdev-brainstorm` → `aiassitrequreimentdev-grill` → `aiassitrequreimentdev-product`
 
-**需求 ≠ feature**：一条需求 → 1..N 个 feature。feature 须对本切片 `A*` 可独立交付（可 G4），不是半成品，也不等于整需求零依赖大包；可有 `dependsOnFeatures`。大需求：产品先写需求级 PRD，再在 `split.yaml` 决定拆几个；主控建目录。小需求可直开单个 feature。feature 内的 `tasks.yaml` 更晚才拆。
+**需求 ≠ feature ≠ story**：一条需求 → 1..N 个 feature。大需求：需求级 PRD + **整需求 `architecture/`（L0/L1，`check-req` 硬）** → `split.yaml` → 建 feature。feature 对本切片 `A*` **对交付负责**（可 G4）；可选 Story 仅技术实现/并行，挂在 Feature 下、不对独立交付负责。小需求可直开单个 feature。`tasks.yaml` 更晚才拆（可挂 `storyId`）。
 
 主控代跑 `start` / `init` / `init-req` / `check`（可 `--accept`）/ `check-req` / `tasks scaffold` / `seal` / `board` / `usage` / `change`（approved 默认可回退门禁）/ `recommend` / `path`。角色结束阶段后记 token：`usage record --role … --stage … --input … --output …`。
 

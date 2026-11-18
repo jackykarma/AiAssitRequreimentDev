@@ -1,0 +1,15 @@
+# Story 索引（可选）。Feature 对交付负责；Story 只服务技术实现与并行开发。
+# storiesEnabled=false 或不存在本文件：直接 Feature tech → tasks（与旧路径兼容）。
+featureId: FEAT-000-example-name
+storiesEnabled: false
+rationale: ""
+stories: []
+# stories[] 字段：
+#   id: ST-001-kebab
+#   title: …
+#   purpose: 本 Story 实现哪条技术主链
+#   coversAcceptance: [A1]   # 只引用本 Feature spec.acceptance id
+#   writeScopeHint: []       # 建议写集上界
+#   dependsOnStories: []
+#   parallelGroup: ""        # 同组可并行
+#   status: planned|ready|done  # done ≠ Feature 已交付

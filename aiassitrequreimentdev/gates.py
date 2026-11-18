@@ -235,6 +235,15 @@ def init_requirement(root: Path, requirement_id: str) -> Path:
         yaml.safe_dump(split_doc, allow_unicode=True, sort_keys=False),
         encoding="utf-8",
     )
+    arch_yaml = destination / "architecture" / "architecture.yaml"
+    if arch_yaml.is_file():
+        arch_doc = yaml.safe_load(arch_yaml.read_text(encoding="utf-8")) or {}
+        if isinstance(arch_doc, dict):
+            arch_doc["requirementId"] = requirement_id
+            arch_yaml.write_text(
+                yaml.safe_dump(arch_doc, allow_unicode=True, sort_keys=False),
+                encoding="utf-8",
+            )
     return destination
 
 
@@ -260,6 +269,15 @@ def init_feature(root: Path, feature_id: str, *, requirement_id: str | None = No
                 change_doc["changes"] = []
             change_path.write_text(
                 yaml.safe_dump(change_doc, allow_unicode=True, sort_keys=False),
+                encoding="utf-8",
+            )
+    stories_path = destination / "stories.yaml"
+    if stories_path.is_file():
+        stories_doc = yaml.safe_load(stories_path.read_text(encoding="utf-8")) or {}
+        if isinstance(stories_doc, dict):
+            stories_doc["featureId"] = feature_id
+            stories_path.write_text(
+                yaml.safe_dump(stories_doc, allow_unicode=True, sort_keys=False),
                 encoding="utf-8",
             )
     if requirement_id:
@@ -309,6 +327,7 @@ def evaluate(feature_dir: Path) -> Report:
         _check_g1(feature_dir, state, spec, violations)
         _check_g2(feature_dir, state, spec, violations)
         _check_g2t(feature_dir, state, spec, violations)
+        _check_stories(feature_dir, state, spec, violations)
         _check_g3(feature_dir, state, spec, violations)
         _check_gr(feature_dir, violations)
         _check_g4(feature_dir, spec, violations)
@@ -1076,11 +1095,11 @@ def _check_ux_visual(
 
 
 def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:
-    # light 仍要求 tech，保证验收有技术落点；full 另强制 L0/L1 三级标题
+    # light 仍要求薄 tech（交付落点）；full 另强制架构增量三级标题
     path_mode = state.get("path")
     tech_md = change_dir / "tech.md"
     if not tech_md.is_file() or tech_md.stat().st_size == 0:
-        violations.append(Violation("G2T", "TECH_DOC_MISSING", "缺少 tech.md 技术方案文档"))
+        violations.append(Violation("G2T", "TECH_DOC_MISSING", "缺少 tech.md 切片技术方案（薄合同）"))
     else:
         _check_template_headings(
             tech_md,
@@ -1088,7 +1107,7 @@ def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Viola
             level=2,
             gate="G2T",
             code="TECH_MD_TEMPLATE",
-            label="tech.md（须对齐 templates/feature/tech.md 章节）",
+            label="tech.md（须对齐 templates/feature/tech.md 薄切片章节）",
             violations=violations,
             must_exist=True,
         )
@@ -1099,7 +1118,7 @@ def _check_g2t(change_dir: Path, state: dict, spec: dict, violations: list[Viola
                 level=3,
                 gate="G2T",
                 code="TECH_MD_TEMPLATE",
-                label="tech.md 强制三级标题（full 路径）",
+                label="tech.md 强制三级标题（full：架构增量）",
                 violations=violations,
                 must_exist=True,
             )
@@ -1879,6 +1898,29 @@ def _check_tech_doc_sections(
                                 )
 
 
+def _check_stories(
+    change_dir: Path,
+    state: dict,
+    spec: dict,
+    violations: list[Violation],
+) -> None:
+    """可选 Story 层：仅 storiesEnabled=true 时进入门禁。"""
+    from aiassitrequreimentdev.stories import evaluate_stories
+
+    feature_id = None
+    if isinstance(spec, dict) and isinstance(spec.get("id"), str):
+        feature_id = spec["id"].strip()
+    elif change_dir.name.startswith("FEAT-"):
+        feature_id = change_dir.name
+    violations.extend(
+        evaluate_stories(
+            change_dir,
+            feature_id=feature_id,
+            acceptance_ids=_acceptance_ids(spec),
+        )
+    )
+
+
 def _check_g3(change_dir: Path, state: dict, spec: dict, violations: list[Violation]) -> None:
     tasks_doc = _read_yaml(
         change_dir / "tasks.yaml",
@@ -1895,6 +1937,9 @@ def _check_g3(change_dir: Path, state: dict, spec: dict, violations: list[Violat
         return
     if is_light_path(state.get("path")) and len(tasks) != 1:
         violations.append(Violation("G3", "TASK_LIGHT_COUNT", "轻路径只能有一个任务"))
+    from aiassitrequreimentdev.stories import validate_task_story_ids
+
+    violations.extend(validate_task_story_ids(change_dir, tasks))
     known = {item.get("id") for item in tasks if isinstance(item, dict)}
     acceptance_ids = _acceptance_ids(spec)
     scopes: list[tuple[str, str]] = []

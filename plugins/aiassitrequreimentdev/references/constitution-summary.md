@@ -17,4 +17,4 @@
 13. 人打断含：未选角色、路径未确认、产品未决、视觉路径（项目锁定则确认遵循，否则 catalog 三选一；可 custom）、视觉选型细节、技术高风险、Review 争议、测试卡死、部署确认。结构问题只由检查器报告。
 14. 部署只写清单与命令，不代执行上线；上线前必须打断确认。
 15. G3 只由检查器判断。主控不得把 `G3` 写成 `accepted` 来盖过 `TASK_CYCLE` 或 `TASK_SCOPE_OVERLAP`。
-16. 一个 feature 须对本切片 `A*` 可独立验收并走到 G4，不是半成品，也不等于整条需求的零依赖大包，也不等于 `tasks.yaml` 里的任务。允许 `dependsOnFeatures`。拆 feature 在需求级 PRD 之后（`split.yaml`）；feature 内 `tasks.yaml` 更晚才拆。过程中改验收须回 G1 重 seal；范围外新目标开新 feature。细则见 `decomposition.md`。
+16. Feature 对本切片 `A*` **对交付负责**（可 G4）。大需求须需求级 PRD + **整需求 architecture**（`check-req`）再 `split.yaml`。可选 Story 只服务并行实现，不对独立交付负责。`tasks.yaml` 更晚才拆。细则见 `decomposition.md`。

@@ -1,0 +1,33 @@
+# 需求级 Epic Design 机器件（check-req）。叙事见 architecture.md（对齐 AISDD epic-design）。
+requirementId: REQ-000-example-name-20200101
+summary: ""
+# 与 split.yaml features[].id 对齐（填实后 check-req 校验集合一致）
+features: []
+contracts: []
+contractsNoneReason: ""
+keyDesigns: []
+keyDesignsNoneReason: ""
+risks: []
+risksNoneReason: ""
+openTechQuestions: []
+diagrams:
+  - id: D-L0
+    type: architecture
+    layer: 0
+    title: 整需求零层上下文
+    scope: 外部系统与信任边界
+    tool: archify
+    html: diagrams/PLACEHOLDER.L0.architecture.html
+    png: diagrams/PLACEHOLDER.L0.architecture.png
+  - id: D-L1
+    type: architecture
+    layer: 1
+    title: 整需求一层模块与 Feature 归属
+    scope: 模块职责与拆分
+    tool: archify
+    html: diagrams/PLACEHOLDER.L1.architecture.html
+    png: diagrams/PLACEHOLDER.L1.architecture.png
+diagramsNoneReason: ""
+# contracts[]：id/type/provider/consumers/summary
+# risks[]：id/summary/features/mitigation
+# openTechQuestions[]：id/question/blocking(bool)/owner

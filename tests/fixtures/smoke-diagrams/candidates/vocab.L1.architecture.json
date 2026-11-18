@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "今日复习 · L1 模块",
+    "subtitle": "UI / 队列仓库 / 打卡存储 / 生词本",
+    "quality_profile": "showcase",
+    "output": "tests/fixtures/smoke-diagrams/out/vocab.L1.architecture.html"
+  },
+  "components": [
+    { "id": "ui", "type": "frontend", "label": "DailyReviewFragment", "sublabel": "语境卡 + 防剧透", "pos": [60, 200], "size": [170, 72], "tag": "painless pk-*" },
+    { "id": "repo", "type": "backend", "label": "ReviewQueueRepository", "sublabel": "日快照 / 续跑", "pos": [320, 200], "size": [180, 72] },
+    { "id": "checkin", "type": "backend", "label": "CheckInStore", "sublabel": "认识/不认识", "pos": [580, 120], "size": [160, 64] },
+    { "id": "notebook", "type": "database", "label": "Notebook", "sublabel": "到期词只读", "pos": [580, 280], "size": [160, 64] },
+    { "id": "db", "type": "database", "label": "SQLite", "sublabel": "t_review_*", "pos": [820, 200], "size": [140, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "app/src/vocab/review", "wraps": ["ui", "repo", "checkin"] }
+  ],
+  "connections": [
+    { "id": "ui-repo", "from": "ui", "to": "repo", "label": "getTodayQueue / checkIn", "variant": "emphasis" },
+    { "id": "repo-checkin", "from": "repo", "to": "checkin", "label": "写打卡", "fromSide": "top", "toSide": "left" },
+    { "id": "repo-notebook", "from": "repo", "to": "notebook", "label": "拉到期词", "fromSide": "bottom", "toSide": "left" },
+    { "id": "checkin-db", "from": "checkin", "to": "db", "label": "persist" },
+    { "id": "repo-db", "from": "repo", "to": "db", "label": "queue snapshot", "fromSide": "right", "toSide": "left" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "KD", "items": ["自然日队列快照当日不重排", "打卡幂等键 = day + wordId"] },
+    { "dot": "rose", "title": "约束", "items": ["释义默认模糊防剧透", "主路径不插会员墙"] }
+  ]
+}

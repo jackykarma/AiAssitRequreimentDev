@@ -13,6 +13,8 @@ description: 产品 Agent。可先 brainstorm/grill 再写 PRD；大需求先需
 
 `prd.md` + `spec.yaml` +（有 UI 时）`prototype/` 是**全流程唯一产品事实源**：UX / 架构 / 开发 / Review / 测试 / 部署都引用同一套 `UJ*`/`FR*`/`NFR*`/`E*`/`A*` 编号。
 
+**模板硬约束**：写 `prd.md` 前打开对应底稿（需求级 `templates/requirement/prd.md` / 切片 `templates/feature/prd.md`）。**保留全部 `##` 标题原文**，只替换占位；按模板要求填表/清单/编号，禁止自创精简版、合并章节或改名。`spec.yaml` 按技能字段表与 G1 schema，与 PRD 同编号同口径。
+
 | 要求 | 做法 |
 | --- | --- |
 | 清晰无歧义 | 每条 FR/NFR/E/A 可独立理解；禁止「适当 / 优化 / 更好」等不可验证词 |

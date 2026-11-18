@@ -1,11 +1,12 @@
-# NFR 技术评估：FEAT-[序号]-[kebab名称]
+# NFR 技术评估：FEAT-[序号]-[kebab名称] / REQ-[…]
 
-> **定位**：本 feature 快稳省等量化展开件；摘要在 `tech.md` §八 / `tech.yaml` → `nfr`。  
+> **定位**：快稳省等量化展开件。Feature：摘要在 `tech.md` §八 / `tech.yaml` → `nfr`。  
+> **REQ Epic**：必须落盘 `requirements/…/architecture/nfr.md`；`architecture.md` §八只保留结论表 + 链接。  
 > **与 spec**：`spec.yaml` 的 NFR* 是验收目标；本文评估方案是否达标。超标须改设计或走变更（C3）。  
 > 不适用子节标 N/A 并简述原因。
 
-**Feature**：FEAT-[序号]-[kebab名称]  
-**关联**：`spec.yaml` · `tech.md` §八 · `tech.yaml` · 可选 KD 展开件  
+**Feature / Requirement**：[ID]  
+**关联**：`spec.yaml` · Epic `architecture.md` §八 · `tech.yaml` · 可选 KD  
 **日期**：[YYYY-MM-DD]
 
 ---

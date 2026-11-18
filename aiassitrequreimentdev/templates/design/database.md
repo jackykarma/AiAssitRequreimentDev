@@ -1,11 +1,12 @@
-# 数据库设计：FEAT-[序号]-[kebab名称]
+# 数据库设计：FEAT-[序号]-[kebab名称] / REQ-[…]
 
-> **定位**：本 feature 数据表/存储展开件；约束边界在 `tech-spec.md` §三，摘要在 `tech.md` §十 / `tech.yaml` → `dataDesign`。  
-> **适用**：Room/SQLite/DataStore/云端等；无则整文 N/A。  
-> **绘图**：Archify `erd` → `diagrams/`，并在 `tech.yaml` diagrams 登记。
+> **定位**：数据表/存储展开件；Feature 约束在 `tech-spec.md`，摘要在 `tech.md` §十 / `dataDesign`。  
+> **REQ Epic**：必须落盘 `architecture/database-design.md`；`architecture.md` §十只摘要 + 链接。  
+> **适用**：Room/SQLite/DataStore/云端等；无则整文 N/A（仍须保留章节标题）。  
+> **绘图**：Archify `erd` → `diagrams/`，并在 yaml diagrams 登记。
 
-**Feature**：FEAT-[序号]-[kebab名称]  
-**关联**：`tech-spec.md` · `tech.md` §十 · `tech.yaml`  
+**Feature / Requirement**：[ID]  
+**关联**：Epic `architecture.md` §十 · `tech-spec.md` · `tech.yaml`  
 **日期**：[YYYY-MM-DD]
 
 ---

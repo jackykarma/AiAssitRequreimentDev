@@ -14,4 +14,6 @@
 
 角色只写自己的工件。门禁：`python -m aiassitrequreimentdev check <feature目录> --gate <G0|G1|G2|G2T|G3|GR|G4|GD>`。
 
+**模板硬约束（凡有底稿必遵）**：产物落盘时，若 `aiassitrequreimentdev/templates/`（或技能明示的底稿路径）已有对应模板，**必须**按该模板的章节结构、标题原文、必填小节与填写要求出内容——保留全部规定 `##`/`###`（及模板要求的表/清单），只替换占位，禁止自创精简版、改名跳节、只写一行摘要糊弄（门禁 `*_TEMPLATE` / `ARCH_MD_THIN` 等会拦）。无独立模板的机器件（如 `spec.yaml`）仍按其 schema/技能字段表填写。
+
 竞品/对标 App 视觉：提供包名时启用 `aiassitrequreimentdev-apk-uikit`（ADB 抓页 → `research/<app>-ui/ui-kit/`），完成后登记 `research/ui-kits/catalog.yaml`；动效对齐 `research/ui-kits/MOTION.md`。G2 视觉：若 `projectStyle.locked=true` 则遵循项目自有 UI（不强制三选一）；否则人选 `ui-kit` / `painless` / `midoo`（可选 `custom`）。

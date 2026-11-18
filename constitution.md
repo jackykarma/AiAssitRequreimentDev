@@ -4,17 +4,18 @@
 
 1. 启动流程必须先选择人角色（产品经理 / 交互视觉 / 架构师SE / 开发 / Code Review / 测试 / 部署；按阶段 adopt），再根据需求推荐并确认研发路径（`full` 全量 / `light` 轻量 / `light-auto` 轻量自动）。角色与路径须由主控在**本会话内**弹选项确认（AskQuestion 或编号菜单），再写入 `actorRole` / `path` 并派技能；HTML picker 仅备用，不得要求用户先打开网页。工件与 CLI 由 Agent 代跑。`light-auto` 仅适用于无 UX/UI 的小需求：G1 seal 后人闸，之后连跑至 G4；部署确认仍打断。
 2. 同一 feature 的产物共仓于 `features/<id>/`，以 `BOARD.md` 为共享索引。角色只写自己的文件，其余只读。一条**需求**可对应一个或多个 feature。
-3. 产品阶段交付：`prd.md`（给人）、可交互 HTML `prototype/index.html`（给人；无 UI 时 `spec.uiRequired=false` + `uiNoneReason`）、`spec.yaml`（给 Agent 与门禁）。输入不完整时须先 brainstorm/grill 再出稿。须覆盖核心用户旅程、功能需求、非功能需求、异常与边界、验收标准（清晰无歧义、可验收）；`prd` 与 `spec` 与原型是**全流程一套事实源**，同源同编号；禁止用对话草稿文件或平行口径代替。
-4. 一个 feature 只有一份机器规格：`features/<id>/spec.yaml`（必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选）。其他 Agent 按编号引用，不改写规格正文。
-5. G1 冻结：主控在 `check G1` 通过后执行 `seal`（写入 `specHash` 并置 `gates.G1=accepted`）。之后修改 `spec.yaml` 必须先把 `gates.G1` 改回 `pending` 并重新签字。检查器用 `specHash` 发现未经退回的修改。改规格须同步 PRD（及受影响原型）。**任何产品/UX/技术方案/范围变更须先写入 `change.yaml`**（发起人、原因、影响、回退门禁、时间），再改合同；细则见插件 `references/change-control.md`。
-6. 交互视觉写 `ux.yaml`（有 UI 须 `interactionRules` + 人选 `visual.baseline`：`ui-kit` 默认或 `custom` 自由发挥；Pencil/Figma 仅探索须回流 HTML）+ 可交互 `prototype/ux/`（或 `skip`）。与产品原型分工：产品=业务可点通，UX=规则与视觉精修。技术方案写 `tech.md`（人审）+ `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。旧 `design.yaml` 退役。架构图分 0 层/1 层；流程/时序/类图可多张（`scope` 区分）。绘图一律 Archify，只留 html/png。
-7. 验收必须能被一条命令判断。`given` / `when` / `then` / `verify` 都要有内容。`verify` 与证据 `command` 须能在 then 不成立时非 0；禁止空转成功。G1 seal 前产品须过人审 A* 清单（见产品技能）。
-8. `nonGoals` 里的事项，开发工人不得实现。主控直接拒绝。
-9. 知识库中的规则以当前源码为准。规格与技术方案只保存链接。长期事实只定义在 `modus/knowledge/`。
-10. 写集相交的任务不得并行。检查器报告 `TASK_SCOPE_OVERLAP` 时，合并任务或改成 `blockedBy`。
-11. 测试与开发不共享对话。通过与否看 `evidence.yaml` 的退出码。测试开工前 GR 必须通过。
-12. Review：`blocking` 必须修复并复审，清零前禁止测试；`dispute` 必须等人裁决；`nit` 不挡门禁。Review 不直接改业务代码。
-13. 人打断含：启动未选角色、路径未确认、产品未决、视觉选型、技术高风险、Review 争议、测试卡死、部署确认。结构问题只由检查器报告。
-14. 部署一期只写清单与命令，不代执行上线；上线前必须打断确认。
-15. G3 只由检查器判断，主控不得把 `G3` 写成 `accepted` 来盖过 `TASK_CYCLE` 或 `TASK_SCOPE_OVERLAP`。`constraint/` 与各域 `business/` 由人持有所有权。
-16. 一个 feature 是可 G4 的交付切片：对本切片 `A*` 可独立验收与举证；**对交付负责**；不等于整条需求零依赖大包，也不等于 `tasks.yaml` 任务。允许 `dependsOnFeatures`。大需求须先需求级 PRD + **整需求 `architecture/`**（`check-req`）再按 `split.yaml` 建 feature。可选 **Story** 仅技术实现/并行开发单元，挂在 Feature 下，**不对独立交付负责**。单 feature 内再用 `tasks.yaml` 拆任务（可挂 `storyId`）。过程中改验收须回 G1 重 seal；范围外新目标开新 feature。细则见 `modus/knowledge/domain/change/references/decomposition.md`。
+3. **有模板必须严格按模板**：凡 `aiassitrequreimentdev/templates/`（及技能明示底稿）已提供的人读产物（需求/feature `prd.md`、Epic `architecture.md`、薄 `tech.md`/`tech-spec.md`、`tasks.md`、Story/design 展开件等），出稿须与模板**章节结构、标题原文、必填小节与填写要求**完全对齐——只替换占位，禁止自创精简版、改名跳节、缺表/缺清单或一行摘要冒充章节。门禁按 `template_headings` 与薄内容规则校验。无独立 md 模板的机器件（`spec.yaml` 等）按其 schema/技能字段表填写。
+4. 产品阶段交付：`prd.md`（给人）、可交互 HTML `prototype/index.html`（给人；无 UI 时 `spec.uiRequired=false` + `uiNoneReason`）、`spec.yaml`（给 Agent 与门禁）。输入不完整时须先 brainstorm/grill 再出稿。须覆盖核心用户旅程、功能需求、非功能需求、异常与边界、验收标准（清晰无歧义、可验收）；`prd` 与 `spec` 与原型是**全流程一套事实源**，同源同编号；禁止用对话草稿文件或平行口径代替。
+5. 一个 feature 只有一份机器规格：`features/<id>/spec.yaml`（必含 `UJ*`/`FR*`/`NFR*`/`E*`/`A*`；`S*` 可选）。其他 Agent 按编号引用，不改写规格正文。
+6. G1 冻结：主控在 `check G1` 通过后执行 `seal`（写入 `specHash` 并置 `gates.G1=accepted`）。之后修改 `spec.yaml` 必须先把 `gates.G1` 改回 `pending` 并重新签字。检查器用 `specHash` 发现未经退回的修改。改规格须同步 PRD（及受影响原型）。**任何产品/UX/技术方案/范围变更须先写入 `change.yaml`**（发起人、原因、影响、回退门禁、时间），再改合同；细则见插件 `references/change-control.md`。
+7. 交互视觉写 `ux.yaml`（有 UI 须 `interactionRules` + 人选 `visual.baseline`：`ui-kit` 默认或 `custom` 自由发挥；Pencil/Figma 仅探索须回流 HTML）+ 可交互 `prototype/ux/`（或 `skip`）。与产品原型分工：产品=业务可点通，UX=规则与视觉精修。技术方案写 `tech.md`（人审）+ `tech.yaml`（`aiConstraints` + `keyDesigns`，开发必遵）。旧 `design.yaml` 退役。架构图分 0 层/1 层；流程/时序/类图可多张（`scope` 区分）。绘图一律 Archify，只留 html/png。
+8. 验收必须能被一条命令判断。`given` / `when` / `then` / `verify` 都要有内容。`verify` 与证据 `command` 须能在 then 不成立时非 0；禁止空转成功。G1 seal 前产品须过人审 A* 清单（见产品技能）。
+9. `nonGoals` 里的事项，开发工人不得实现。主控直接拒绝。
+10. 知识库中的规则以当前源码为准。规格与技术方案只保存链接。长期事实只定义在 `modus/knowledge/`。
+11. 写集相交的任务不得并行。检查器报告 `TASK_SCOPE_OVERLAP` 时，合并任务或改成 `blockedBy`。
+12. 测试与开发不共享对话。通过与否看 `evidence.yaml` 的退出码。测试开工前 GR 必须通过。
+13. Review：`blocking` 必须修复并复审，清零前禁止测试；`dispute` 必须等人裁决；`nit` 不挡门禁。Review 不直接改业务代码。
+14. 人打断含：启动未选角色、路径未确认、产品未决、视觉选型、技术高风险、Review 争议、测试卡死、部署确认。结构问题只由检查器报告。
+15. 部署一期只写清单与命令，不代执行上线；上线前必须打断确认。
+16. G3 只由检查器判断，主控不得把 `G3` 写成 `accepted` 来盖过 `TASK_CYCLE` 或 `TASK_SCOPE_OVERLAP`。`constraint/` 与各域 `business/` 由人持有所有权。
+17. 一个 feature 是可 G4 的交付切片：对本切片 `A*` 可独立验收与举证；**对交付负责**；不等于整条需求零依赖大包，也不等于 `tasks.yaml` 任务。允许 `dependsOnFeatures`。大需求须先需求级 PRD + **整需求 `architecture/`**（`check-req`）再按 `split.yaml` 建 feature。可选 **Story** 仅技术实现/并行开发单元，挂在 Feature 下，**不对独立交付负责**。单 feature 内再用 `tasks.yaml` 拆任务（可挂 `storyId`）。过程中改验收须回 G1 重 seal；范围外新目标开新 feature。细则见 `modus/knowledge/domain/change/references/decomposition.md`。

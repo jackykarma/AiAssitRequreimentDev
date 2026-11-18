@@ -6,3 +6,8 @@ __pycache__/
 dist/
 build/
 .superpowers/
+# 插件烟测落盘（每次 unittest 重建，勿当业务需求合入）
+smoke/
+.archify/
+tests/fixtures/smoke-diagrams/out/*.finalize*.json
+tests/fixtures/smoke-diagrams/out/*.browser-check.json

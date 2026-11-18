@@ -2,6 +2,8 @@
 
 对话编排 + 规格门禁多智能体。启动时先选角色，再确认全量/轻量；合同落在 `features/<id>/`，长期知识在 `modus/knowledge/`。门禁用 `python -m aiassitrequreimentdev check`（主控代跑）。团队插件入口：`plugins/aiassitrequreimentdev/`（Cursor / Codex marketplace 同一套源）。
 
+**模板硬约束**：`aiassitrequreimentdev/templates/` 已有底稿的产物文档，须严格按模板章节结构、标题原文与填写要求出内容（门禁 `*_TEMPLATE` / Epic 薄内容规则校验）；无独立 md 模板的机器件按其 schema/技能字段表。
+
 ## 需求与 feature
 
 | 概念 | 含义 |
@@ -49,7 +51,7 @@ features/FEAT-<序号>-<kebab>/  # 如 FEAT-001-move-album
 | 门禁 | 条件 |
 | --- | --- |
 | G0 | path 合法且 `pathConfirmed`；轻量族（light / light-auto）的 affected 一项 |
-| G1 | spec 含 UJ/FR/NFR/E/A（S 可选）且形状合法、openQuestions 空；prd 章节对齐模板；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；light-auto 另须 `uiRequired=false`；`seal` 写哈希并 `G1=accepted` |
+| G1 | spec 含 UJ/FR/NFR/E/A（S 可选）且形状合法、openQuestions 空；**有模板的人读产物须严格按 `templates/` 结构与填写要求**（prd 章节对齐模板）；有 UI 须可交互 `prototype/index.html`，无 UI 须 `uiRequired=false`+原因；light-auto 另须 `uiRequired=false`；`seal` 写哈希并 `G1=accepted` |
 | G2 | `uiRequired=false` 跳过 UX；有 UI 须 `interactionRules` + `visual.baseline`（ui-kit\|custom）+ 可交互 `prototype/ux/`（或 `skip`）；轻量族可无 ux 文件 |
 | G2T | tech.md + tech-spec.md + tech.yaml（feature 级模板）；aiConstraints/keyDesigns/interfaces/diagrams；full 强制 L0/L1 三级标题与 workflow/sequence/class；acceptance 全覆盖 |
 | G3 | 任务无环、写集不交；轻量族仅一任务 |

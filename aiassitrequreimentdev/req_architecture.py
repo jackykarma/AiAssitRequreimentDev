@@ -5,7 +5,7 @@
  **
  ** File: - req_architecture.py
  ** Description: requirements/.../architecture 校验（check-req 硬门槛）。
- ** Version: 1.0
+ ** Version: 1.1
  ** Date: 2026/11/18
  ** Author: limao2@Apps.Gallery
  **
@@ -13,6 +13,7 @@
  ** <author> <date> <version> <desc>
  ** ------------------------------------------------------------------------------
  ** limao2@Apps.Gallery 2026/11/18 1.0 INIT
+ ** limao2@Apps.Gallery 2026/11/18 1.1 §八～§十一强制 design 展开件
  *********************************************************************************/
 """
 
@@ -25,7 +26,10 @@ import yaml
 
 from aiassitrequreimentdev.gates import Violation
 from aiassitrequreimentdev.template_headings import (
+    REQ_ARCH_EXPAND_FILES,
+    REQ_ARCH_EXPAND_LINKS,
     REQ_ARCH_H2,
+    REQ_ARCH_H3_REQUIRED,
     extract_markdown_headings,
     missing_headings,
 )
@@ -69,6 +73,58 @@ def _check_png(path: Path) -> str | None:
     return None
 
 
+def _h2_section(md_text: str, h2_title: str) -> str:
+    marker = f"## {h2_title}"
+    start = md_text.find(marker)
+    if start < 0:
+        return ""
+    nxt = md_text.find("\n## ", start + len(marker))
+    return md_text[start : nxt if nxt > 0 else len(md_text)]
+
+
+def _check_architecture_expands(arch_dir: Path, md_text: str | None) -> list[Violation]:
+    """§八～§十一须独立落盘 design 展开件，且 architecture.md 对应章须引用。"""
+    violations: list[Violation] = []
+    for filename, required_h3 in REQ_ARCH_EXPAND_FILES.items():
+        path = arch_dir / filename
+        if not path.is_file():
+            violations.append(
+                Violation(
+                    "REQ",
+                    "ARCH_EXPAND_MISSING",
+                    f"缺少 architecture/{filename}（§八～§十一须按 "
+                    "templates/design/ 独立落盘，禁止只写在 architecture.md）",
+                )
+            )
+            continue
+        expand_text = path.read_text(encoding="utf-8")
+        expand_h = extract_markdown_headings(expand_text)
+        for title in missing_headings(expand_h.get(3, []), required_h3):
+            violations.append(
+                Violation(
+                    "REQ",
+                    "ARCH_EXPAND_HEADING",
+                    f"{filename} 缺少三级标题（对齐 design 模板）：{title}",
+                )
+            )
+    if md_text is None:
+        return violations
+    for h2, link_file in REQ_ARCH_EXPAND_LINKS.items():
+        chunk = _h2_section(md_text, h2)
+        if not chunk:
+            continue
+        if link_file not in chunk:
+            violations.append(
+                Violation(
+                    "REQ",
+                    "ARCH_EXPAND_UNLINKED",
+                    f"architecture.md「{h2}」须引用独立展开件 ./{link_file} "
+                    "（本节只保留摘要表 + 链接）",
+                )
+            )
+    return violations
+
+
 def evaluate_req_architecture(
     req_dir: Path,
     *,
@@ -88,12 +144,14 @@ def evaluate_req_architecture(
         return violations
 
     md_path = arch_dir / "architecture.md"
+    md_text: str | None = None
     if not md_path.is_file():
         violations.append(
             Violation("REQ", "ARCH_MD_MISSING", "缺少 architecture/architecture.md")
         )
     else:
-        headings = extract_markdown_headings(md_path.read_text(encoding="utf-8"))
+        md_text = md_path.read_text(encoding="utf-8")
+        headings = extract_markdown_headings(md_text)
         missing = missing_headings(headings.get(2, []), REQ_ARCH_H2)
         for title in missing:
             violations.append(
@@ -103,6 +161,40 @@ def evaluate_req_architecture(
                     f"architecture.md 缺少二级标题：{title}",
                 )
             )
+        missing_h3 = missing_headings(headings.get(3, []), REQ_ARCH_H3_REQUIRED)
+        for title in missing_h3:
+            violations.append(
+                Violation(
+                    "REQ",
+                    "ARCH_MD_H3",
+                    f"architecture.md 缺少三级标题（须对齐 Epic Design 模板）：{title}",
+                )
+            )
+        # 禁止仅用一行摘要糊弄 §六～§十一（模板要求表格）
+        thin_markers = (
+            ("## 六、技术风险与边界场景", "### 6.1"),
+            ("## 七、关键功能与疑难点/亮点设计", "### 7.1"),
+            ("## 八、技术评估（NFR）", "| 维度 |"),
+            ("## 九、接口设计", "| ID |"),
+            ("## 十、数据库设计", "| 存储 |"),
+            ("## 十一、埋点技术方案", "| 事件 |"),
+        )
+        for h2, must in thin_markers:
+            start = md_text.find(h2)
+            if start < 0:
+                continue
+            nxt = md_text.find("\n## ", start + len(h2))
+            chunk = md_text[start:nxt if nxt > 0 else len(md_text)]
+            if must not in chunk:
+                violations.append(
+                    Violation(
+                        "REQ",
+                        "ARCH_MD_THIN",
+                        f"{h2} 未按模板展开（缺少「{must}」结构，禁止只写一行摘要）",
+                    )
+                )
+
+    violations.extend(_check_architecture_expands(arch_dir, md_text))
 
     yaml_path = arch_dir / "architecture.yaml"
     if not yaml_path.is_file():

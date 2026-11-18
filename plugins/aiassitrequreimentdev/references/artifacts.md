@@ -2,6 +2,8 @@
 
 目录：`features/<id>/`。只保留正式交付，不保留对话草稿。角色只写自己的文件。
 
+**模板硬约束**：表中凡注明「严格按 / 按 `templates/…`」的人读产物，出稿前先打开对应底稿；**保留全部规定标题原文与必填小节结构**，只替换占位内容；须含模板要求的表/清单/图位，禁止自创精简版或跳节。机器件（`spec.yaml` / `tech.yaml` 等）按技能字段表与 schema，不另起平行结构。
+
 | 文件 | 作者 | 要点 |
 | --- | --- | --- |
 | `state.json` | 主控 | `stage`、`path`、`pathConfirmed`、`actorRole`、`requirementId`、`dependsOnFeatures`、`gates`、`specHash` |
@@ -25,7 +27,7 @@
 | `evidence.yaml` | 测试 | 每条验收的 command 与 `exitCode`；command 须对应 `spec.verify`，禁止空转成功 |
 | `deploy.yaml` | 部署 | 环境、命令、回滚；不代执行上线 |
 
-大需求另有 `requirements/REQ-…/`：`prd.md`、`split.yaml`、**`architecture/` Epic Design**（对齐 AISDD epic-design；`check-req` 硬门槛）。  
+大需求另有 `requirements/REQ-…/`：`prd.md`、`split.yaml`、**`architecture/` Epic Design**（对齐 AISDD epic-design；`check-req` 硬门槛）。§八～§十一详表强制独立文件：`nfr.md` / `interface-design.md` / `database-design.md` / `analytics-tracking.md`（对齐 `templates/design/`）；`architecture.md` 对应章只摘要 + 链接。  
 Feature **薄** `tech.md`（交付落点 + 相对 Epic 增量；G2T）。可选 `stories.yaml` + `stories/ST-*/story-tech.md`。`tasks.yaml` 可带 `storyId`。
 
 `prd.md` 给人读，`spec.yaml` 给 Agent 与门禁，**同一套编号、一套事实源**（贯穿 UX/tech/dev/review/test/deploy）。禁止只交其中一份或另起平行口径。改规格必须同步 PRD 及受影响原型。

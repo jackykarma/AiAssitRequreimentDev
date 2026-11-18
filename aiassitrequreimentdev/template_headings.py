@@ -5,8 +5,8 @@
  **
  ** File: - template_headings.py
  ** Description: feature/prd/tech 模板必含 Markdown 标题（门禁逐条校验）
- ** Version: 1.1
- ** Date: 2026/11/15
+ ** Version: 1.2
+ ** Date: 2026/11/18
  ** Author: limao2@Apps.Gallery
  **
  ** ------------------------------- Revision History: ----------------------------
@@ -14,6 +14,7 @@
  ** ------------------------------------------------------------------------------
  ** limao2@Apps.Gallery 2026/11/15 1.0 INIT
  ** limao2@Apps.Gallery 2026/11/15 1.1 feature 级 tech 标题（去 EPIC/Story 漂移）
+ ** limao2@Apps.Gallery 2026/11/18 1.2 REQ Epic §八～§十一展开件标题
  *********************************************************************************/
 """
 
@@ -65,6 +66,77 @@ REQ_ARCH_H2 = (
     "十三、Story 详细设计索引",
     "附录：与 Feature tech / Story / tasks 的对应关系",
 )
+
+# architecture.md 强制三级标题（与 templates/requirement/architecture/architecture.md 对齐）
+REQ_ARCH_H3_REQUIRED = (
+    "前置检查清单",
+    "跨 Feature 共享能力登记",
+    "P0 覆盖快照（与各 Feature spec 对照）",
+    "前置检查结论",
+    "1.1 目的和对象",
+    "1.2 范围",
+    "2.1 需求背景",
+    "2.2 需求范围及限制（按 Feature 索引）",
+    "3.1 领域概念",
+    "3.2 领域概念词汇表（必须）",
+    "4.1 边界说明",
+    "4.2 零层架构图（必须）",
+    "4.3 架构设计说明（必须）",
+    "4.4 外部依赖清单",
+    "5.1 一层框架图（必须）",
+    "5.2 组件清单与职责（必须）",
+    "5.3 组件协作流程图（必须）",
+    "5.4 技术方案选型",
+    "6.1 技术风险与消解策略（绑定 Feature / Story）",
+    "6.2 边界与异常场景枚举",
+    "7.1 关键设计清单",
+    "7.2 详细设计引用",
+    "12.1 拆解策略与约束",
+    "12.2 Feature 列表（与 split 对齐）",
+    "12.3 Story 列表（按 Feature 分组，可选）",
+    "12.4 Story 依赖与并行度",
+    "12.5 Feature → 设计覆盖矩阵",
+    "13.1 索引表",
+    "13.2 依赖总览",
+    "13.3 覆盖度检查",
+)
+
+# requirements/.../architecture/ 展开件（§八～§十一必须独立落盘，正文只保留摘要+链接）
+# 文件名 → 必含 ### 标题（对齐 templates/design/）
+REQ_ARCH_EXPAND_FILES: dict[str, tuple[str, ...]] = {
+    "nfr.md": (
+        "8.1 算法评估（如适用）",
+        "8.2 功耗评估（必须量化，基于场景）",
+        "8.3 性能评估（必须量化，基于场景）",
+        "8.4 内存评估（必须量化，基于场景）",
+        "8.5 安全评估（如适用）",
+        "8.6 兼容性评估（必须）",
+        "8.7 RomSize 增量评估（必须）",
+    ),
+    "interface-design.md": (
+        "9.1 对外提供的接口",
+        "9.2 依赖的外部接口",
+        "9.3 接口一致性自检",
+    ),
+    "database-design.md": (
+        "10.1 数据库概览",
+        "10.2 数据表详细设计",
+        "10.3 数据设计说明",
+        "10.4 数据库设计一致性自检",
+    ),
+    "analytics-tracking.md": (
+        "11.1 埋点事件与字段规约",
+        "11.2 埋点一致性自检（推荐）",
+    ),
+}
+
+# architecture.md 各章须引用的相对路径（禁止只在章内写满详表却无展开件）
+REQ_ARCH_EXPAND_LINKS: dict[str, str] = {
+    "八、技术评估（NFR）": "nfr.md",
+    "九、接口设计": "interface-design.md",
+    "十、数据库设计": "database-design.md",
+    "十一、埋点技术方案": "analytics-tracking.md",
+}
 
 # 兼容旧名
 EPIC_PRD_H2 = REQ_PRD_H2

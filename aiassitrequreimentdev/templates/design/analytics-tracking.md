@@ -1,9 +1,11 @@
-# 埋点技术方案：FEAT-[序号]-[kebab名称]
+# 埋点技术方案：FEAT-[序号]-[kebab名称] / REQ-[…]
 
-> **定位**：本 feature 埋点展开件；摘要在 `tech.md` §十一 / `tech.yaml` → `tracking`。仅列本切片新增或修改事件。
+> **定位**：埋点展开件；Feature 摘要在 `tech.md` §十一 / `tech.yaml` → `tracking`。  
+> **REQ Epic**：必须落盘 `architecture/analytics-tracking.md`；`architecture.md` §十一只摘要 + 链接。  
+> 仅列本需求/切片新增或修改事件。
 
-**Feature**：FEAT-[序号]-[kebab名称]  
-**关联**：`spec.yaml` · `tech.md` §十一 · `tech.yaml`  
+**Feature / Requirement**：[ID]  
+**关联**：Epic `architecture.md` §十一 · `spec.yaml` · `tech.yaml`  
 **日期**：[YYYY-MM-DD]
 
 ---

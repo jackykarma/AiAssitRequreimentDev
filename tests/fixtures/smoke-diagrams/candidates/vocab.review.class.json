@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "diagram_type": "class",
+  "meta": {
+    "title": "今日复习领域类型",
+    "subtitle": "队列快照、打卡记录与仓库职责",
+    "quality_profile": "showcase",
+    "output": "tests/fixtures/smoke-diagrams/out/vocab.review.class.html"
+  },
+  "layout": { "mode": "grid" },
+  "types": [
+    {
+      "id": "fragment",
+      "label": "DailyReviewFragment",
+      "kind": "class",
+      "sublabel": "词卡 UI",
+      "row": 0,
+      "col": 0,
+      "methods": [
+        { "name": "onResume", "returns": "void", "visibility": "public" },
+        { "name": "renderCard", "parameters": "word: WordCard", "returns": "void", "visibility": "private" }
+      ]
+    },
+    {
+      "id": "repo",
+      "label": "ReviewQueueRepository",
+      "kind": "class",
+      "sublabel": "日队列与续跑",
+      "row": 0,
+      "col": 1,
+      "methods": [
+        { "name": "getTodayQueue", "returns": "QueueSnapshot", "visibility": "public" },
+        { "name": "checkIn", "parameters": "wordId: String, result: CheckInResult", "returns": "Advance", "visibility": "public" }
+      ]
+    },
+    {
+      "id": "store",
+      "label": "CheckInStore",
+      "kind": "interface",
+      "sublabel": "持久化契约",
+      "row": 0,
+      "col": 2,
+      "methods": [
+        { "name": "upsert", "parameters": "record: CheckInRecord", "returns": "void", "visibility": "public", "abstract": true },
+        { "name": "loadDone", "parameters": "day: LocalDate", "returns": "Set<String>", "visibility": "public", "abstract": true }
+      ]
+    },
+    {
+      "id": "snapshot",
+      "label": "QueueSnapshot",
+      "kind": "class",
+      "sublabel": "当日有序 wordId",
+      "row": 1,
+      "col": 1,
+      "attributes": [
+        { "name": "day", "type": "LocalDate", "visibility": "public" },
+        { "name": "wordIds", "type": "List<String>", "visibility": "public" },
+        { "name": "cursor", "type": "Int", "visibility": "public" }
+      ]
+    },
+    {
+      "id": "record",
+      "label": "CheckInRecord",
+      "kind": "class",
+      "sublabel": "打卡幂等行",
+      "row": 1,
+      "col": 2,
+      "attributes": [
+        { "name": "day", "type": "LocalDate", "visibility": "public" },
+        { "name": "wordId", "type": "String", "visibility": "public" },
+        { "name": "result", "type": "Known|Unknown", "visibility": "public" }
+      ]
+    }
+  ],
+  "relationships": [
+    { "id": "ui-repo", "from": "fragment", "to": "repo", "kind": "dependency", "label": "uses" },
+    { "id": "repo-snap", "from": "repo", "to": "snapshot", "kind": "association", "label": "owns" },
+    { "id": "repo-store", "from": "repo", "to": "store", "kind": "dependency", "label": "persists", "labelDy": -40 },
+    { "id": "store-rec", "from": "store", "to": "record", "kind": "association", "label": "writes" }
+  ]
+}

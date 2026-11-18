@@ -121,6 +121,8 @@ seal **之后**不要停下来等人点「下一步」，连续完成：
 
 ## 角色写出
 
+**模板硬约束（主控派活前强调）**：凡 `templates/` 有底稿的产物文档，角色出稿必须严格按模板**结构 + 标题原文 + 填写要求**；门禁 `*_TEMPLATE` / Epic 薄内容规则失败则打回，不得 `--accept` 盖过。
+
 | 角色 | 技能 | 写出 |
 | --- | --- | --- |
 | 产品经理 | product | 需求级/切片 prd 严格按 `templates/requirement|feature/prd.md`；prototype + `spec.yaml` |

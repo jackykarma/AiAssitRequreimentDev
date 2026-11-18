@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "无痛单词 · 今日复习 L0",
+    "subtitle": "英语学习者与本地客户端；无新增云端依赖",
+    "quality_profile": "showcase",
+    "output": "tests/fixtures/smoke-diagrams/out/vocab.L0.architecture.html"
+  },
+  "components": [
+    { "id": "learner", "type": "external", "label": "英语学习者", "sublabel": "每日打开 App", "pos": [40, 220], "size": [140, 64], "icon": "person" },
+    { "id": "app", "type": "frontend", "label": "无痛单词客户端", "sublabel": "tech.xiangzi.painless 风格", "pos": [280, 220], "size": [180, 72], "tag": "Android" },
+    { "id": "notebook", "type": "database", "label": "生词本", "sublabel": "到期词集合 / SRS", "pos": [560, 140], "size": [150, 64] },
+    { "id": "review", "type": "backend", "label": "今日复习模块", "sublabel": "队列 + 打卡", "pos": [560, 280], "size": [150, 64], "tag": "本需求" },
+    { "id": "localdb", "type": "database", "label": "本地 SQLite", "sublabel": "队列快照 / 打卡", "pos": [800, 220], "size": [150, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "设备本地信任边界", "wraps": ["app", "notebook", "review", "localdb"] }
+  ],
+  "connections": [
+    { "id": "open-app", "from": "learner", "to": "app", "label": "打开今日复习", "variant": "emphasis" },
+    { "id": "app-review", "from": "app", "to": "review", "label": "进入队列" },
+    { "id": "review-notebook", "from": "review", "to": "notebook", "label": "读到期词", "fromSide": "top", "toSide": "bottom" },
+    { "id": "review-db", "from": "review", "to": "localdb", "label": "快照/打卡" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "范围", "items": ["对标无痛单词学习节奏", "本需求不改阅读器与会员"] },
+    { "dot": "emerald", "title": "数据", "items": ["生词本只读到期集合", "复习队列与打卡落本地库"] }
+  ]
+}

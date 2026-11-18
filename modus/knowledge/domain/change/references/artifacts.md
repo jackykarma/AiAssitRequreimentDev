@@ -2,6 +2,8 @@
 
 目录：`features/<id>/`。只保留正式交付，不保留 `intent.md` 等对话草稿。
 
+**模板硬约束**：若包内 `templates/` 或技能明示底稿已覆盖该产物，出稿须严格按模板结构、标题原文与填写要求；禁止自创精简版。权威表见插件 `references/artifacts.md`。
+
 | 文件 | 作者 | 要点 |
 | --- | --- | --- |
 | `state.json` | 主控 | `stage`、`path`、`pathConfirmed`、`actorRole`、`gates`、`specHash`、`runId` |

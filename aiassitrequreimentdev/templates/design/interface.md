@@ -1,10 +1,11 @@
-# 接口设计：FEAT-[序号]-[kebab名称]
+# 接口设计：FEAT-[序号]-[kebab名称] / REQ-[…]
 
-> **定位**：本 feature 接口展开件；摘要在 `tech.md` §九 / `tech.yaml` → `interfaces`；工程边界在 `tech-spec.md`。  
-> **内容**：方法签名、字段、错误码；无对外/外部接口则 N/A。
+> **定位**：接口展开件；Feature 摘要在 `tech.md` §九 / `tech.yaml` → `interfaces`。  
+> **REQ Epic**：必须落盘 `architecture/interface-design.md`；`architecture.md` §九只摘要 + 链接。  
+> **内容**：方法签名、字段、错误码；无对外/外部接口则 N/A（仍须保留章节标题）。
 
-**Feature**：FEAT-[序号]-[kebab名称]  
-**关联**：`tech.md` §九 · `tech.yaml` · `tech-spec.md`  
+**Feature / Requirement**：[ID]  
+**关联**：Epic `architecture.md` §九 · `tech.yaml` · `tech-spec.md`  
 **日期**：[YYYY-MM-DD]
 
 ---

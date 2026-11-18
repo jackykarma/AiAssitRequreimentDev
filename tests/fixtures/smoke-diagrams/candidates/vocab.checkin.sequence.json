@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "打开复习与打卡时序",
+    "subtitle": "UI → Repository → Notebook / CheckInStore",
+    "quality_profile": "showcase",
+    "output": "tests/fixtures/smoke-diagrams/out/vocab.checkin.sequence.html",
+    "column_fit": "spread"
+  },
+  "participants": [
+    { "id": "ui", "type": "frontend", "label": "DailyReviewUI" },
+    { "id": "repo", "type": "backend", "label": "QueueRepo" },
+    { "id": "nb", "type": "database", "label": "Notebook" },
+    { "id": "store", "type": "database", "label": "CheckInStore" }
+  ],
+  "segments": [
+    { "from": 140, "to": 350, "label": "打开队列" },
+    { "from": 360, "to": 470, "label": "打卡" },
+    { "from": 480, "to": 560, "label": "推进" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "ui", "to": "repo", "y": 160, "label": "getTodayQueue()", "variant": "emphasis" },
+    { "id": "m2", "from": "repo", "to": "nb", "y": 195, "label": "listDueWords(today)" },
+    { "id": "m3", "from": "nb", "to": "repo", "y": 230, "label": "wordIds[]", "variant": "return" },
+    { "id": "m4", "from": "repo", "to": "store", "y": 265, "label": "loadCheckins(day)" },
+    { "id": "m5", "from": "store", "to": "repo", "y": 300, "label": "done set", "variant": "return" },
+    { "id": "m6", "from": "repo", "to": "ui", "y": 335, "label": "QueueSnapshot", "variant": "return" },
+    { "id": "m7", "from": "ui", "to": "repo", "y": 380, "label": "checkIn(wordId, known)", "variant": "emphasis" },
+    { "id": "m8", "from": "repo", "to": "store", "y": 415, "label": "upsert day+wordId" },
+    { "id": "m9", "from": "store", "to": "repo", "y": 450, "label": "ok", "variant": "return" },
+    { "id": "m10", "from": "repo", "to": "ui", "y": 500, "label": "next cursor / completed", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "ui", "from": 155, "to": 510, "type": "frontend" },
+    { "participant": "repo", "from": 160, "to": 505, "type": "backend" },
+    { "participant": "nb", "from": 190, "to": 240, "type": "database" },
+    { "participant": "store", "from": 260, "to": 460, "type": "database" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "幂等", "items": ["打卡键 = 自然日 + wordId", "重复提交不产生二次完成"] },
+    { "dot": "cyan", "title": "续跑", "items": ["已有日快照则不重排", "游标跳过已打卡词"] }
+  ]
+}

@@ -4,7 +4,7 @@
 > **不对 G4 交付负责**；可执行验收在各 `features/*/spec.yaml`。  
 > **下游**：Feature 写**薄** `tech.md`（交付落点 + 增量）；复杂/并行落码写 `stories/ST-*/story-tech.md`。  
 > **绘图**：[Archify](https://github.com/tt-a1i/archify) `finalize` → `.html` + `.png`；正文用 `![](…png)` 内嵌（禁止仅列路径；禁止 svg 作合同预览）。  
-> **展开件**：KD / NFR / 接口 / 库表 / 埋点可复制 `templates/design/` 到本目录或 Owner Feature。  
+> **展开件（强制）**：`nfr.md` / `interface-design.md` / `database-design.md` / `analytics-tracking.md` 必须落在本目录，结构对齐 `templates/design/`；§八～§十一正文只保留摘要表 + 相对链接。KD 按需。  
 > **机器件**：`architecture.yaml`（`check-req`）。
 
 **Requirement**：REQ-[序号]-[kebab名称]-[YYYYMMDD]  
@@ -19,7 +19,10 @@
 | `architecture.yaml` | 门禁 / Agent | diagrams、contracts、risks、features 追溯 |
 | `diagrams/` | §四 / §五 等 | Archify html+png |
 | `key-func-design/KD_*_*.md`（按需） | §七 | 跨 Feature 或整需求级 KD |
-| `nfr.md` / `interface-design.md` 等（按需） | §八～§十一 | 详表；本节保留摘要 + 链接 |
+| `nfr.md`（**强制**） | §八 | 对齐 `templates/design/nfr.md`；本节只摘要+链接 |
+| `interface-design.md`（**强制**） | §九 | 对齐 `templates/design/interface.md` |
+| `database-design.md`（**强制**） | §十 | 对齐 `templates/design/database.md` |
+| `analytics-tracking.md`（**强制**） | §十一 | 对齐 `templates/design/analytics-tracking.md` |
 | 各 Feature `stories/ST-*/` | §十二 / §十三 | Story 详细设计（挂在 Feature 下） |
 
 ---
@@ -206,50 +209,54 @@
 
 ## 八、技术评估（NFR）
 
-> 必须量化；详表可展开本目录 `nfr.md`（`templates/design/nfr.md`）。本节保留结论表。
+> **强制**：详表必须独立落盘本目录 [`nfr.md`](./nfr.md)，结构对齐 `templates/design/nfr.md`（含 8.1～8.7）。  
+> **禁止**仅在本节写一行摘要或把展开件内容整段塞进 `architecture.md`。本节只保留结论表 + 链接。
 
 | 维度 | 结论 / 预算 | 缓解 | 详表 |
 | --- | --- | --- | --- |
-| 性能 | … | … | ./nfr.md 或 N/A |
-| 稳定性 | … | … | |
-| 功耗 | … | … | |
-| 其它 | … | … | |
+| 性能 | … | … | [./nfr.md](./nfr.md) |
+| 稳定性 | … | … | [./nfr.md](./nfr.md) |
+| 功耗 | … | … | [./nfr.md](./nfr.md) |
+| 其它 | … | … | [./nfr.md](./nfr.md) |
 
 ---
 
 ## 九、接口设计
 
-> 跨 Feature / 对外契约摘要；字段级详表 → `interface-design.md` 或 Owner Feature。
+> **强制**：字段级详表必须独立落盘 [`interface-design.md`](./interface-design.md)，结构对齐 `templates/design/interface.md`（含 9.1～9.3）。  
+> 本节只保留跨 Feature / 对外契约摘要表 + 链接。
 
 | ID | 方向 | 类型 | 提供方 | 消费方 | 摘要 | 冻结时机 |
 | --- | --- | --- | --- | --- | --- | --- |
 | CTR-1 / IF-1 | provided/consumed | api/event/… | FEAT-… | FEAT-… | … | 先发 G2T 前 |
 
-无则 N/A + `contractsNoneReason`。
+详表：[./interface-design.md](./interface-design.md)。无跨切片契约时摘要表可写 N/A，**展开件文件仍须存在**（可在件内标注 N/A 并保留模板章节）。
 
 ---
 
 ## 十、数据库设计
 
-> 摘要 + 链接；详表 → `database-design.md`（`templates/design/database.md`）。
+> **强制**：库表详表必须独立落盘 [`database-design.md`](./database-design.md)，结构对齐 `templates/design/database.md`（含 10.1～10.4）。  
+> 本节只保留存储清单摘要 + 链接。
 
 | 存储 | 变更 | 目的 | Owner Feature |
 | --- | --- | --- | --- |
 | … | add/alter/none | … | FEAT-… |
 
-不涉及则 N/A。
+详表：[./database-design.md](./database-design.md)。
 
 ---
 
 ## 十一、埋点技术方案
 
-> 摘要 + 链接；详表 → `analytics-tracking.md`。
+> **强制**：埋点字段规约必须独立落盘 [`analytics-tracking.md`](./analytics-tracking.md)，结构对齐 `templates/design/analytics-tracking.md`（含 11.1～11.2）。  
+> 本节只保留事件摘要表 + 链接。
 
 | 事件 | 触发 | 关键字段 | Owner |
 | --- | --- | --- | --- |
 | … | … | … | FEAT-… |
 
-无则 N/A。
+详表：[./analytics-tracking.md](./analytics-tracking.md)。
 
 ---
 

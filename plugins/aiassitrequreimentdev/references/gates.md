@@ -16,3 +16,5 @@
 | GD | `deploy.yaml` 含 `environment`、`commands`、`rollback` |
 
 G1 已接受后改 `spec.yaml`：先记 **C3** 到 `change.yaml`，再将 `gates.G1` 退回 `pending`，同步 PRD 与受影响原型，再 `seal`。检查器用 `specHash` 发现未经退回的修改。UX/技术变更见 `change-control.md`（C2/C1）。
+
+`check-req`（需求目录）：`split.yaml` + `architecture/`。`architecture.md` 须对齐 Epic Design 模板的全部 `##` 与关键 `###`（如 4.1–4.4、5.1–5.4、6.1–6.2、7.1–7.2…）；§六～§十一 禁止只写一行摘要（须表格 / 清单结构，`ARCH_MD_THIN`）。**§八～§十一 详表强制独立落盘** `nfr.md` / `interface-design.md` / `database-design.md` / `analytics-tracking.md`（标题对齐 `templates/design/`，`ARCH_EXPAND_*`）；对应章须引用相对路径。L0/L1（及协作流程图）须为 Archify 真图 html+png。

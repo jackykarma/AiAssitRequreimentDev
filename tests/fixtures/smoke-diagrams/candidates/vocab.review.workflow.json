@@ -1,0 +1,46 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "今日复习主流程",
+    "subtitle": "进入 → 建/取队列 → 打卡 → 完成或空态",
+    "quality_profile": "showcase",
+    "output": "tests/fixtures/smoke-diagrams/out/vocab.review.workflow.html"
+  },
+  "lanes": [
+    { "id": "user", "label": "学习者" },
+    { "id": "ui", "label": "复习 UI" },
+    { "id": "domain", "label": "队列 / 打卡" },
+    { "id": "edge", "label": "异常 / 空态", "variant": "exception" }
+  ],
+  "phases": [
+    { "id": "enter", "label": "进入", "fromCol": 0, "toCol": 1 },
+    { "id": "queue", "label": "队列", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "done", "label": "打卡收尾", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["open", "load", "show", "tap", "persist", "finish"],
+  "nodes": [
+    { "id": "open", "lane": "user", "col": 0, "type": "external", "label": "打开今日复习", "width": 140 },
+    { "id": "load", "lane": "domain", "col": 1, "type": "backend", "label": "取或建日快照", "sublabel": "到期词排序", "width": 150 },
+    { "id": "empty", "lane": "edge", "col": 2, "type": "security", "label": "空态", "sublabel": "无到期词", "width": 120 },
+    { "id": "show", "lane": "ui", "col": 2, "type": "frontend", "label": "展示词卡", "sublabel": "释义默认模糊", "width": 140 },
+    { "id": "tap", "lane": "user", "col": 3, "type": "external", "label": "认识 / 不认识", "width": 140 },
+    { "id": "persist", "lane": "domain", "col": 4, "type": "database", "label": "写打卡 + 推进", "width": 150 },
+    { "id": "finish", "lane": "ui", "col": 5, "type": "frontend", "label": "下一词 / 完成页", "width": 150 },
+    { "id": "resume", "lane": "edge", "col": 1, "type": "messagebus", "label": "杀进程续跑", "sublabel": "跳过已打卡", "width": 140 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "open", "to": "load", "variant": "emphasis" },
+    { "id": "e2", "from": "load", "to": "show", "label": "有词" },
+    { "id": "e3", "from": "load", "to": "empty", "label": "无词", "variant": "security", "role": "error" },
+    { "id": "e4", "from": "show", "to": "tap" },
+    { "id": "e5", "from": "tap", "to": "persist", "variant": "emphasis" },
+    { "id": "e6", "from": "persist", "to": "finish" },
+    { "id": "e7", "from": "resume", "to": "load", "label": "恢复游标", "variant": "dashed", "role": "branch" },
+    { "id": "e8", "from": "finish", "to": "show", "label": "还有未打卡", "variant": "dashed", "role": "branch" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "主路径", "items": ["有到期词则进入词卡打卡闭环", "当日快照不重排"] },
+    { "dot": "rose", "title": "分支", "items": ["无到期词 → 空态引导", "杀进程 → 从首个未打卡续跑"] }
+  ]
+}

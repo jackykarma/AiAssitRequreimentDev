@@ -38,6 +38,8 @@ USAGE_STAGES = (
     "implement",
     "review",
     "verify",
+    "qa-ready",
+    "qa",
     "release",
     "done",
 )

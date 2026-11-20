@@ -77,6 +77,7 @@ def _normalize_argv(argv: list[str]) -> list[str]:
         "usage": ("record", "show"),
         "change": ("record", "show"),
         "tasks": ("scaffold",),
+        "verify": ("run", "status", "fix", "next"),
     }
     if head not in sub_by_cmd:
         return argv
@@ -241,6 +242,41 @@ def main(argv: list[str] | None = None) -> int:
     tasks_scaffold.add_argument(
         "--force", action="store_true", help="覆盖已有非空 tasks.yaml"
     )
+
+    verify_parser = sub.add_parser(
+        "verify", help="验收执行器：真实跑 A* 的 verify，失败自动提单回退，人工签收后提测"
+    )
+    verify_sub = verify_parser.add_subparsers(dest="verify_command", required=True)
+    verify_run = verify_sub.add_parser(
+        "run", help="执行 spec.acceptance[].verify 并回写 evidence.yaml"
+    )
+    verify_run.add_argument("feature_dir")
+    verify_run.add_argument("--only", default="", help="只跑指定 A*，逗号分隔")
+    verify_run.add_argument("--timeout", type=int, default=120, help="单条命令超时秒数")
+    verify_run.add_argument("--dry-run", action="store_true", help="只打印将执行的命令")
+    verify_run.add_argument(
+        "--shell", action="store_true", help="强制 shell 模式（复合命令需开启）"
+    )
+    verify_run.add_argument(
+        "--no-auto-fix", action="store_true", help="失败时不自动提单回退 G3"
+    )
+    verify_run.add_argument(
+        "--max-attempts", type=int, default=3, help="自动修复重试上限，超出转人工"
+    )
+    verify_run.add_argument(
+        "--accept-g4", action="store_true", help="全部通过且 GR 清零时自动 accept G4 进入提测"
+    )
+    verify_status = verify_sub.add_parser("status", help="查看验证模式/重试次数/门禁状态")
+    verify_status.add_argument("feature_dir")
+    verify_next = verify_sub.add_parser("next", help="主控编排：返回下一步应派的角色，驱动 AI 自动修复闭环")
+    verify_next.add_argument("feature_dir")
+    verify_next.add_argument("--json", action="store_true", help="输出 JSON")
+    verify_fix = verify_sub.add_parser(
+        "fix", help="对指定失败 A* 手动触发自动提单回退（需人工确认后使用）"
+    )
+    verify_fix.add_argument("feature_dir")
+    verify_fix.add_argument("--acceptance", required=True, help="失败 A*，逗号分隔")
+    verify_fix.add_argument("--max-attempts", type=int, default=3)
 
     change_parser = sub.add_parser(
         "change",
@@ -650,6 +686,74 @@ def main(argv: list[str] | None = None) -> int:
                 print(format_change_report(feature_dir))
             return 0
         return 2
+
+    if args.command == "verify":
+        from aiassitrequreimentdev.verify import (
+            auto_fix_failures,
+            mark_verification_success,
+            run_verification,
+            verification_next,
+            verification_status,
+        )
+
+        feature_dir = Path(args.feature_dir)
+        if not feature_dir.is_dir():
+            print(f"feature 目录不存在: {feature_dir}", file=sys.stderr)
+            return 2
+        if args.verify_command == "status":
+            print(json.dumps(verification_status(feature_dir), ensure_ascii=False, indent=2))
+            return 0
+        if args.verify_command == "next":
+            payload = verification_next(feature_dir)
+            if args.json:
+                print(json.dumps(payload, ensure_ascii=False, indent=2))
+            else:
+                print(f"nextRole={payload['nextRole']} reason={payload['reason']}")
+            return 0
+        if args.verify_command == "fix":
+            failed = [item.strip() for item in args.acceptance.split(",") if item.strip()]
+            payload = auto_fix_failures(feature_dir, failed, max_attempts=args.max_attempts)
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+            return 0 if payload.get("action") != "blocked" else 3
+        # verify run
+        try:
+            payload = run_verification(
+                feature_dir,
+                only=[item.strip() for item in args.only.split(",") if item.strip()],
+                timeout=args.timeout,
+                dry_run=args.dry_run,
+                force_shell=args.shell,
+            )
+        except (ValueError, FileNotFoundError) as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+        if not payload["dryRun"] and payload["failed"]:
+            if args.no_auto_fix:
+                payload["autoFix"] = {"action": "skipped", "reason": "--no-auto-fix"}
+            else:
+                payload["autoFix"] = auto_fix_failures(
+                    feature_dir,
+                    payload["failed"],
+                    max_attempts=args.max_attempts,
+                    results=payload["results"],
+                )
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+            return 4
+        if not payload["dryRun"]:
+            payload["verification"] = mark_verification_success(feature_dir)
+            if args.accept_g4:
+                from aiassitrequreimentdev.progress import accept_gate
+
+                try:
+                    state = accept_gate(feature_dir, "G4")
+                    payload["acceptedG4"] = {"stage": state.get("stage"), "gates": state.get("gates")}
+                    refresh_board(feature_dir)
+                except ValueError as exc:
+                    print(f"G4 自动接受失败: {exc}", file=sys.stderr)
+                    print(json.dumps(payload, ensure_ascii=False, indent=2))
+                    return 5
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 0
 
     if args.command == "check":
         feature_dir = Path(args.feature_dir)

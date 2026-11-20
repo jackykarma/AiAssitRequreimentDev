@@ -119,6 +119,29 @@ seal **之后**不要停下来等人点「下一步」，连续完成：
 仍须打断：`I_PRODUCT_OPEN`、`I_TECH_RISK`、`I_REVIEW_DISPUTE`、`I_TEST_STUCK`、`I_DEPLOY_CONFIRM`、`I_CHANGE_CONFIRM`（C3/C4）。  
 部署（GD）**不要**自动上线确认。有 UI / 需逐步确认时改选 `light` 或 `full`，不要硬套 `light-auto`。
 
+## 验收自动修复闭环（GR 通过后）
+
+GR 清零后，**不需要人介入**，按此循环自动推进：
+
+```bash
+# 1. 真实执行验收（runner 取真实退出码，自动回写 evidence.yaml 并开启 runner 模式）
+python <本插件>/scripts/aad.py verify run <feature目录> --accept-g4
+#    - 全过：自动 accept G4 → stage=qa-ready → 进入提测签收（GQA）
+#    - 失败：自动提 C0 单 + 回退 G3/GR/G4/GQA + 生成 fix-tasks.yaml（派给 dev）
+
+# 2. 每一步问编排器「下一步派谁」（驱动闭环，勿问人）
+python <本插件>/scripts/aad.py verify next <feature目录> --json
+#    nextRole=dev   → 自动派 dev agent 认领 fix-tasks.yaml 修源码（不打断人）
+#    nextRole=human → 仅 I_TEST_STUCK（超重试上限）或 GQA/GD 人签收时才停
+
+# 3. dev 修完 → 主控重跑 `verify run` → 通过则修复任务包转 fixed、计数清零
+```
+
+要点：
+- **修复由 dev agent（AI）自动完成**，`I_TEST_STUCK` 只在 `attempts > maxAttempts`（默认 3）时才触发，不是一失败就打断人。
+- 判定与修复分离：dev 只改写集内源码，碰不到 `evidence.yaml`/门禁；胜负由 runner 真跑决定，杜绝自报。
+- 全部 A* 真过之后不等于可上线：仍须人签收 `qa.yaml`（GQA 提测）+ GD 上线确认。这是设计保留的人审点，不自动跳过。
+
 ## 角色写出
 
 **模板硬约束（主控派活前强调）**：凡 `templates/` 有底稿的产物文档，角色出稿必须严格按模板**结构 + 标题原文 + 填写要求**；门禁 `*_TEMPLATE` / Epic 薄内容规则失败则打回，不得 `--accept` 盖过。

@@ -49,6 +49,11 @@ import yaml
 
 from aiassitrequreimentdev.change_log import repo_root_for
 from aiassitrequreimentdev.paths import is_light_path
+from aiassitrequreimentdev.verify_match import (
+    commands_match,
+    is_fake_green,
+    verify_hash,
+)
 from aiassitrequreimentdev.template_headings import (
     SPEC_PRD_H2,
     TECH_MD_H2,
@@ -79,7 +84,7 @@ FEATURE_ID_HINT = (
 )
 FEATURE_ID_PLACEHOLDER = "FEAT-000-example-name"
 
-GATES = ("G0", "G1", "G2", "G2T", "G3", "GR", "G4", "GD")
+GATES = ("G0", "G1", "G2", "G2T", "G3", "GR", "G4", "GQA", "GD")
 PATHS = ("full", "light", "light-auto")
 REVIEW_SEVERITIES = ("nit", "dispute", "blocking")
 DIAGRAM_TYPES = (
@@ -331,6 +336,7 @@ def evaluate(feature_dir: Path) -> Report:
         _check_g3(feature_dir, state, spec, violations)
         _check_gr(feature_dir, violations)
         _check_g4(feature_dir, spec, violations)
+        _check_gqa(feature_dir, violations)
         _check_gd(feature_dir, violations)
     return Report(violations)
 
@@ -2034,6 +2040,21 @@ def _check_gr(change_dir: Path, violations: list[Violation]) -> None:
                 )
 
 
+def _check_runner_mode(change_dir: Path) -> bool:
+    """只有显式开启 runner 模式的 feature 才施加真实执行硬校验（渐进启用）。"""
+    state_path = change_dir / "state.json"
+    if not state_path.is_file():
+        return False
+    try:
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return False
+    if not isinstance(state, dict):
+        return False
+    verification = state.get("verification")
+    return isinstance(verification, dict) and verification.get("mode") == "runner"
+
+
 def _check_g4(change_dir: Path, spec: dict, violations: list[Violation]) -> None:
     # G4 依赖 GR：若 review 仍有未关闭阻塞/争议，一并记在 G4
     review_violations: list[Violation] = []
@@ -2054,6 +2075,15 @@ def _check_g4(change_dir: Path, spec: dict, violations: list[Violation]) -> None
     if not isinstance(results, list):
         violations.append(Violation("G4", "EVIDENCE_GAP", "evidence.yaml 缺少 results"))
         return
+
+    runner_mode = _check_runner_mode(change_dir)
+    acceptance_map: dict[str, object] = {}
+    acceptance = spec.get("acceptance")
+    if isinstance(acceptance, list):
+        for item in acceptance:
+            if isinstance(item, dict) and isinstance(item.get("id"), str):
+                acceptance_map[item["id"]] = item.get("verify")
+
     covered: set[str] = set()
     for item in results:
         if not isinstance(item, dict):
@@ -2067,11 +2097,86 @@ def _check_g4(change_dir: Path, spec: dict, violations: list[Violation]) -> None
             violations.append(Violation("G4", "EVIDENCE_EXIT", f"{identifier} 的退出码不是 0"))
         if isinstance(identifier, str):
             covered.add(identifier)
+            if not runner_mode:
+                continue
+            # runner 模式：防自报与假绿三连校验
+            if item.get("executedBy") != "runner":
+                violations.append(
+                    Violation("G4", "EVIDENCE_UNEXECUTED", f"{identifier} 缺少 runner 真实执行标记")
+                )
+            if is_fake_green(command):
+                violations.append(
+                    Violation("G4", "EVIDENCE_FAKE_GREEN", f"{identifier} 的 command 是空转命令")
+                )
+            verify = acceptance_map.get(identifier)
+            if isinstance(verify, str):
+                if not commands_match(command, verify):
+                    violations.append(
+                        Violation(
+                            "G4",
+                            "EVIDENCE_VERIFY_MISMATCH",
+                            f"{identifier} 的 command 与 spec.verify 不同源",
+                        )
+                    )
+                recorded_hash = item.get("verifyHash")
+                if isinstance(recorded_hash, str) and recorded_hash != verify_hash(verify):
+                    violations.append(
+                        Violation(
+                            "G4",
+                            "EVIDENCE_VERIFY_MISMATCH",
+                            f"{identifier} 的 verifyHash 与当前 spec.verify 不一致",
+                        )
+                    )
     missing = _acceptance_ids(spec) - covered
     if missing:
         violations.append(
             Violation("G4", "EVIDENCE_GAP", "证据未覆盖: " + ", ".join(sorted(missing)))
         )
+
+
+def _check_gqa(change_dir: Path, violations: list[Violation]) -> None:
+    """提测门禁：runner 模式下，须有人工签收的 qa.yaml 且充分性清单与阻塞项达标。"""
+    if not _check_runner_mode(change_dir):
+        return
+    qa = _read_yaml(
+        change_dir / "qa.yaml",
+        "GQA",
+        "QA_MISSING",
+        "缺少 qa.yaml（runner 模式提测须人工签收）",
+        violations,
+    )
+    if qa is None:
+        return
+    environment = qa.get("environment")
+    if not isinstance(environment, str) or not environment.strip():
+        violations.append(Violation("GQA", "QA_SHAPE", "environment 不能为空"))
+    sign_off = qa.get("signOff")
+    if not isinstance(sign_off, dict):
+        violations.append(Violation("GQA", "QA_SIGN", "缺少 signOff 人工签收"))
+    else:
+        if sign_off.get("role") not in ("human", "qa", "tester", "product"):
+            violations.append(
+                Violation("GQA", "QA_SIGN", "signOff.role 须为 human/qa/tester/product，禁止 AI 代签")
+            )
+        if not isinstance(sign_off.get("name"), str) or not sign_off["name"].strip():
+            violations.append(Violation("GQA", "QA_SIGN", "signOff.name 不能为空"))
+        if not isinstance(sign_off.get("at"), str) or not sign_off["at"].strip():
+            violations.append(Violation("GQA", "QA_SIGN", "signOff.at 不能为空"))
+    scope = qa.get("scope")
+    if not isinstance(scope, dict):
+        violations.append(Violation("GQA", "QA_SCOPE", "缺少 scope 充分性清单"))
+    else:
+        checklist = scope.get("checklist")
+        if not isinstance(checklist, list) or not checklist:
+            violations.append(Violation("GQA", "QA_SCOPE", "scope.checklist 至少一条"))
+        for key in ("exploratory", "regression", "crossDevice"):
+            if not isinstance(scope.get(key), bool):
+                violations.append(Violation("GQA", "QA_SCOPE", f"scope.{key} 须为布尔值"))
+    blocking_open = qa.get("blockingOpen")
+    if not isinstance(blocking_open, int) or isinstance(blocking_open, bool) or blocking_open != 0:
+        violations.append(Violation("GQA", "QA_BLOCKING_OPEN", "提测前 blocking 必须为 0"))
+    if qa.get("conclusion") != "pass":
+        violations.append(Violation("GQA", "QA_CONCLUSION", "conclusion 须为 pass"))
 
 
 def _check_gd(change_dir: Path, violations: list[Violation]) -> None:

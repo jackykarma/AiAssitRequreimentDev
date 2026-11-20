@@ -15,9 +15,17 @@
     "G3": "pending",
     "GR": "pending",
     "G4": "pending",
+    "GQA": "pending",
     "GD": "pending"
   },
   "openQuestions": [],
   "runId": null,
-  "specHash": null
+  "specHash": null,
+  "verification": {
+    "mode": "self-report",
+    "attempts": 0,
+    "maxAttempts": 3,
+    "lastFailure": null,
+    "blocked": false
+  }
 }

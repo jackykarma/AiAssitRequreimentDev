@@ -32,7 +32,8 @@ GATE_NEXT_STAGE: dict[str, str] = {
     "G2T": "plan",
     "G3": "implement",
     "GR": "verify",
-    "G4": "release",
+    "G4": "qa-ready",
+    "GQA": "release",
     "GD": "done",
 }
 
@@ -45,6 +46,7 @@ GATE_WORK_STAGE: dict[str, str] = {
     "G3": "plan",
     "GR": "review",
     "G4": "verify",
+    "GQA": "qa",
     "GD": "release",
 }
 

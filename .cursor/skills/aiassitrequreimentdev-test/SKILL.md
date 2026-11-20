@@ -19,6 +19,18 @@ python <本插件>/scripts/aad.py check <feature 目录> --gate GR
 
 `results` 覆盖每条验收：`acceptanceId`、`command`、`exitCode`、`excerpt`。未运行不得填 0。失败保留非 0；超重试仍失败则交主控打断。
 
+### 与自动修复闭环的关系
+
+GR 通过后由主控用 `verify run` 真实执行并回写证据（推荐路径，runner 模式）：
+
+```bash
+python <本插件>/scripts/aad.py verify run <feature目录> --accept-g4
+```
+
+- 退出非 0 不是「交人修」，而是**自动派 dev agent**：主控生成 `fix-tasks.yaml`（含失败 excerpt）并回退 G3，`verify next` 返回 `nextRole=dev`，dev 在写集内修复后主控重跑，循环到通过或超 `maxAttempts`。
+- 你的证据由 runner 自动写入，**任何角色（含 dev）不得手写 exitCode=0**；G4 在 runner 模式会校验 command 与 verify 同源、拒绝 `true`/`exit 0` 空转。
+- 只有 `verify next` 返回 `nextRole=human`（`I_TEST_STUCK`）才交人。
+
 ### 防假绿（必守）
 
 - `command` 必须对应 `spec.acceptance[].verify`（同名用例 / 同源脚本）；不得另起无关「总能成功」的命令

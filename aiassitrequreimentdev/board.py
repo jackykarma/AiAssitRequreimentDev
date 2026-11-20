@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from aiassitrequreimentdev.gates import GATES
 from aiassitrequreimentdev.paths import PATH_BY_ID, resolve_path
 from aiassitrequreimentdev.roles import ROLE_BY_ID, ROLES, resolve_menu_choice
 from aiassitrequreimentdev.usage import board_usage_section
@@ -103,7 +104,7 @@ def refresh_board(change_dir: Path) -> Path:
                 "| --- | --- |",
             ]
         )
-        for gate_id in ("G0", "G1", "G2", "G2T", "G3", "GR", "G4", "GD"):
+        for gate_id in GATES:
             lines.append(f"| `{gate_id}` | {gates.get(gate_id, '—')} |")
         lines.append("")
     if path:

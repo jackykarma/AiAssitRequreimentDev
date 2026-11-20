@@ -1,0 +1,18 @@
+# 提测签收单（GQA）。runner 模式下 G4 通过后须由真人测试人员填写并签收。
+# 判据：G4 的 AC 真实执行证据 + 本单的充分性清单，二者共同构成提测门槛。
+# 注意：AI 可代拟清单草稿，但 signOff 必须由人填写，禁止 agent 代签。
+environment: ""            # 提测环境，如 staging / 真机灰度
+build: ""                  # 构建号或版本，可空
+signOff:
+  role: human              # human|qa|tester|product（禁止填 agent/AI）
+  name: ""                 # 签收人姓名或账号
+  at: ""                   # ISO8601 签收时间
+scope:
+  checklist:               # 本轮实际覆盖的充分性项，至少一条
+    - ""
+  exploratory: false       # 是否完成探索性测试
+  regression: false        # 是否完成全量回归
+  crossDevice: false       # 是否完成跨设备/兼容性验证
+blockingOpen: 1            # 提测前必须为 0
+conclusion: pending        # pending|pass|fail；GQA 要求 pass
+notes: ""
